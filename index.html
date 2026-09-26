@@ -1,0 +1,3793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XtremeTech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg: #0a0b0d;
+    --bg-grid: #101216;
+    --panel: #121418;
+    --panel-border: #23262c;
+    --accent: #e8a33d;
+    --accent-dim: #8a6425;
+    --accent-soft: rgba(232,163,61,0.10);
+    --text: #e8e6e1;
+    --text-muted: #7b8087;
+    --text-faint: #4d5157;
+    --error: #e0574c;
+    --error-soft: rgba(224,87,76,0.10);
+    --success: #5fbf8a;
+    --radius: 3px;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --sans: 'Inter', -apple-system, sans-serif;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html,body{
+    margin:0; padding:0; height:100%;
+    background: var(--bg);
+    font-family: var(--sans);
+    color: var(--text);
+    scrollbar-width: none;      /* Firefox */
+    -ms-overflow-style: none;   /* old Edge/IE */
+  }
+
+  html::-webkit-scrollbar, body::-webkit-scrollbar{
+    display: none;              /* Chrome, Safari, new Edge */
+  }
+
+  body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding: 24px;
+    background-image: url('https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/LOGIN.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  #loggedInVideoBg{
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #loggedInVideoBg.show{ display: block; }
+
+  #videoMuteToggle{
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    background: rgba(7,8,10,0.65);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 14px;
+    color: var(--text);
+    cursor: pointer;
+    z-index: 20;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  #videoMuteToggle.show{ display: flex; }
+
+  #videoMuteToggle:hover{
+    color: var(--accent);
+    border-color: rgba(232,163,61,0.4);
+  }
+
+  #videoMuteToggle svg{
+    width: 20px;
+    height: 20px;
+  }
+
+  #videoMuteToggle .unmuted-icon{ display: none; }
+  #videoMuteToggle.is-unmuted .muted-icon{ display: none; }
+  #videoMuteToggle.is-unmuted .unmuted-icon{ display: block; }
+
+  body::before{
+    content:"";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 700px 500px at 50% 40%, rgba(0,0,0,0.15), rgba(0,0,0,0.35) 70%);
+    pointer-events: none;
+  }
+
+  .window{
+    position: relative;
+    width: 100%;
+    background: rgba(7,8,10,0.62);
+    backdrop-filter: blur(22px) brightness(0.55) saturate(55%);
+    -webkit-backdrop-filter: blur(22px) brightness(0.55) saturate(55%);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius);
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,0.6);
+    animation: rise 0.5s cubic-bezier(.2,.8,.2,1);
+  }
+
+
+  /* ---------------------------------------------------------------
+     Admin sidebar: full-height, translucent, brand box on top
+  --------------------------------------------------------------- */
+  .admin-sidebar{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 72px;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 8px;
+    background: rgba(7,8,10,0.55);
+    backdrop-filter: blur(18px) brightness(0.65) saturate(60%);
+    -webkit-backdrop-filter: blur(18px) brightness(0.65) saturate(60%);
+    border-right: 1px solid rgba(255,255,255,0.12);
+    border-radius: 0 22px 22px 0;
+    box-shadow: 0 20px 50px -15px rgba(0,0,0,0.6);
+    z-index: 10;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .admin-sidebar::-webkit-scrollbar{ display: none; }
+
+  .admin-sidebar.show{ display: flex; }
+
+  .main-stack{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    transition: max-width 0.3s ease;
+  }
+
+  .main-stack.admin-wide{
+    max-width: 960px;
+  }
+
+  .admin-brand{
+    display: none;
+    position: fixed;
+    top: 28px;
+    left: 88px;   /* sidebar width (72px) + a small gap */
+    right: 24px;  /* small gap from the right edge */
+    flex-direction: column;
+    gap: 26px;
+    z-index: 9;
+  }
+
+  .admin-brand.show{ display: flex; }
+
+  .brand-card{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 14px;
+    background: rgba(7,8,10,0.62);
+    backdrop-filter: blur(22px) brightness(0.55) saturate(55%);
+    -webkit-backdrop-filter: blur(22px) brightness(0.55) saturate(55%);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 999px;
+    box-shadow: 0 20px 50px -15px rgba(0,0,0,0.5);
+    padding: 14px 32px;
+  }
+
+  .brand-actions{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+
+  .pill-btn{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: transform 0.3s ease,
+                color 0.3s ease,
+                border-color 0.3s ease;
+  }
+
+  .pill-btn img{
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    border-radius: 4px;
+  }
+
+
+  .pill-btn:hover{
+    transform: translateY(-2px);
+    color: var(--accent);
+  }
+
+  .admin-brand .logo-x{
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 42px;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .admin-brand .welcome-text{
+    font-family: var(--mono);
+    font-size: 18px;
+    color: var(--text);
+    letter-spacing: 0.02em;
+  }
+
+  .sidebar-spacer{
+    flex: 1;
+  }
+
+  .sidebar-group{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .sidebar-divider{
+    width: 60%;
+    height: 1px;
+    margin: 6px auto;
+    background: rgba(255,255,255,0.15);
+  }
+
+  .admin-only{ display: none !important; }
+
+  body.role-admin .sidebar-btn.admin-only{ display: flex !important; }
+
+  .server-context-btn{ display: none !important; }
+  .server-context-btn.ctx-visible{ display: flex !important; }
+
+  .sidebar-btn{
+    position: relative;
+    left: 0px;
+    width: 52px;
+    height: 52px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 16px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition:
+      left 0.18s ease,
+      color 0.3s ease,
+      background-color 0.3s ease,
+      border-color 0.3s ease;
+  }
+
+  .sidebar-btn svg{
+    width: 24px;
+    height: 24px;
+  }
+
+  .sidebar-btn:hover{
+    left: 7px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-color: rgba(232,163,61,0.25);
+  }
+
+  .sidebar-btn#navLogout:hover{
+    color: var(--error);
+    background: var(--error-soft);
+    border-color: rgba(224,87,76,0.25);
+  }
+
+  .sidebar-tooltip{
+    position: absolute;
+    left: calc(100% + 12px);
+    top: 50%;
+    transform: translateY(-50%) translateX(-6px);
+    background: rgba(10,11,13,0.92);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 6px 12px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 10px 25px -8px rgba(0,0,0,0.6);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .sidebar-btn:hover .sidebar-tooltip{
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+
+  body.admin-mode{
+    padding-left: 96px;
+    align-items: flex-start;
+    padding-top: 190px;
+    transition: padding-left 0.3s ease;
+  }
+
+  @keyframes rise{
+    from{ opacity:0; transform: translateY(10px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .window{ animation: none; }
+  }
+
+  .titlebar{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--panel-border);
+  }
+
+  .dot{
+    width:9px; height:9px;
+    border-radius:50%;
+    background: #2a2d33;
+  }
+
+  .titlebar-label{
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+  }
+
+  .content{
+    padding: 34px 32px 32px;
+  }
+
+  .heading{
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--text);
+    margin: 0 0 6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .subtext{
+    font-size: 13.5px;
+    color: var(--text-muted);
+    margin: 0 0 28px;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  form{
+    display:flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .field label{
+    display:block;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-bottom: 7px;
+  }
+
+  .field input{
+    width: 100%;
+    background: #0d0f12;
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    padding: 11px 12px;
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .field input::placeholder{ color: var(--text-faint); }
+
+  .field input:focus{
+    border-color: var(--accent-dim);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  .field input.invalid{
+    border-color: var(--error);
+  }
+
+  .field select{
+    width: 100%;
+    background: #0d0f12;
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    padding: 11px 12px;
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .field select:focus{
+    border-color: var(--accent-dim);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  .duration-row{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* ---------------------------------------------------------------
+     Add Server modal
+  --------------------------------------------------------------- */
+  .modal-overlay{
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 24px;
+  }
+
+  .modal-overlay.show{ display: flex; }
+
+  .modal-box{
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    max-height: 88vh;
+    overflow-y: auto;
+    background: rgba(10,11,13,0.78);
+    backdrop-filter: blur(24px) saturate(70%);
+    -webkit-backdrop-filter: blur(24px) saturate(70%);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 20px;
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,0.7);
+    padding: 32px;
+    animation: rise 0.4s cubic-bezier(.2,.8,.2,1);
+  }
+
+  .modal-close{
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 30px;
+    height: 30px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: transparent;
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    color: var(--text-muted);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .modal-close:hover{
+    color: var(--text);
+    border-color: rgba(255,255,255,0.3);
+  }
+
+  #addServerForm{
+    display:flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-top: 6px;
+  }
+
+  .remove-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 12px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    padding: 12px 14px;
+  }
+
+  .remove-row-info{
+    display:flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .remove-row-name{
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .remove-row-meta{
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--text-muted);
+  }
+
+  .remove-row-btn{
+    flex-shrink: 0;
+    padding: 8px 14px;
+    background: transparent;
+    border: 1px solid rgba(224,87,76,0.4);
+    border-radius: 10px;
+    color: var(--error);
+    font-family: var(--mono);
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .remove-row-btn:hover{
+    background: var(--error-soft);
+  }
+
+  .manage-row{
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    padding: 14px;
+  }
+
+  .manage-row-header{
+    display:flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .manage-row-assign{
+    display:flex;
+    gap: 8px;
+  }
+
+  .manage-row-assign input{
+    flex: 1;
+    background: #0d0f12;
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    padding: 9px 10px;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--text);
+    outline: none;
+  }
+
+  .manage-row-assign input:focus{
+    border-color: var(--accent-dim);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  .manage-row-save{
+    flex-shrink: 0;
+    padding: 9px 16px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius);
+    color: #14100a;
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .manage-row-save:hover{
+    background: #f0b155;
+  }
+
+  .manage-row-save.saved{
+    background: var(--success);
+    color: #0a1a12;
+  }
+
+  /* ---------------------------------------------------------------
+     Server-created confirmation card
+  --------------------------------------------------------------- */
+  /* ---------------------------------------------------------------
+     Persistent server list: stacked cards below the Support/Discord
+     row, fed live from Firestore
+  --------------------------------------------------------------- */
+  .server-list{
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+    position: fixed;
+    top: 210px;                    /* the boundary -- level with Support/Discord */
+    left: 88px;
+    right: 24px;
+    bottom: 24px;                  /* fills down to near the bottom of the screen */
+    overflow-y: auto;
+    z-index: 8;
+    scrollbar-width: none;         /* Firefox */
+    -ms-overflow-style: none;      /* old Edge/IE */
+  }
+
+  .server-list.show{ display: flex; }
+
+  .manage-view{
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    top: 195px;
+    left: 88px;
+    right: 24px;
+    bottom: 24px;
+    overflow-y: auto;
+    z-index: 8;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-top: 6px;
+  }
+
+  .manage-view.show{ display: flex; }
+
+  .manage-view::-webkit-scrollbar{ display: none; }
+
+  .server-list::-webkit-scrollbar{
+    display: none;                 /* Chrome, Safari, new Edge */
+  }
+
+  .server-item{
+    position: relative;
+    flex-shrink: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.6);
+    background-size: cover;
+    background-position: center 25%;
+    animation: rise 0.4s cubic-bezier(.2,.8,.2,1);
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .server-item:hover{
+    transform: translateY(-2px);
+    border-color: rgba(232,163,61,0.4);
+  }
+
+  .server-item-inner{
+    background: linear-gradient(90deg, rgba(6,7,9,0.85) 0%, rgba(6,7,9,0.55) 55%, rgba(6,7,9,0.3) 100%);
+    padding: 32px 22px;
+    min-height: 120px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+  }
+
+  .server-item-name{
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text);
+  }
+
+  .server-item-meta{
+    display:flex;
+    gap: 20px;
+    font-size: 12.5px;
+    font-family: var(--mono);
+  }
+
+  .server-item-meta span:first-child{
+    color: var(--text-muted);
+    margin-right: 4px;
+  }
+
+  .server-item-meta div{
+    color: var(--text);
+  }
+
+  .server-list-empty{
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-faint);
+    text-align: center;
+    padding: 30px 0;
+  }
+
+  /* ---------------------------------------------------------------
+     File Manager
+  --------------------------------------------------------------- */
+  .fm-topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-bottom:18px;
+  }
+
+  .fm-path{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:2px;
+    font-family: var(--mono);
+    font-size:13px;
+    color: var(--text-muted);
+    min-width:0;
+  }
+
+  .fm-path-seg{
+    background:transparent;
+    border:none;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    font-size:13px;
+    cursor:pointer;
+    padding:4px 6px;
+    border-radius:6px;
+    transition: color 0.2s ease, background 0.2s ease;
+    white-space:nowrap;
+  }
+
+  .fm-path-seg:hover{ color: var(--accent); background: var(--accent-soft); }
+  .fm-path-seg.current{ color: var(--text); cursor:default; }
+  .fm-path-seg.current:hover{ background:transparent; color:var(--text); }
+
+  .fm-path-sep{
+    color: var(--text-faint);
+    font-size:12px;
+    padding:0 1px;
+  }
+
+  .fm-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+
+  .fm-btn{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:9px 18px;
+    background: transparent;
+    border:1px solid rgba(255,255,255,0.16);
+    border-radius: 999px;
+    clip-path: none;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size:12.5px;
+    font-weight:500;
+    cursor:pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+    white-space:nowrap;
+  }
+
+  .fm-btn svg{ width:15px; height:15px; flex-shrink:0; }
+
+  .fm-btn:hover{
+    transform: translateY(-1px);
+    border-color: rgba(232,163,61,0.45);
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .fm-header-row{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:10px 16px;
+    color: var(--text-faint);
+    font-family: var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+  }
+
+  .fm-checkbox{
+    width:16px;
+    height:16px;
+    flex-shrink:0;
+    border-radius:5px;
+    border:1.5px solid rgba(255,255,255,0.28);
+    background: transparent;
+    cursor:pointer;
+    position:relative;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .fm-checkbox:hover{ border-color: rgba(232,163,61,0.5); }
+
+  .fm-checkbox.checked{
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .fm-checkbox.checked::after{
+    content:"";
+    position:absolute;
+    left:4px; top:1px;
+    width:4px; height:8px;
+    border: solid #14100a;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .fm-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    position:relative;
+    border-radius:18px;
+    transition: background 0.2s ease;
+  }
+
+  .fm-list.dragover{
+    background: var(--accent-soft);
+    outline: 2px dashed rgba(232,163,61,0.5);
+    outline-offset: -8px;
+  }
+
+  .fm-drop-hint{
+    display:none;
+    align-items:center;
+    justify-content:center;
+    font-family: var(--mono);
+    font-size:13px;
+    color: var(--accent);
+    padding: 40px 0;
+  }
+
+  .fm-list.dragover .fm-drop-hint{ display:flex; }
+  .fm-list.dragover .fm-file-box{ opacity:0.35; pointer-events:none; }
+
+  .fm-file-box{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    min-height:64px;
+    padding: 14px 16px;
+    background: #0d0e11;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 16px;
+    cursor:pointer;
+    transition: transform 0.15s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .fm-file-box:hover{
+    transform: translateY(-1px);
+    border-color: rgba(232,163,61,0.35);
+    background: #101216;
+  }
+
+  .fm-file-icon{
+    width:34px;
+    height:34px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:9px;
+    background: rgba(255,255,255,0.05);
+    color: var(--accent);
+  }
+
+  .fm-file-icon svg{ width:18px; height:18px; }
+
+  .fm-file-name{
+    flex:1;
+    min-width:0;
+    font-family: var(--mono);
+    font-size:13.5px;
+    color: var(--text);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  .fm-file-size{
+    flex-shrink:0;
+    width:70px;
+    text-align:right;
+    font-family: var(--mono);
+    font-size:12px;
+    color: var(--text-muted);
+  }
+
+  .fm-file-date{
+    flex-shrink:0;
+    width:150px;
+    text-align:right;
+    font-family: var(--mono);
+    font-size:12px;
+    color: var(--text-muted);
+  }
+
+  .fm-file-dots{
+    flex-shrink:0;
+    width:30px;
+    height:30px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:8px;
+    background:transparent;
+    border:none;
+    color: var(--text-muted);
+    cursor:pointer;
+    position:relative;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .fm-file-dots:hover{ background: rgba(255,255,255,0.08); color: var(--text); }
+
+  .fm-dropdown{
+    display:none;
+    position:absolute;
+    top:34px;
+    right:0;
+    min-width:140px;
+    background: #16181c;
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.7);
+    overflow:hidden;
+    z-index:30;
+  }
+
+  .fm-dropdown.show{ display:block; }
+
+  .fm-dropdown button{
+    display:block;
+    width:100%;
+    text-align:left;
+    padding:10px 14px;
+    background:transparent;
+    border:none;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size:12.5px;
+    cursor:pointer;
+  }
+
+  .fm-dropdown button:hover{ background: var(--accent-soft); color: var(--accent); }
+  .fm-dropdown button.danger:hover{ background: var(--error-soft); color: var(--error); }
+
+  .fm-empty{
+    font-family: var(--mono);
+    font-size:13px;
+    color: var(--text-faint);
+    text-align:center;
+    padding: 50px 0;
+  }
+
+  /* Editor modal */
+  .fm-editor-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background: rgba(4,5,7,0.75);
+    backdrop-filter: blur(6px);
+    z-index:60;
+    align-items:center;
+    justify-content:center;
+    padding: 30px;
+  }
+
+  .fm-editor-overlay.show{ display:flex; }
+
+  .fm-editor-box{
+    width:100%;
+    max-width: 1000px;
+    height: 82vh;
+    display:flex;
+    flex-direction:column;
+    background: #0d0e11;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,0.7);
+    overflow:hidden;
+  }
+
+  .fm-editor-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--panel-border);
+    font-family: var(--mono);
+    font-size:13px;
+    color: var(--text);
+    flex-shrink:0;
+  }
+
+  .fm-editor-close{
+    background:transparent;
+    border:none;
+    color: var(--text-muted);
+    cursor:pointer;
+    font-size:18px;
+    line-height:1;
+    padding:4px 8px;
+  }
+
+  .fm-editor-close:hover{ color: var(--error); }
+
+  .fm-editor-code-wrap{
+    position:relative;
+    flex:1;
+    min-height:0;
+    overflow:hidden;
+  }
+
+  .fm-editor-highlight, .fm-editor-textarea{
+    position:absolute;
+    inset:0;
+    margin:0;
+    padding: 18px;
+    font-family: var(--mono);
+    font-size:13px;
+    line-height:1.6;
+    tab-size:2;
+    white-space:pre-wrap;
+    word-break:break-word;
+    overflow:auto;
+  }
+
+  .fm-editor-highlight{
+    color: var(--text);
+    background: #0a0b0d;
+    pointer-events:none;
+  }
+
+  .fm-editor-textarea{
+    width:100%;
+    height:100%;
+    resize:none;
+    border:none;
+    outline:none;
+    background:transparent;
+    color:transparent;
+    caret-color: var(--text);
+  }
+
+  .tok-kw{ color:#c586c0; font-weight:600; }
+  .tok-str{ color:#ce9178; }
+  .tok-com{ color:#6a9955; font-style:italic; }
+  .tok-num{ color:#b5cea8; }
+  .tok-fn{ color:#dcdcaa; }
+  .tok-type{ color:#4ec9b0; }
+
+  .console-err{ color:#f26e6e; }
+  .console-warn{ color:#e8c15b; }
+  .console-info{ color:#61afef; }
+  .console-ok{ color:#7fd88f; }
+  .console-time{ color:#7a7f8a; }
+  .console-num{ color:#b5cea8; }
+
+  .fm-editor-footer{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 12px 18px;
+    border-top: 1px solid var(--panel-border);
+    flex-shrink:0;
+    gap:12px;
+  }
+
+  .fm-lang-wrap{ position:relative; }
+
+  .fm-lang-btn{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding: 9px 14px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size:12.5px;
+    cursor:pointer;
+  }
+
+  .fm-lang-btn:hover{ border-color: rgba(232,163,61,0.4); color: var(--accent); }
+
+  .fm-lang-menu{
+    display:none;
+    position:absolute;
+    bottom: 42px;
+    left:0;
+    max-height: 260px;
+    overflow-y:auto;
+    min-width:170px;
+    background: #16181c;
+    border:1px solid var(--panel-border);
+    border-radius:10px;
+    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.7);
+    z-index:40;
+  }
+
+  .fm-lang-menu.show{ display:block; }
+
+  .fm-lang-menu button{
+    display:block;
+    width:100%;
+    text-align:left;
+    padding:8px 14px;
+    background:transparent;
+    border:none;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size:12px;
+    cursor:pointer;
+  }
+
+  .fm-lang-menu button:hover{ background: var(--accent-soft); color: var(--accent); }
+  .fm-lang-menu button.active{ color: var(--accent); }
+
+  .fm-save-btn{
+    padding: 10px 22px;
+    background: var(--accent);
+    border:none;
+    border-radius: 10px;
+    color: #14100a;
+    font-family: var(--mono);
+    font-weight:600;
+    font-size:12.5px;
+    cursor:pointer;
+    transition: background 0.2s ease;
+  }
+
+  .fm-save-btn:hover{ background: #f0b155; }
+  .fm-save-btn.saved{ background: var(--success); color:#0a1a12; }
+
+  .server-stats-row{
+    display: flex;
+    gap: 8px;
+  }
+
+  .graph-box{
+    flex:1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 8px;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+
+  .graph-box span{
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .graph-box canvas{ width:100%; height:120px; }
+
+  .graph-box-row{ display:flex; gap:4px; }
+
+  .graph-scale{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    width:34px;
+    flex-shrink:0;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    color: var(--text-muted);
+    padding: 2px 0;
+  }
+
+  .info-box{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 9px 14px;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  .info-box span:first-child{ color: var(--text-muted); }
+  .info-box span:last-child{ color: var(--text); }
+
+  #terminalOutput{ scrollbar-color: #000 #0a0b0d; scrollbar-width: thin; }
+  #terminalOutput::-webkit-scrollbar{ width: 8px; }
+  #terminalOutput::-webkit-scrollbar-thumb{ background: #000; border-radius: 4px; }
+  #terminalOutput::-webkit-scrollbar-track{ background: #0a0b0d; }
+
+  .stat-box{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text);
+    min-width: 62px;
+    white-space: nowrap;
+  }
+
+  .stat-box svg{
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    color: var(--accent);
+  }
+
+  .pw-wrap{ position: relative; }
+
+  .pw-toggle{
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-faint);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    padding: 4px 6px;
+  }
+
+  .pw-toggle:hover{ color: var(--text-muted); }
+
+  .captcha-row{
+    display:flex;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  canvas#captchaCanvas{
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    background: #0d0f12;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .captcha-refresh{
+    background: #0d0f12;
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    color: var(--text-muted);
+    width: 42px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, transform 0.2s ease;
+  }
+
+  .captcha-refresh:hover{
+    color: var(--accent);
+    border-color: var(--accent-dim);
+  }
+
+  .captcha-refresh:active{ transform: rotate(120deg); }
+
+  .captcha-input{ margin-top: 10px; }
+
+  .error-msg{
+    display:none;
+    font-size: 12.5px;
+    color: var(--error);
+    background: var(--error-soft);
+    border: 1px solid rgba(224,87,76,0.25);
+    border-radius: var(--radius);
+    padding: 9px 11px;
+    line-height: 1.4;
+  }
+
+  .error-msg.show{ display:block; }
+
+  button.submit{
+    margin-top: 4px;
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    color: #14100a;
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 13.5px;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 8px;
+  }
+
+  button.submit:hover{ background: #f0b155; }
+  button.submit:active{ transform: scale(0.99); }
+
+  button.submit:disabled{
+    background: #3a3d44;
+    color: var(--text-faint);
+    cursor: not-allowed;
+  }
+
+  .spinner{
+    width: 13px; height: 13px;
+    border: 2px solid rgba(20,16,10,0.3);
+    border-top-color: #14100a;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    display:none;
+  }
+
+  .spinner.show{ display:inline-block; }
+
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+
+  .logged-in{
+    display: none;
+    text-align: center;
+    padding: 10px 4px 4px;
+  }
+
+  .logged-in.show{ display: block; }
+
+  .logged-in .status{
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--success);
+    margin: 0 0 8px;
+  }
+
+  .logged-in .user-email{
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0 0 24px;
+    word-break: break-all;
+  }
+
+  button.signout{
+    width: 100%;
+    padding: 11px;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  button.signout:hover{
+    color: var(--text);
+    border-color: rgba(255,255,255,0.25);
+  }
+
+</style>
+</head>
+<body>
+
+<video id="loggedInVideoBg" autoplay loop muted playsinline>
+  <source src="https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/Make_k_vedio_of_live_servers.mp4" type="video/mp4">
+</video>
+
+<button type="button" id="videoMuteToggle" title="Unmute">
+  <svg class="muted-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 9v6h4l5 4V5L8 9H4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M17 8.5c1.5 1 1.5 6 0 7M19.5 6c2.5 2 2.5 10 0 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    <line x1="3" y1="21" x2="21" y2="3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+  </svg>
+  <svg class="unmuted-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 9v6h4l5 4V5L8 9H4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M17 8.5c1.5 1 1.5 6 0 7M19.5 6c2.5 2 2.5 10 0 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+  </svg>
+</button>
+
+<div class="admin-brand" id="adminBrand">
+  <div class="brand-card">
+    <span class="logo-x">X</span>
+    <span class="welcome-text">Welcome to XtremeTech</span>
+  </div>
+  <div class="brand-actions">
+    <button type="button" class="pill-btn" id="btnSupport">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 13v-1a8 8 0 0116 0v1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <rect x="2.5" y="13" width="4" height="6.5" rx="2" stroke="currentColor" stroke-width="1.8"/>
+        <rect x="17.5" y="13" width="4" height="6.5" rx="2" stroke="currentColor" stroke-width="1.8"/>
+      </svg>
+      <span>Support</span>
+    </button>
+    <button type="button" class="pill-btn" id="btnDiscord">
+      <svg viewBox="0 0 24 24" width="26" height="26" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#5865F2" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.522 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
+      </svg>
+      <span>Discord</span>
+    </button>
+  </div>
+</div>
+
+<div class="main-stack">
+  <div class="window">
+    <div class="titlebar">
+      <span class="titlebar-label">XtremeTech</span>
+    </div>
+
+    <div class="content">
+      <div id="loginView">
+        <h1 class="heading">Sign in</h1>
+        <p class="subtext">Enter your credentials to access the console.</p>
+
+        <div id="formError" class="error-msg"></div>
+
+        <form id="loginForm" autocomplete="off">
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email">
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="pw-wrap">
+              <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password">
+              <button type="button" class="pw-toggle" id="pwToggle">show</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="captchaInput">Security check</label>
+            <div class="captcha-row">
+              <canvas id="captchaCanvas" width="140" height="46" title="Click to refresh"></canvas>
+              <button type="button" class="captcha-refresh" id="captchaRefresh" title="Generate new code">↻</button>
+            </div>
+            <input type="text" id="captchaInput" class="captcha-input" placeholder="Type the code above" autocomplete="off">
+          </div>
+
+          <button type="submit" class="submit" id="submitBtn">
+            <span class="spinner" id="spinner"></span>
+            <span id="submitLabel">Sign in</span>
+          </button>
+        </form>
+      </div>
+
+      <div id="loggedInView" class="logged-in">
+        <p class="status">Logged in</p>
+        <button type="button" class="signout" id="signOutBtn">Sign out</button>
+      </div>
+
+      <div id="adminView" style="display:none;">
+        <h1 class="heading">Admin Panel</h1>
+        <p class="subtext">You're in.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="admin-sidebar" id="adminSidebar">
+
+  <div class="sidebar-group">
+    <button type="button" class="sidebar-btn" id="navHome" data-label="Home">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 11.5L12 4l9 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M5.5 10v9a1 1 0 0 0 1 1H9a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h2.5a1 1 0 0 0 1-1v-9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="sidebar-tooltip">Home</span>
+    </button>
+
+    <div class="sidebar-divider"></div>
+
+    <button type="button" class="sidebar-btn admin-only" id="navAddServer" data-label="Add Server">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <span class="sidebar-tooltip">Add Server</span>
+    </button>
+
+    <button type="button" class="sidebar-btn admin-only" id="navRemoveServer" data-label="Remove Server">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <span class="sidebar-tooltip">Remove Server</span>
+    </button>
+
+    <button type="button" class="sidebar-btn admin-only" id="navManageServers" data-label="Manage Servers">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3.5" y="4" width="17" height="6" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
+        <rect x="3.5" y="14" width="17" height="6" rx="1.5" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="7" cy="7" r="0.9" fill="currentColor"/>
+        <circle cx="7" cy="17" r="0.9" fill="currentColor"/>
+        <path d="M10.5 7h6M10.5 17h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <span class="sidebar-tooltip">Manage Servers</span>
+    </button>
+
+    <button type="button" class="sidebar-btn ctx-terminal" id="navTerminal" data-label="Terminal" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M7 9l3 3-3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12.5 15h4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <span class="sidebar-tooltip">Terminal</span>
+    </button>
+
+    <button type="button" class="sidebar-btn ctx-terminal" id="navFiles" data-label="Files" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 7a1.5 1.5 0 0 1 1.5-1.5H9l2 2h8.5A1.5 1.5 0 0 1 21 9v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18V7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+      <span class="sidebar-tooltip">Files</span>
+    </button>
+
+    <button type="button" class="sidebar-btn ctx-terminal" id="navStartup" data-label="Startup" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M12 7.5v5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="sidebar-tooltip">Startup</span>
+    </button>
+
+    <button type="button" class="sidebar-btn ctx-terminal" id="navSchedule" data-label="Schedule" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3.5" y="5" width="17" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M3.5 9.5h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <span class="sidebar-tooltip">Schedule</span>
+    </button>
+
+    <button type="button" class="sidebar-btn ctx-terminal" id="navUsers" data-label="Users" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="8.5" cy="8" r="2.8" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M3 19c.6-3 2.6-5 5.5-5s4.9 2 5.5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="16.5" cy="8.5" r="2.3" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M14.8 14.3c2.4.3 4 2 4.6 4.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <span class="sidebar-tooltip">Users</span>
+    </button>
+
+    <div class="sidebar-divider admin-only"></div>
+
+    <button type="button" class="sidebar-btn" id="navAccount" data-label="Account">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M4.5 20c1.4-3.6 4.4-5.5 7.5-5.5s6.1 1.9 7.5 5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <span class="sidebar-tooltip">Account</span>
+    </button>
+
+    <button type="button" class="sidebar-btn" id="navLogout" data-label="Logout">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 5H6.5A1.5 1.5 0 0 0 5 6.5v11A1.5 1.5 0 0 0 6.5 19H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 8l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16 12H9.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <span class="sidebar-tooltip">Logout</span>
+    </button>
+  </div>
+
+  <div class="sidebar-spacer"></div>
+</nav>
+
+<!-- Add Server modal -->
+<div class="modal-overlay" id="serverTypeOverlay">
+  <div class="modal-box" style="max-width:380px; text-align:center;">
+    <button type="button" class="modal-close" id="serverTypeClose">✕</button>
+    <h1 class="heading" style="justify-content:center;">Server Type</h1>
+    <p class="subtext" style="margin-bottom:20px;">Choose one to continue.</p>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <button type="button" id="typeVDS" class="signout">VDS</button>
+      <button type="button" id="typeVPS" class="signout">VPS</button>
+      <button type="button" id="typeDedicated" class="submit">Dedicated Server</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="addServerOverlay">
+  <div class="modal-box">
+    <button type="button" class="modal-close" id="addServerClose">✕</button>
+    <h1 class="heading" style="text-align:left; justify-content:flex-start;">Add Server</h1>
+    <p class="subtext" style="text-align:left; margin-bottom:20px;">Fill in the details for the new server.</p>
+
+    <form id="addServerForm" autocomplete="off">
+      <div class="field">
+        <label for="serverName">Server Name</label>
+        <input type="text" id="serverName" placeholder="e.g. Aincrad #1" required>
+      </div>
+
+      <div class="field">
+        <label>Server Duration</label>
+        <div class="duration-row">
+          <select id="serverDay" required></select>
+          <select id="serverMonth" required></select>
+          <select id="serverYear" required></select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="serverBackground">Server Background</label>
+        <select id="serverBackground" required>
+          <option value="">Select a theme…</option>
+          <option value="https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/GOJO.png">Gojo Satoru</option>
+          <option value="https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/Kamado.png">Kamado Tanjiro</option>
+          <option value="https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/Light.png">Light Yagami</option>
+          <option value="https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/DrStone.png">Dr. Stone</option>
+          <option value="https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/AOT.png">Attack On Titan</option>
+          <option value="https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/Nature.png">Nature</option>
+          <option value="https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/Aurora.png">Aurora</option>
+          <option value="https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/Naruto.png">Naruto</option>
+          <option value="https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/DBSOG.png">Dragon Ball Super</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="serverCost">Server Cost</label>
+        <input type="text" id="serverCost" placeholder="e.g. $5.00 / month" required>
+      </div>
+
+      <div class="field">
+        <label for="serverUuid">Server UUID</label>
+        <input type="text" id="serverUuid" placeholder="e.g. 3f29c1a2-..." required>
+      </div>
+
+      <button type="submit" class="submit" id="createServerBtn">
+        <span>Create Server</span>
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Remove Server modal: pick a server, then confirm -->
+<div class="modal-overlay" id="removeServerOverlay">
+  <div class="modal-box">
+    <button type="button" class="modal-close" id="removeServerClose">✕</button>
+    <h1 class="heading" style="text-align:left; justify-content:flex-start;">Remove Server</h1>
+    <p class="subtext" style="text-align:left; margin-bottom:20px;">Select a server to remove.</p>
+
+    <div id="removeServerList" style="display:flex; flex-direction:column; gap:10px;"></div>
+  </div>
+</div>
+
+<!-- Confirm-delete step, shown on top of the Remove Server modal -->
+<div class="modal-overlay" id="confirmDeleteOverlay">
+  <div class="modal-box" style="max-width:380px; text-align:center;">
+    <h1 class="heading" style="justify-content:center;">Remove this server?</h1>
+    <p class="subtext" id="confirmDeleteName" style="margin-bottom:24px;"></p>
+    <p class="subtext" style="margin-bottom:24px; color: var(--error);">This cannot be undone.</p>
+    <div style="display:flex; gap:12px;">
+      <button type="button" class="signout" id="confirmDeleteCancel" style="flex:1;">Cancel</button>
+      <button type="button" class="submit" id="confirmDeleteYes" style="flex:1; background: var(--error); color:#fff;">Yes, remove</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm-remove-user step, shown on top of Manage Servers -->
+<div class="manage-view" id="serverControlOverlay">
+  <h1 class="heading" style="text-align:left; justify-content:flex-start;" id="serverControlName"></h1>
+  <div style="display:flex; gap:14px; margin-top:14px; padding-right:24px; align-items:stretch; height:400px;">
+    <div style="flex:0 0 62%; display:flex; flex-direction:column; gap:8px;">
+      <div style="background:#0a0b0d; border:1px solid var(--panel-border); border-radius:10px; padding:14px; font-family:var(--mono); font-size:12.5px; color:#ffffff; flex:1; min-height:0; overflow-y:auto; white-space:pre-wrap;" id="terminalOutput"></div>
+      <input type="text" id="terminalInput" placeholder="Type a command…" style="background:#0a0b0d; border:1px solid var(--panel-border); border-radius:10px; padding:10px 12px; font-family:var(--mono); font-size:12.5px; color:var(--text); outline:none;">
+    </div>
+
+    <div style="flex:1; display:flex; flex-direction:column; gap:10px;">
+      <div style="display:flex; gap:10px;">
+        <button type="button" id="pwrStart" style="flex:1; height:50px; border-radius:25px; border:2px solid rgba(255,255,255,0.3); background:var(--success); color:#0a1a12; display:flex; align-items:center; justify-content:center; cursor:pointer;">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button type="button" id="pwrRestart" style="flex:1; height:50px; border-radius:25px; border:2px solid rgba(255,255,255,0.3); background:transparent; color:var(--text); display:flex; align-items:center; justify-content:center; cursor:pointer;">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M4 12a8 8 0 1 1 3 6.2M4 12V6M4 12h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" id="pwrStop" style="flex:1; height:50px; border-radius:25px; border:2px solid rgba(255,255,255,0.3); background:var(--error); color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+        </button>
+      </div>
+
+      <div class="info-box"><span>Address</span><span id="infoAddress">—</span></div>
+      <div class="info-box"><span>Uptime</span><span id="infoUptime">—</span></div>
+      <div class="info-box"><span>CPU Load</span><span id="infoCpu">—</span></div>
+      <div class="info-box"><span>Memory</span><span id="infoMemory">—</span></div>
+      <div class="info-box"><span>Disk</span><span id="infoDisk">—</span></div>
+      <div class="info-box"><span>Network (In)</span><span id="infoNetIn">—</span></div>
+      <div class="info-box"><span>Network (Out)</span><span id="infoNetOut">—</span></div>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:8px; margin-top:10px;">
+    <div class="graph-box"><span>CPU Load</span>
+      <div class="graph-box-row">
+        <div class="graph-scale"><span id="scaleCpuUp">—</span><span id="scaleCpuMid">—</span><span>0%</span></div>
+        <canvas id="graphCpu" width="300" height="120"></canvas>
+      </div>
+    </div>
+    <div class="graph-box"><span>Memory</span>
+      <div class="graph-box-row">
+        <div class="graph-scale"><span id="scaleMemUp">—</span><span id="scaleMemMid">—</span><span>0</span></div>
+        <canvas id="graphMemory" width="300" height="120"></canvas>
+      </div>
+    </div>
+    <div class="graph-box"><span>Network</span>
+      <div class="graph-box-row">
+        <div class="graph-scale"><span id="scaleNetUp">—</span><span id="scaleNetMid">—</span><span>0</span></div>
+        <canvas id="graphNetwork" width="300" height="120"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="confirmRemoveUserOverlay">
+  <div class="modal-box" style="max-width:380px; text-align:center;">
+    <h1 class="heading" style="justify-content:center;">Remove this user?</h1>
+    <p class="subtext" id="confirmRemoveUserName" style="margin-bottom:24px;"></p>
+    <p class="subtext" style="margin-bottom:24px; color: var(--error);">Removes their access to this server. Their login itself isn't deleted (they may have access to other servers). This cannot be undone.</p>
+    <div style="display:flex; gap:12px;">
+      <button type="button" class="signout" id="confirmRemoveUserCancel" style="flex:1;">Cancel</button>
+      <button type="button" class="submit" id="confirmRemoveUserYes" style="flex:1; background: var(--error); color:#fff;">Yes, remove</button>
+    </div>
+  </div>
+</div>
+
+<!-- Manage Servers section: click a server to manage its users -->
+<div class="manage-view" id="manageServersOverlay">
+  <h1 class="heading" style="text-align:left; justify-content:flex-start;">Manage Servers</h1>
+  <p class="subtext" style="text-align:left; margin-bottom:20px;">Click a server to see and manage its users.</p>
+
+  <div id="manageServersBoxes" style="display:flex; flex-direction:column; gap:14px;"></div>
+</div>
+
+<!-- Server Users section: shown in place of the box list when a server is clicked -->
+<div class="manage-view" id="serverUsersOverlay">
+  <button type="button" id="serverUsersBack" title="Back to server list" style="width:auto; height:auto; padding:8px 14px; margin-bottom:16px; background:transparent; border:1px solid var(--panel-border); border-radius:10px; color:var(--text-muted); font-family:var(--mono); font-size:13px; cursor:pointer;">← Back</button>
+
+  <h1 class="heading" style="text-align:left; justify-content:flex-start;" id="serverUsersName"></h1>
+  <p class="subtext" style="text-align:left; margin-bottom:16px;">Users with access to this server.</p>
+
+  <div id="serverUsersList" style="display:flex; flex-direction:column; gap:10px; margin-bottom:28px;"></div>
+
+  <h1 class="heading" style="text-align:left; justify-content:flex-start; font-size:16px;">Add User</h1>
+  <p class="subtext" style="text-align:left; margin-bottom:16px;">Creates a real login for them (or updates their password if the email already has one) and limits what they'll be able to use.</p>
+
+  <div id="addUserError" class="error-msg"></div>
+
+  <div class="field">
+    <label for="addUserEmail">Email</label>
+    <input type="email" id="addUserEmail" placeholder="someone@example.com">
+  </div>
+
+  <div class="field" style="margin-top:18px;">
+    <label for="addUserPassword">Password</label>
+    <div class="pw-wrap">
+      <input type="password" id="addUserPassword" placeholder="Leave blank to keep the existing password">
+      <button type="button" class="pw-toggle" id="addUserPwToggle">show</button>
+    </div>
+  </div>
+
+  <div class="field" style="margin-top:18px;">
+    <label for="addUserPasswordConfirm">Confirm Password</label>
+    <div class="pw-wrap">
+      <input type="password" id="addUserPasswordConfirm" placeholder="Re-type the password above">
+      <button type="button" class="pw-toggle" id="addUserPwConfirmToggle">show</button>
+    </div>
+  </div>
+
+  <div class="duration-row" style="margin-top:18px;">
+    <div class="field">
+      <label for="addUserCpuLimit">CPU Limit (%)</label>
+      <input type="number" id="addUserCpuLimit" placeholder="e.g. 50" min="0">
+    </div>
+    <div class="field">
+      <label for="addUserRamLimit">RAM Limit (MB)</label>
+      <input type="number" id="addUserRamLimit" placeholder="e.g. 1024" min="0">
+    </div>
+    <div class="field">
+      <label for="addUserStorageLimit">Storage Limit (MB)</label>
+      <input type="number" id="addUserStorageLimit" placeholder="e.g. 5000" min="0">
+    </div>
+    <div class="field">
+      <label for="addUserNetworkLimit">Network Limit (Mbps)</label>
+      <input type="number" id="addUserNetworkLimit" placeholder="e.g. 100" min="0">
+    </div>
+  </div>
+
+  <p class="subtext" style="margin-top:14px; font-size:12px;">
+    CPU and RAM limits are applied for real on the panel. A private folder named after their email is
+    created in Files, and they'll only ever see that folder. Storage/network are shown as caps in the
+    dashboard, but Pterodactyl has no native network-throttle to enforce.
+  </p>
+
+  <button type="button" class="submit" id="addUserSaveBtn" style="margin-top:20px;">
+    <span>Add User</span>
+  </button>
+</div>
+
+<!-- Startup section: docker image + startup command, and egg variables -->
+<div class="manage-view" id="startupOverlay">
+  <h1 class="heading" style="text-align:left; justify-content:flex-start;">Startup</h1>
+  <p class="subtext" style="text-align:left; margin-bottom:16px;">Startup command, Docker image, and install variables for this server.</p>
+
+  <div id="startupError" class="error-msg"></div>
+
+  <div style="background:#0a0b0d; border:1px solid var(--panel-border); border-radius:10px; padding:16px; margin-bottom:20px;">
+    <div class="field">
+      <label for="startupCommandInput">Startup Command</label>
+      <input type="text" id="startupCommandInput" style="font-family:var(--mono); font-size:12.5px;">
+    </div>
+    <div class="field" style="margin-top:16px;">
+      <label for="startupImageSelect">Available Docker Images</label>
+      <select id="startupImageSelect" style="width:100%; background:#0a0b0d; border:1px solid var(--panel-border); border-radius:10px; padding:10px 12px; color:var(--text); font-family:var(--mono); font-size:12.5px;"></select>
+    </div>
+  </div>
+
+  <div style="background:#0a0b0d; border:1px solid var(--panel-border); border-radius:10px; padding:16px;">
+    <h1 class="heading" style="text-align:left; justify-content:flex-start; font-size:16px; margin-bottom:4px;">Variables</h1>
+    <div id="startupVarsBox"></div>
+  </div>
+
+  <button type="button" class="submit" id="startupSaveBtn" style="margin-top:20px;">
+    <span>Save</span>
+  </button>
+</div>
+
+<!-- Files section: browse, upload, and edit a server's files -->
+<div class="manage-view" id="filesOverlay">
+  <div class="fm-topbar">
+    <div class="fm-path" id="fmPath"></div>
+    <div class="fm-actions">
+      <button type="button" class="fm-btn" id="fmCreateDirBtn">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 7a1.5 1.5 0 0 1 1.5-1.5H9l2 2h8.5A1.5 1.5 0 0 1 21 9v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18V7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 11v5M9.5 13.5h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span>Create Directory</span>
+      </button>
+      <button type="button" class="fm-btn" id="fmUploadBtn">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 16V4M12 4l-4 4M12 4l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <span>Upload</span>
+      </button>
+      <button type="button" class="fm-btn" id="fmNewFileBtn">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3.5h8l4 4V19.5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 19.5v-14A1.5 1.5 0 0 1 5.5 3.5H6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 11v5M9.5 13.5h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span>New File</span>
+      </button>
+      <input type="file" id="fmFileInput" multiple style="display:none;">
+    </div>
+  </div>
+
+  <div class="fm-header-row">
+    <button type="button" class="fm-checkbox" id="fmSelectAll"></button>
+    <span style="flex:1;">Name</span>
+    <span style="width:70px; text-align:right;">Size</span>
+    <span style="width:150px; text-align:right;">Modified</span>
+    <span style="width:30px;"></span>
+  </div>
+
+  <div class="fm-list" id="fmList">
+    <div class="fm-drop-hint">Drop files here to upload</div>
+  </div>
+</div>
+
+<!-- File editor modal -->
+<div class="fm-editor-overlay" id="fmEditorOverlay">
+  <div class="fm-editor-box">
+    <div class="fm-editor-head">
+      <span id="fmEditorName">untitled.txt</span>
+      <button type="button" class="fm-editor-close" id="fmEditorClose">&times;</button>
+    </div>
+    <div class="fm-editor-code-wrap">
+      <pre class="fm-editor-highlight" id="fmEditorHighlight"></pre>
+      <textarea class="fm-editor-textarea" id="fmEditorTextarea" spellcheck="false"></textarea>
+    </div>
+    <div class="fm-editor-footer">
+      <div class="fm-lang-wrap">
+        <button type="button" class="fm-lang-btn" id="fmLangBtn">
+          <span id="fmLangLabel">Plain Text</span>
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="fm-lang-menu" id="fmLangMenu"></div>
+      </div>
+      <button type="button" class="fm-save-btn" id="fmSaveBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Persistent server list: stacked cards, fed live from Firestore -->
+<div class="server-list" id="serverList"></div>
+
+<!-- Firebase SDK (compat build, simplest for a single-file page) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+  // ---------------------------------------------------------------
+  // 1. PASTE YOUR FIREBASE CONFIG HERE (from Firebase Console >
+  //    Project settings > General > Your apps > SDK setup).
+  // ---------------------------------------------------------------
+  const firebaseConfig = {
+    apiKey: "AIzaSyCEHipTNO4izq6K15GG4OXpzFpau9kTNmQ",
+    authDomain: "xtremetech-f9434.firebaseapp.com",
+    projectId: "xtremetech-f9434",
+    storageBucket: "xtremetech-f9434.firebasestorage.app",
+    messagingSenderId: "43655532067",
+    appId: "1:43655532067:web:f3403587eda5ad74e52b96"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  // ---------------------------------------------------------------
+  // View switching: login form <-> normal user screen <-> admin panel
+  // ---------------------------------------------------------------
+  const mainStack = document.querySelector('.main-stack');
+  const adminBrand = document.getElementById('adminBrand');
+  const loginView = document.getElementById('loginView');
+  const loggedInView = document.getElementById('loggedInView');
+  const adminView = document.getElementById('adminView');
+  const adminSidebar = document.getElementById('adminSidebar');
+  const serverList = document.getElementById('serverList');
+
+  const LOGIN_BG = "https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/LOGIN.png";
+  const ADMIN_BG = "https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/XtremeTechWebsiteBackground.png";
+
+  // Where notify_login.py is running. Change this if you host it
+  // somewhere other than your own machine on port 5000.
+  const BACKEND_URL = "http://localhost:5000/notify";
+
+  function setBackground(url){
+    document.body.style.backgroundImage = `url('${url}')`;
+  }
+
+  const loggedInVideoBg = document.getElementById('loggedInVideoBg');
+
+  const videoMuteToggle = document.getElementById('videoMuteToggle');
+
+  function showVideoBackground(){
+    loggedInVideoBg.classList.add('show');
+    videoMuteToggle.classList.add('show');
+    loggedInVideoBg.play().catch(() => {
+      // Autoplay can be blocked by the browser in rare cases -- the
+      // static background image behind it is still there as a fallback.
+    });
+  }
+
+  function hideVideoBackground(){
+    loggedInVideoBg.classList.remove('show');
+    videoMuteToggle.classList.remove('show');
+    loggedInVideoBg.pause();
+  }
+
+  videoMuteToggle.addEventListener('click', () => {
+    // Browsers only allow enabling audio in direct response to a real
+    // click like this one -- it can't be turned on automatically.
+    loggedInVideoBg.muted = !loggedInVideoBg.muted;
+    videoMuteToggle.classList.toggle('is-unmuted', !loggedInVideoBg.muted);
+    videoMuteToggle.title = loggedInVideoBg.muted ? 'Unmute' : 'Mute';
+  });
+
+  function showLoginForm(){
+    loginView.style.display = '';
+    loggedInView.classList.remove('show');
+    adminView.style.display = 'none';
+    mainStack.style.display = '';
+    mainStack.classList.remove('admin-wide');
+    adminBrand.classList.remove('show');
+    adminSidebar.classList.remove('show');
+    serverList.classList.remove('show');
+    document.body.classList.remove('admin-mode', 'role-admin', 'role-user');
+    stopServerListener();
+    hideVideoBackground();
+    setBackground(LOGIN_BG);
+  }
+
+  function showLoggedIn(){
+    loginView.style.display = 'none';
+    loggedInView.classList.remove('show'); // the old plain box is retired in favor of the shared panel below
+    adminView.style.display = 'none';
+    mainStack.style.display = 'none';
+    adminBrand.classList.add('show');
+    adminSidebar.classList.add('show');
+    serverList.classList.remove('show');
+    document.body.classList.remove('admin-mode', 'role-admin');
+    document.body.classList.add('role-user'); // CSS hides the admin-only sidebar buttons for this role
+    showVideoBackground();
+  }
+
+  function showAdminPanel(){
+    loginView.style.display = 'none';
+    loggedInView.classList.remove('show');
+    adminView.style.display = 'none';
+    mainStack.style.display = 'none';
+    adminBrand.classList.add('show');
+    adminSidebar.classList.add('show');
+    serverList.classList.add('show');
+    document.body.classList.remove('role-user');
+    document.body.classList.add('admin-mode', 'role-admin');
+    hideVideoBackground();
+    setBackground(ADMIN_BG);
+    attachAdminServerListener();
+  }
+
+  // Tells the backend someone logged in, so it can (a) email the
+  // admin about it and (b) tell the page whether this was the admin
+  // account. Nothing here blocks login itself -- if the backend is
+  // offline, the person still gets the normal logged-in view, just
+  // never the admin panel (fails safe, not open).
+  async function checkAdminAndRoute(user){
+    showLoggedIn(); // default view while we wait on the backend
+    let isAdmin = false;
+    try{
+      const idToken = await user.getIdToken();
+      const res = await fetch(BACKEND_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken })
+      });
+      const data = await res.json();
+      if(data.ok && data.is_admin){
+        isAdmin = true;
+        showAdminPanel();
+      }
+    }catch(err){
+      // backend offline or unreachable -- fall through and treat as
+      // non-admin below, no error shown to the user
+    }
+
+    if(!isAdmin){
+      // Not the admin -- check whether this email has been assigned
+      // a server via Manage Servers. If so, they'll see just that one.
+      attachOwnerServerListener(user.email);
+    }
+  }
+
+  // Runs on page load, and again whenever auth state changes (login/logout).
+  auth.onAuthStateChanged((user) => {
+    if(user){
+      checkAdminAndRoute(user);
+    }else{
+      showLoginForm();
+    }
+  });
+
+  document.getElementById('signOutBtn').addEventListener('click', () => {
+    auth.signOut();
+  });
+
+  // Sidebar nav (admin panel only)
+  document.getElementById('navLogout').addEventListener('click', () => {
+    auth.signOut();
+  });
+
+  document.getElementById('navHome').addEventListener('click', () => {
+    hideAllScreens();
+    document.getElementById('navAddServer').style.display = '';
+    document.getElementById('navRemoveServer').style.display = '';
+    document.getElementById('navManageServers').style.display = '';
+    if(document.body.classList.contains('role-admin')) serverList.classList.add('show');
+    // Home doesn't open anything -- it just clears whatever popup/panel
+    // might currently be open, back to the plain dashboard view.
+    document.querySelectorAll('.server-context-btn').forEach(el => el.classList.remove('ctx-visible'));
+    closeAddServerModal();
+    closeRemoveServerModal();
+    closeManageServersModal();
+        closeConfirmDelete();
+    closeConfirmRemoveUser();
+  });
+
+  document.getElementById('btnDiscord').addEventListener('click', () => {
+    window.open('https://discord.gg/T6bjwg8KDZ', '_blank', 'noopener,noreferrer');
+  });
+
+  // ---------------------------------------------------------------
+  // Add Server modal
+  // ---------------------------------------------------------------
+  const addServerOverlay = document.getElementById('addServerOverlay');
+  const addServerForm = document.getElementById('addServerForm');
+
+  function openAddServerModal(){
+    addServerOverlay.classList.add('show');
+  }
+
+  function closeAddServerModal(){
+    addServerOverlay.classList.remove('show');
+  }
+
+  let pendingTypeAction = null; // 'add' or 'remove'
+
+  function openServerTypeSelector(action){
+    pendingTypeAction = action;
+    document.getElementById('serverTypeOverlay').classList.add('show');
+  }
+
+  document.getElementById('serverTypeClose').addEventListener('click', () => {
+    document.getElementById('serverTypeOverlay').classList.remove('show');
+  });
+
+  document.getElementById('typeVDS').addEventListener('click', () => {
+    alert('VDS is not usable yet.');
+  });
+
+  document.getElementById('typeVPS').addEventListener('click', () => {
+    alert('VPS is not usable yet.');
+  });
+
+  document.getElementById('typeDedicated').addEventListener('click', () => {
+    document.getElementById('serverTypeOverlay').classList.remove('show');
+    if(pendingTypeAction === 'add') openAddServerModal();
+    if(pendingTypeAction === 'remove') openRemoveServerModal();
+  });
+
+  if(document.getElementById('navAddServer')) document.getElementById('navAddServer').addEventListener('click', () => openServerTypeSelector('add'));
+  document.getElementById('addServerClose').addEventListener('click', closeAddServerModal);
+  addServerOverlay.addEventListener('click', (e) => {
+    if(e.target === addServerOverlay) closeAddServerModal();
+  });
+
+  // ---------------------------------------------------------------
+  // Remove Server modal: pick one from the list, then confirm
+  // ---------------------------------------------------------------
+  const removeServerOverlay = document.getElementById('removeServerOverlay');
+  const removeServerList = document.getElementById('removeServerList');
+  const confirmDeleteOverlay = document.getElementById('confirmDeleteOverlay');
+  const confirmDeleteName = document.getElementById('confirmDeleteName');
+
+  let pendingDeleteId = null;
+
+  async function openRemoveServerModal(){
+    removeServerOverlay.classList.add('show');
+    removeServerList.innerHTML = '<p class="server-list-empty">Loading…</p>';
+
+    try{
+      const snapshot = await db.collection('servers').orderBy('createdAt', 'desc').get();
+      if(snapshot.empty){
+        removeServerList.innerHTML = '<p class="server-list-empty">No servers yet.</p>';
+        return;
+      }
+
+      removeServerList.innerHTML = '';
+      snapshot.forEach((doc) => {
+        const s = doc.data();
+        const row = document.createElement('div');
+        row.className = 'remove-row';
+        row.innerHTML = `
+          <div class="remove-row-info">
+            <div class="remove-row-name">${s.name || 'Unnamed server'}</div>
+            <div class="remove-row-meta">Expires ${s.expiry || '—'} · Cost ${s.cost || '—'}</div>
+          </div>
+          <button type="button" class="remove-row-btn">Remove</button>
+        `;
+        row.querySelector('.remove-row-btn').addEventListener('click', () => {
+          pendingDeleteId = doc.id;
+          confirmDeleteName.textContent = s.name || 'Unnamed server';
+          confirmDeleteOverlay.classList.add('show');
+        });
+        removeServerList.appendChild(row);
+      });
+    }catch(err){
+      removeServerList.innerHTML = '<p class="server-list-empty">Could not load servers.</p>';
+    }
+  }
+
+  function closeRemoveServerModal(){
+    removeServerOverlay.classList.remove('show');
+  }
+
+  if(document.getElementById('navRemoveServer')) document.getElementById('navRemoveServer').addEventListener('click', () => openServerTypeSelector('remove'));
+  document.getElementById('removeServerClose').addEventListener('click', closeRemoveServerModal);
+  removeServerOverlay.addEventListener('click', (e) => {
+    if(e.target === removeServerOverlay) closeRemoveServerModal();
+  });
+
+  function closeConfirmDelete(){
+    confirmDeleteOverlay.classList.remove('show');
+    pendingDeleteId = null;
+  }
+
+  document.getElementById('confirmDeleteCancel').addEventListener('click', closeConfirmDelete);
+  confirmDeleteOverlay.addEventListener('click', (e) => {
+    if(e.target === confirmDeleteOverlay) closeConfirmDelete();
+  });
+
+  document.getElementById('confirmDeleteYes').addEventListener('click', async () => {
+    if(!pendingDeleteId) return;
+    try{
+      await db.collection('servers').doc(pendingDeleteId).delete();
+      closeConfirmDelete();
+      closeRemoveServerModal();
+      // The persistent list (serverList) updates on its own via the
+      // onSnapshot listener already running -- no manual refresh needed.
+    }catch(err){
+      alert('Could not remove this server: ' + err.message);
+    }
+  });
+
+  // ---------------------------------------------------------------
+  // Manage Servers modal: assign an email to each server. Whoever
+  // logs in with that email sees just that one server's card --
+  // handled by attachOwnerServerListener() above, once the admin
+  // check comes back false for them.
+  // ---------------------------------------------------------------
+  const manageServersOverlay = document.getElementById('manageServersOverlay');
+  const manageServersBoxes = document.getElementById('manageServersBoxes');
+
+  const serverUsersOverlay = document.getElementById('serverUsersOverlay');
+  const serverUsersName = document.getElementById('serverUsersName');
+  const serverUsersList = document.getElementById('serverUsersList');
+
+  const addUserEmail = document.getElementById('addUserEmail');
+  const addUserPassword = document.getElementById('addUserPassword');
+  const addUserPasswordConfirm = document.getElementById('addUserPasswordConfirm');
+  const addUserCpuLimit = document.getElementById('addUserCpuLimit');
+  const addUserRamLimit = document.getElementById('addUserRamLimit');
+  const addUserStorageLimit = document.getElementById('addUserStorageLimit');
+  const addUserNetworkLimit = document.getElementById('addUserNetworkLimit');
+  const addUserError = document.getElementById('addUserError');
+  const addUserSaveBtn = document.getElementById('addUserSaveBtn');
+
+  let pendingServerDocId = null;
+  let pendingControlDoc = null;
+
+  async function sendPower(signal, btn){
+    if(!pendingControlDoc) return;
+    btn.style.transform = 'scale(0.9)';
+    btn.style.opacity = '0.6';
+    setTimeout(() => { btn.style.transform = ''; btn.style.opacity = ''; }, 200);
+
+    const idToken = await auth.currentUser.getIdToken();
+    try{
+      const res = await fetch('http://localhost:5000/server_power', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken, docId: pendingControlDoc, signal })
+      });
+      const data = await res.json();
+      if(!data.ok){
+        alert('Power action failed: ' + (data.error || 'unknown error'));
+      }
+    }catch(err){
+      alert('Could not reach backend for power action.');
+    }
+  }
+  document.getElementById('pwrStart').addEventListener('click', (e) => sendPower('start', e.currentTarget));
+  document.getElementById('pwrRestart').addEventListener('click', (e) => sendPower('restart', e.currentTarget));
+  document.getElementById('pwrStop').addEventListener('click', (e) => sendPower('stop', e.currentTarget));
+
+  const graphHistory = { cpu: [], memory: [], netIn: [], netOut: [] };
+  const graphLimits = { cpu: null, memory: null };
+
+  function pushGraphPoint(key, value, limit){
+    const arr = graphHistory[key];
+    arr.push(value);
+    if(arr.length > 30) arr.shift();
+    graphLimits[key] = limit;
+    drawGraph(key);
+  }
+
+  function pushNetworkPoint(inbound, outbound){
+    graphHistory.netIn.push(inbound);
+    graphHistory.netOut.push(outbound);
+    if(graphHistory.netIn.length > 30) graphHistory.netIn.shift();
+    if(graphHistory.netOut.length > 30) graphHistory.netOut.shift();
+    drawGraph('network');
+  }
+
+  function drawLine(ctx, data, w, h, max, color, fillColor){
+    if(data.length < 2) return;
+    ctx.beginPath();
+    data.forEach((v, i) => {
+      const x = (i / (data.length - 1)) * w;
+      const y = h - (v / max) * (h - 6) - 3;
+      if(i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    if(fillColor){
+      ctx.lineTo(w, h);
+      ctx.lineTo(0, h);
+      ctx.closePath();
+      ctx.fillStyle = fillColor;
+      ctx.fill();
+    }
+  }
+
+  function drawGraph(key){
+    const idMap = { cpu: 'graphCpu', memory: 'graphMemory', network: 'graphNetwork' };
+    const canvas = document.getElementById(idMap[key]);
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+
+    if(key === 'network'){
+      const max = Math.max(...graphHistory.netIn, ...graphHistory.netOut, 1);
+      drawLine(ctx, graphHistory.netIn, w, h, max, '#3fa9f5', 'rgba(63,169,245,0.12)');   // inbound: blue
+      drawLine(ctx, graphHistory.netOut, w, h, max, '#d2691e', 'rgba(210,105,30,0.12)');  // outbound: dark orange
+      return;
+    }
+
+    const data = graphHistory[key];
+    const limit = graphLimits[key];
+    const max = Math.max(...data, limit || 0, 1);
+    drawLine(ctx, data, w, h, max, '#e8a33d', 'rgba(232,163,61,0.15)');
+
+    // Reference line at this user's specific limit for this metric
+    if(limit){
+      const y = h - (limit / max) * (h - 6) - 3;
+      ctx.beginPath();
+      ctx.setLineDash([5, 4]);
+      ctx.moveTo(0, y);
+      ctx.lineTo(w, y);
+      ctx.strokeStyle = '#e0574c';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
+  let logsTimer = null;
+
+  async function refreshTerminal(){
+    if(!pendingControlDoc) return;
+    try{
+      const idToken = await auth.currentUser.getIdToken();
+      const res = await fetch('http://localhost:5000/server_console', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken, docId: pendingControlDoc })
+      });
+      const data = await res.json();
+      if(!data.ok) return;
+
+      const out = document.getElementById('terminalOutput');
+      const atBottom = out.scrollHeight - out.scrollTop - out.clientHeight < 40;
+      // logs come from the websocket now, not this poll
+      if(atBottom) out.scrollTop = out.scrollHeight;
+
+      const r = data.resources || {};
+      document.getElementById('infoAddress').textContent = data.address || '—';
+      document.getElementById('infoUptime').textContent = r.uptime ? Math.floor(r.uptime/60000) + 'm' : '—';
+      document.getElementById('infoCpu').textContent = (r.cpu_absolute ?? '—') + '%';
+      document.getElementById('infoMemory').textContent = r.memory_bytes ? (r.memory_bytes/1048576).toFixed(1) + 'MB' : '—';
+      document.getElementById('infoDisk').textContent = r.disk_bytes ? (r.disk_bytes/1048576).toFixed(1) + 'MB' : '—';
+      document.getElementById('infoNetIn').textContent = r.network_rx_bytes ? (r.network_rx_bytes/1048576).toFixed(1) + 'MB' : '—';
+      document.getElementById('infoNetOut').textContent = r.network_tx_bytes ? (r.network_tx_bytes/1048576).toFixed(1) + 'MB' : '—';
+
+      pushGraphPoint('cpu', r.cpu_absolute || 0, data.limits ? data.limits.cpuLimit : null);
+      pushGraphPoint('memory', r.memory_bytes ? r.memory_bytes/1048576 : 0, data.limits ? data.limits.ramLimit : null);
+      pushNetworkPoint((r.network_rx_bytes||0)/1048576, (r.network_tx_bytes||0)/1048576);
+      updateScaleLabels(data.limits || {});
+    }catch(err){}
+  }
+
+  // Left-side up/middle/low labels on each graph box, always tracking
+  // this account's own limit for that resource (top = limit, middle =
+  // half, low = 0). Falls back to "—" when no limit was set for them.
+  function updateScaleLabels(limits){
+    const cpu = limits.cpuLimit;
+    document.getElementById('scaleCpuUp').textContent = cpu ? `${cpu}%` : '—';
+    document.getElementById('scaleCpuMid').textContent = cpu ? `${Math.round(cpu/2)}%` : '—';
+
+    const ram = limits.ramLimit;
+    document.getElementById('scaleMemUp').textContent = ram ? `${ram}MB` : '—';
+    document.getElementById('scaleMemMid').textContent = ram ? `${Math.round(ram/2)}MB` : '—';
+
+    const net = limits.networkLimit;
+    document.getElementById('scaleNetUp').textContent = net ? `${net}Mbps` : '—';
+    document.getElementById('scaleNetMid').textContent = net ? `${Math.round(net/2)}Mbps` : '—';
+  }
+
+  function startTerminalPolling(){
+    stopTerminalPolling();
+    refreshTerminal();
+    logsTimer = setInterval(refreshTerminal, 5000);
+  }
+
+  function stopTerminalPolling(){
+    if(logsTimer){ clearInterval(logsTimer); logsTimer = null; }
+  }
+
+  function escapeHtml(s){
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // Cheap, dependency-free colorizer for raw console text: timestamps,
+  // log levels, and numbers get a color -- enough to make a wall of
+  // server log lines scannable without a full log-parsing library.
+  function colorizeConsoleLine(line){
+    let html = escapeHtml(line);
+    html = html.replace(/\[?\b(\d{2}:\d{2}:\d{2}(?:\.\d+)?)\]?/g, '<span class="console-time">$&</span>');
+    html = html.replace(/\b(ERROR|SEVERE|FATAL|Exception|error)\b/g, '<span class="console-err">$1</span>');
+    html = html.replace(/\b(WARN|WARNING|Warn)\b/g, '<span class="console-warn">$1</span>');
+    html = html.replace(/\b(INFO|DEBUG)\b/g, '<span class="console-info">$1</span>');
+    html = html.replace(/\b(OK|SUCCESS|Done|done)\b/g, '<span class="console-ok">$1</span>');
+    html = html.replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="console-num">$1</span>');
+    return html;
+  }
+
+  // Same idea for the code editor: a small keyword/string/comment/number
+  // tokenizer that works reasonably across the languages in the picker,
+  // rather than a separate grammar per language.
+  const HL_KEYWORDS = ['def','class','function','func','return','if','else','elif','for','while','do','switch',
+    'case','break','continue','import','from','export','default','let','const','var','new','this','self',
+    'public','private','protected','static','void','null','None','nil','true','false','True','False',
+    'try','catch','except','finally','throw','raise','async','await','yield','lambda','struct','enum',
+    'interface','extends','implements','package','namespace','using','include','typedef','const','fn'];
+  const HL_TYPES = ['int','float','double','bool','boolean','string','String','char','long','short','byte',
+    'object','Object','Array','List','Dict','Map','Set','void','var','let','const'];
+
+  function highlightCode(code){
+    const kw = HL_KEYWORDS.join('|');
+    const ty = HL_TYPES.join('|');
+    const master = new RegExp(
+      `(#.*$|\\/\\/.*$)|("(?:[^"\\\\]|\\\\.)*"|'(?:[^'\\\\]|\\\\.)*'|\`(?:[^\`\\\\]|\\\\.)*\`)|(\\b(?:${kw})\\b)|(\\b(?:${ty})\\b)|(\\b\\d+(?:\\.\\d+)?\\b)|(\\b[a-zA-Z_]\\w*(?=\\s*\\())`,
+      'gm'
+    );
+    let out = '';
+    let last = 0;
+    let m;
+    while((m = master.exec(code)) !== null){
+      out += escapeHtml(code.slice(last, m.index));
+      const text = escapeHtml(m[0]);
+      if(m[1] !== undefined) out += `<span class="tok-com">${text}</span>`;
+      else if(m[2] !== undefined) out += `<span class="tok-str">${text}</span>`;
+      else if(m[3] !== undefined) out += `<span class="tok-kw">${text}</span>`;
+      else if(m[4] !== undefined) out += `<span class="tok-type">${text}</span>`;
+      else if(m[5] !== undefined) out += `<span class="tok-num">${text}</span>`;
+      else if(m[6] !== undefined) out += `<span class="tok-fn">${text}</span>`;
+      last = master.lastIndex;
+    }
+    out += escapeHtml(code.slice(last));
+    return out + '\n';
+  }
+
+  let consoleSocket = null;
+
+  async function connectConsoleSocket(){
+    disconnectConsoleSocket();
+    try{
+      const idToken = await auth.currentUser.getIdToken();
+      const out = document.getElementById('terminalOutput');
+      const proxyUrl = `ws://localhost:5000/console_proxy?idToken=${encodeURIComponent(idToken)}&docId=${encodeURIComponent(pendingControlDoc)}`;
+      consoleSocket = new WebSocket(proxyUrl);
+
+      consoleSocket.onmessage = (msg) => {
+        let payload;
+        try{ payload = JSON.parse(msg.data); }catch(e){ return; }
+
+        if(payload.event === 'console output'){
+          const atBottom = out.scrollHeight - out.scrollTop - out.clientHeight < 40;
+          out.textContent += (payload.args && payload.args[0] ? payload.args[0] : '') + '\n';
+          if(atBottom) out.scrollTop = out.scrollHeight;
+        }
+      };
+
+      consoleSocket.onerror = () => {};
+    }catch(err){}
+  }
+
+  function disconnectConsoleSocket(){
+    if(consoleSocket){
+      try{ consoleSocket.close(); }catch(e){}
+      consoleSocket = null;
+    }
+  }
+
+
+  document.getElementById('terminalInput').addEventListener('keydown', async (e) => {
+    if(e.key !== 'Enter') return;
+    const cmd = e.target.value.trim();
+    if(!cmd || !pendingControlDoc) return;
+    e.target.value = '';
+    try{
+      const idToken = await auth.currentUser.getIdToken();
+      await fetch('http://localhost:5000/server_command', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken, docId: pendingControlDoc, command: cmd })
+      });
+      setTimeout(refreshTerminal, 800);
+    }catch(err){}
+  });
+
+  let pendingServerName = '';
+
+  function hideAllScreens(){
+    serverList.classList.remove('show');
+    manageServersOverlay.classList.remove('show');
+    serverUsersOverlay.classList.remove('show');
+    document.getElementById('serverControlOverlay').classList.remove('show');
+    document.getElementById('filesOverlay').classList.remove('show');
+    document.getElementById('startupOverlay').classList.remove('show');
+    document.getElementById('navTerminal').style.display = 'none';
+    document.getElementById('navFiles').style.display = 'none';
+    document.getElementById('navSchedule').style.display = 'none';
+    document.getElementById('navUsers').style.display = 'none';
+    document.getElementById('navStartup').style.display = 'none';
+    stopTerminalPolling();
+    disconnectConsoleSocket();
+  }
+
+  async function openManageServersModal(){
+    hideAllScreens();
+    manageServersOverlay.classList.add('show');
+    manageServersBoxes.innerHTML = '<p class="server-list-empty">Loading…</p>';
+
+    try{
+      const snapshot = await db.collection('servers').orderBy('createdAt', 'desc').get();
+      if(snapshot.empty){
+        manageServersBoxes.innerHTML = '<p class="server-list-empty">No servers yet.</p>';
+        return;
+      }
+
+      manageServersBoxes.innerHTML = '';
+      snapshot.forEach((doc) => {
+        const s = doc.data();
+        const box = document.createElement('div');
+        box.className = 'server-item';
+        if(s.backgroundUrl){
+          box.style.backgroundImage = `url('${s.backgroundUrl}')`;
+        }
+        box.innerHTML = `
+          <div class="server-item-inner">
+            <div class="server-item-name">${s.name || 'Unnamed server'}</div>
+            <div class="server-item-meta">
+              <div><span>Expires</span>${s.expiry || '—'}</div>
+              <div>Manage users →</div>
+            </div>
+          </div>
+        `;
+        box.addEventListener('click', () => openServerUsersPanel(doc.id, s));
+        manageServersBoxes.appendChild(box);
+      });
+    }catch(err){
+      manageServersBoxes.innerHTML = '<p class="server-list-empty">Could not load servers.</p>';
+    }
+  }
+
+  function closeManageServersModal(){
+    manageServersOverlay.classList.remove('show');
+    serverUsersOverlay.classList.remove('show');
+    if(document.body.classList.contains('role-admin')){
+      serverList.classList.add('show');
+    }
+  }
+
+  if(document.getElementById('navManageServers')) document.getElementById('navManageServers').addEventListener('click', openManageServersModal);
+
+  // ---------------------------------------------------------------
+  // Server Users panel: shows everyone with access to ONE server,
+  // and a form to add a new person (with resource limits).
+  // Account creation/updates happen through notify_login.py, NOT the
+  // client SDK -- creating a user with the client SDK signs the
+  // browser in as that new user, which would kick the admin out of
+  // their own session. Python avoids that entirely.
+  // ---------------------------------------------------------------
+  async function openServerUsersPanel(docId, serverData){
+    pendingServerDocId = docId;
+    pendingServerName = serverData.name || 'Unnamed server';
+
+    manageServersOverlay.classList.remove('show');
+    serverUsersOverlay.classList.add('show');
+    serverUsersName.textContent = pendingServerName;
+
+    addUserEmail.value = '';
+    addUserPassword.value = '';
+    addUserPasswordConfirm.value = '';
+    addUserCpuLimit.value = '';
+    addUserRamLimit.value = '';
+    addUserStorageLimit.value = '';
+    addUserNetworkLimit.value = '';
+    addUserError.classList.remove('show');
+
+    await refreshServerUsersList();
+  }
+
+  async function refreshServerUsersList(){
+    serverUsersList.innerHTML = '<p class="server-list-empty">Loading…</p>';
+    try{
+      const idToken = await auth.currentUser.getIdToken();
+      const res = await fetch('http://localhost:5000/server_access_list', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken, docId: pendingServerDocId })
+      });
+      const data = await res.json();
+
+      if(!data.ok){
+        serverUsersList.innerHTML = '<p class="server-list-empty">Could not load users.</p>';
+        return;
+      }
+
+      if(!data.users || data.users.length === 0){
+        serverUsersList.innerHTML = '<p class="server-list-empty">No users yet.</p>';
+        return;
+      }
+
+      serverUsersList.innerHTML = '';
+      data.users.forEach((u) => {
+        const limitParts = [];
+        if(u.cpuLimit) limitParts.push(`CPU ${u.cpuLimit}%`);
+        if(u.ramLimit) limitParts.push(`RAM ${u.ramLimit}MB`);
+        if(u.storageLimit) limitParts.push(`Storage ${u.storageLimit}MB`);
+        const limitText = limitParts.length ? limitParts.join(' · ') : 'No limits set';
+
+        const row = document.createElement('div');
+        row.className = 'remove-row';
+        row.innerHTML = `
+          <div class="remove-row-info">
+            <div class="remove-row-name">📁 ${u.email}</div>
+            <div class="remove-row-meta">${limitText}</div>
+          </div>
+          <button type="button" class="remove-row-btn">Remove</button>
+        `;
+        row.querySelector('.remove-row-btn').addEventListener('click', () => {
+          pendingRemoveUser = { email: u.email };
+          document.getElementById('confirmRemoveUserName').textContent = `${u.email} — ${pendingServerName}`;
+          document.getElementById('confirmRemoveUserOverlay').classList.add('show');
+        });
+        serverUsersList.appendChild(row);
+      });
+    }catch(err){
+      serverUsersList.innerHTML = '<p class="server-list-empty">Could not reach the backend.</p>';
+    }
+  }
+
+  document.getElementById('serverUsersBack').addEventListener('click', () => {
+    serverUsersOverlay.classList.remove('show');
+    openManageServersModal();
+  });
+
+  document.getElementById('addUserPwToggle').addEventListener('click', () => {
+    const btn = document.getElementById('addUserPwToggle');
+    const isPw = addUserPassword.type === 'password';
+    addUserPassword.type = isPw ? 'text' : 'password';
+    btn.textContent = isPw ? 'hide' : 'show';
+  });
+
+  document.getElementById('addUserPwConfirmToggle').addEventListener('click', () => {
+    const btn = document.getElementById('addUserPwConfirmToggle');
+    const isPw = addUserPasswordConfirm.type === 'password';
+    addUserPasswordConfirm.type = isPw ? 'text' : 'password';
+    btn.textContent = isPw ? 'hide' : 'show';
+  });
+
+  addUserSaveBtn.addEventListener('click', async () => {
+    if(!pendingServerDocId) return;
+
+    const email = addUserEmail.value.trim();
+    const password = addUserPassword.value; // blank = "don't change it"
+    const passwordConfirm = addUserPasswordConfirm.value;
+    const cpuLimit = addUserCpuLimit.value.trim();
+    const ramLimit = addUserRamLimit.value.trim();
+    const storageLimit = addUserStorageLimit.value.trim();
+    const networkLimit = addUserNetworkLimit.value.trim();
+
+    addUserError.classList.remove('show');
+
+    if(!email){
+      addUserError.textContent = 'Enter an email.';
+      addUserError.classList.add('show');
+      return;
+    }
+
+    if(password && password !== passwordConfirm){
+      addUserError.textContent = 'Passwords do not match.';
+      addUserError.classList.add('show');
+      return;
+    }
+
+    const label = addUserSaveBtn.querySelector('span');
+    label.textContent = 'Saving…';
+
+    try{
+      const idToken = await auth.currentUser.getIdToken();
+      const res = await fetch('http://localhost:5000/assign_server_access', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          idToken,
+          docId: pendingServerDocId,
+          email,
+          password,
+          cpuLimit: cpuLimit ? Number(cpuLimit) : null,
+          ramLimit: ramLimit ? Number(ramLimit) : null,
+          storageLimit: storageLimit ? Number(storageLimit) : null,
+          networkLimit: networkLimit ? Number(networkLimit) : null
+        })
+      });
+      const data = await res.json();
+
+      if(!data.ok){
+        addUserError.textContent = data.error || 'Could not save this user.';
+        addUserError.classList.add('show');
+        label.textContent = 'Add User';
+        return;
+      }
+
+      label.textContent = 'Added';
+      addUserEmail.value = '';
+      addUserPassword.value = '';
+      addUserPasswordConfirm.value = '';
+      addUserCpuLimit.value = '';
+      addUserRamLimit.value = '';
+      addUserStorageLimit.value = '';
+      addUserNetworkLimit.value = '';
+      setTimeout(() => { label.textContent = 'Add User'; }, 900);
+      refreshServerUsersList();
+    }catch(err){
+      addUserError.textContent = 'Could not reach the backend -- is notify_login.py running?';
+      addUserError.classList.add('show');
+      label.textContent = 'Add User';
+    }
+  });
+
+  let pendingRemoveUser = null; // { email }
+
+  function closeConfirmRemoveUser(){
+    document.getElementById('confirmRemoveUserOverlay').classList.remove('show');
+    pendingRemoveUser = null;
+  }
+
+  document.getElementById('confirmRemoveUserCancel').addEventListener('click', closeConfirmRemoveUser);
+  document.getElementById('confirmRemoveUserOverlay').addEventListener('click', (e) => {
+    if(e.target === document.getElementById('confirmRemoveUserOverlay')) closeConfirmRemoveUser();
+  });
+
+  document.getElementById('confirmRemoveUserYes').addEventListener('click', async () => {
+    if(!pendingRemoveUser || !pendingServerDocId) return;
+    const yesBtn = document.getElementById('confirmRemoveUserYes');
+    yesBtn.textContent = 'Removing…';
+
+    try{
+      const idToken = await auth.currentUser.getIdToken();
+      const res = await fetch('http://localhost:5000/remove_server_access', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken, docId: pendingServerDocId, email: pendingRemoveUser.email })
+      });
+      const data = await res.json();
+
+      if(!data.ok){
+        alert('Could not remove this user: ' + (data.error || 'unknown error'));
+        yesBtn.textContent = 'Yes, remove';
+        return;
+      }
+
+      yesBtn.textContent = 'Yes, remove';
+      closeConfirmRemoveUser();
+      refreshServerUsersList();
+    }catch(err){
+      alert('Could not reach the backend -- is notify_login.py running?');
+      yesBtn.textContent = 'Yes, remove';
+    }
+  });
+
+  // Populate day / month / year dropdowns
+  const daySelect = document.getElementById('serverDay');
+  const monthSelect = document.getElementById('serverMonth');
+  const yearSelect = document.getElementById('serverYear');
+
+  for(let d = 1; d <= 31; d++){
+    daySelect.add(new Option(String(d).padStart(2, '0'), d));
+  }
+
+  const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  MONTH_NAMES.forEach((name, i) => {
+    monthSelect.add(new Option(name, i + 1));
+  });
+
+  const currentYear = new Date().getFullYear();
+  for(let y = currentYear; y <= currentYear + 6; y++){
+    yearSelect.add(new Option(y, y));
+  }
+
+  // Show/hide the API key like the login password field
+  // Renders the persistent stacked list from whatever Firestore sends.
+  // This runs every time the "servers" collection changes -- including
+  // the instant after we add a new one below.
+  function renderServerList(snapshot){
+    if(snapshot.empty){
+      serverList.innerHTML = '<p class="server-list-empty">No servers yet.</p>';
+      return;
+    }
+
+    serverList.innerHTML = '';
+    snapshot.forEach((doc) => {
+      const s = doc.data();
+      const item = document.createElement('div');
+      item.className = 'server-item';
+      if(s.backgroundUrl){
+        item.style.backgroundImage = `url('${s.backgroundUrl}')`;
+      }
+      item.innerHTML = `
+        <div class="server-item-inner">
+          <div>
+            <div class="server-item-name">${s.name || 'Unnamed server'}</div>
+            <div class="server-stats-row">
+              <div class="stat-box" title="CPU usage">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="6" y="6" width="12" height="12" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+                  <path d="M9 2.5v3M12 2.5v3M15 2.5v3M9 18.5v3M12 18.5v3M15 18.5v3M2.5 9h3M2.5 12h3M2.5 15h3M18.5 9h3M18.5 12h3M18.5 15h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+                <span class="stat-cpu" id="cpu-${doc.id}">—</span>
+              </div>
+              <div class="stat-box" title="RAM usage">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="3" y="7" width="18" height="10" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+                  <path d="M7 7V4.5M12 7V4.5M17 7V4.5M7 10.5v3M11 10.5v3M15 10.5v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+                <span class="stat-ram" id="ram-${doc.id}">—</span>
+              </div>
+              <div class="stat-box" title="Storage usage">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <ellipse cx="12" cy="5.5" rx="8" ry="2.8" stroke="currentColor" stroke-width="1.6"/>
+                  <path d="M4 5.5V12c0 1.5 3.5 2.8 8 2.8s8-1.3 8-2.8V5.5M4 12v6.5c0 1.5 3.5 2.8 8 2.8s8-1.3 8-2.8V12" stroke="currentColor" stroke-width="1.6"/>
+                </svg>
+                <span class="stat-disk" id="disk-${doc.id}">—</span>
+              </div>
+            </div>
+          </div>
+          <div class="server-item-meta">
+            <div><span>Expires</span>${s.expiry || '—'}</div>
+            <div><span>Cost</span>${s.cost || '—'}</div>
+          </div>
+        </div>
+      `;
+      item.addEventListener('click', () => {
+        const admin = document.body.classList.contains('role-admin');
+        pendingControlDoc = doc.id;
+        document.getElementById('serverControlName').textContent = s.name || 'Unnamed server';
+        hideAllScreens();
+        document.getElementById('navAddServer').style.display = 'none';
+        document.getElementById('navRemoveServer').style.display = 'none';
+        document.getElementById('navManageServers').style.display = 'none';
+        document.getElementById('serverControlOverlay').classList.add('show');
+        document.getElementById('navTerminal').style.display = 'flex';
+        document.getElementById('navFiles').style.display = 'flex';
+        document.getElementById('navSchedule').style.display = 'flex';
+        document.getElementById('navUsers').style.display = admin ? 'flex' : 'none';
+        document.getElementById('navStartup').style.display = 'flex';
+        startTerminalPolling();
+        connectConsoleSocket();
+      });
+      serverList.appendChild(item);
+      fetchServerStats(doc.id);
+    });
+  }
+
+  // Asks the Python backend for this server's live CPU/RAM/disk usage.
+  // The API key never leaves notify_login.py -- the page only ever
+  // sends a Firestore document id and its own login token, and gets
+  // back plain numbers.
+  async function fetchServerStats(docId){
+    const cpuEl = document.getElementById(`cpu-${docId}`);
+    const ramEl = document.getElementById(`ram-${docId}`);
+    const diskEl = document.getElementById(`disk-${docId}`);
+    if(!cpuEl) return; // card wasn't rendered (shouldn't happen)
+
+    try{
+      const idToken = await auth.currentUser.getIdToken();
+      const res = await fetch('http://localhost:5000/server_stats', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken, docId })
+      });
+      const data = await res.json();
+
+      if(data.ok){
+        cpuEl.textContent = data.cpu_limit ? `${data.cpu_percent}% / ${data.cpu_limit}%` : `${data.cpu_percent}%`;
+        ramEl.textContent = data.ram_limit ? `${data.memory_mb}MB / ${data.ram_limit}MB` : `${data.memory_mb}MB`;
+        diskEl.textContent = data.storage_limit ? `${data.disk_mb}MB / ${data.storage_limit}MB` : `${data.disk_mb}MB`;
+      }else{
+        cpuEl.textContent = ramEl.textContent = diskEl.textContent = '—';
+      }
+    }catch(err){
+      // Backend offline or request failed -- leave the placeholders.
+      cpuEl.textContent = ramEl.textContent = diskEl.textContent = '—';
+    }
+  }
+
+
+  // Only one of these is ever active at a time -- whichever role the
+  // signed-in user turns out to be. Keeping a handle to unsubscribe
+  // avoids leftover listeners (and Firestore permission-denied noise)
+  // when a session switches role or signs out.
+  let activeServerListener = null;
+
+  function stopServerListener(){
+    if(activeServerListener){
+      activeServerListener();
+      activeServerListener = null;
+    }
+  }
+
+  // Admin: sees every server. Only attached once we're sure this is
+  // the admin account -- Firestore rules wouldn't allow this query
+  // for anyone else anyway.
+  function attachAdminServerListener(){
+    stopServerListener();
+    activeServerListener = db.collection('servers').orderBy('createdAt', 'desc').onSnapshot(
+      renderServerList,
+      (err) => {
+        serverList.innerHTML = '<p class="server-list-empty">Could not load servers.</p>';
+      }
+    );
+  }
+
+  // Non-admin: sees only the server(s) an admin has given them access
+  // to via Manage Servers -> [server] -> Add User. Firestore rules
+  // allow this via the access/{their-email} subcollection doc.
+  async function attachOwnerServerListener(email){
+    stopServerListener();
+    activeServerListener = () => {}; // one-time fetch below, nothing to unsubscribe from
+
+    try{
+      const idToken = await auth.currentUser.getIdToken();
+      const res = await fetch('http://localhost:5000/my_servers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken })
+      });
+      const data = await res.json();
+
+      if(!data.ok || !data.servers || data.servers.length === 0){
+        serverList.classList.remove('show');
+        return;
+      }
+
+      serverList.classList.add('show');
+      // A tiny stand-in for a real Firestore QuerySnapshot, just
+      // enough shape (.empty, .forEach) for renderServerList to work
+      // identically whether it's fed the admin's live query or this
+      // plain array from the backend.
+      renderServerList({
+        empty: false,
+        forEach: (callback) => data.servers.forEach(s => callback({ id: s.id, data: () => s }))
+      });
+    }catch(err){
+      serverList.classList.remove('show');
+    }
+  }
+
+  addServerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('serverName').value.trim();
+    const dayNum = parseInt(daySelect.value, 10);
+    const monthIndex = parseInt(monthSelect.value, 10) - 1; // JS Date months are 0-based
+    const yearNum = parseInt(yearSelect.value, 10);
+    const day = daySelect.value.padStart(2, '0');
+    const month = MONTH_NAMES[monthIndex];
+    const bgUrl = document.getElementById('serverBackground').value;
+    const cost = document.getElementById('serverCost').value.trim();
+    const uuid = document.getElementById('serverUuid').value.trim();
+
+    // A real date the backend can do math on (days until expiry),
+    // not just the human-readable string shown on the card.
+    const expiryDate = new Date(yearNum, monthIndex, dayNum);
+
+    try{
+      await db.collection('servers').add({
+        name,
+        expiry: `${day} ${month} ${yearNum}`,
+        expiryTimestamp: firebase.firestore.Timestamp.fromDate(expiryDate),
+        reminderSent: false,
+        backgroundUrl: bgUrl,
+        cost,
+        uuid,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      closeAddServerModal();
+      addServerForm.reset();
+    }catch(err){
+      alert('Could not save this server to Firestore: ' + err.message);
+    }
+  });
+
+  // ---------------------------------------------------------------
+  // Captcha: self-contained canvas captcha (client-side only).
+  // Good enough to stop casual/scripted form-fills; it is NOT a
+  // substitute for server-side bot protection like reCAPTCHA on a
+  // real production login. See notes at the end of the chat reply.
+  // ---------------------------------------------------------------
+  const canvas = document.getElementById('captchaCanvas');
+  const ctx = canvas.getContext('2d');
+  let captchaText = '';
+
+  function randomChar(){
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no 0/O/1/I ambiguity
+    return chars[Math.floor(Math.random() * chars.length)];
+  }
+
+  function drawCaptcha(){
+    captchaText = Array.from({length: 5}, randomChar).join('');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // background
+    ctx.fillStyle = '#0d0f12';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // noise lines
+    for(let i = 0; i < 5; i++){
+      ctx.strokeStyle = `rgba(123,128,135,${0.15 + Math.random()*0.2})`;
+      ctx.beginPath();
+      ctx.moveTo(Math.random()*canvas.width, Math.random()*canvas.height);
+      ctx.lineTo(Math.random()*canvas.width, Math.random()*canvas.height);
+      ctx.stroke();
+    }
+
+    // characters
+    const spacing = canvas.width / (captchaText.length + 1);
+    for(let i = 0; i < captchaText.length; i++){
+      ctx.save();
+      const x = spacing * (i + 1);
+      const y = canvas.height / 2 + (Math.random()*8 - 4);
+      ctx.translate(x, y);
+      ctx.rotate((Math.random()*0.5 - 0.25));
+      ctx.font = '600 22px "JetBrains Mono", monospace';
+      ctx.fillStyle = Math.random() > 0.5 ? '#e8a33d' : '#e8e6e1';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(captchaText[i], 0, 0);
+      ctx.restore();
+    }
+
+    // noise dots
+    for(let i = 0; i < 30; i++){
+      ctx.fillStyle = `rgba(123,128,135,${Math.random()*0.3})`;
+      ctx.beginPath();
+      ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, 1, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  drawCaptcha();
+  canvas.addEventListener('click', drawCaptcha);
+  document.getElementById('captchaRefresh').addEventListener('click', drawCaptcha);
+
+  // ---------------------------------------------------------------
+  // Password visibility toggle
+  // ---------------------------------------------------------------
+  const pwInput = document.getElementById('password');
+  const pwToggle = document.getElementById('pwToggle');
+  pwToggle.addEventListener('click', () => {
+    const isPw = pwInput.type === 'password';
+    pwInput.type = isPw ? 'text' : 'password';
+    pwToggle.textContent = isPw ? 'hide' : 'show';
+  });
+
+  // ---------------------------------------------------------------
+  // Form submit
+  // ---------------------------------------------------------------
+  const form = document.getElementById('loginForm');
+  const errorBox = document.getElementById('formError');
+  const submitBtn = document.getElementById('submitBtn');
+  const submitLabel = document.getElementById('submitLabel');
+  const spinner = document.getElementById('spinner');
+
+  function showError(msg){
+    errorBox.textContent = msg;
+    errorBox.classList.add('show');
+  }
+
+  function clearError(){
+    errorBox.classList.remove('show');
+    errorBox.textContent = '';
+  }
+
+  function setLoading(loading){
+    submitBtn.disabled = loading;
+    spinner.classList.toggle('show', loading);
+    submitLabel.textContent = loading ? 'Signing in…' : 'Sign in';
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearError();
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const captchaInput = document.getElementById('captchaInput').value.trim();
+
+    if(!email || !password){
+      showError('Enter your email and password.');
+      return;
+    }
+
+    if(captchaInput.toUpperCase() !== captchaText){
+      showError('Security code does not match. Try again.');
+      drawCaptcha();
+      document.getElementById('captchaInput').value = '';
+      return;
+    }
+
+    setLoading(true);
+    try{
+      await auth.signInWithEmailAndPassword(email, password);
+      // onAuthStateChanged (above) detects this and swaps in the
+      // logged-in view automatically — no redirect needed.
+    }catch(err){
+      const isNetworkError = err.code === 'auth/network-request-failed';
+      showError(isNetworkError ? 'Network Connection Failed' : 'Wrong Credentials');
+      drawCaptcha();
+      document.getElementById('captchaInput').value = '';
+    }finally{
+      setLoading(false);
+    }
+  });
+
+  // ---------------------------------------------------------------
+  // File Manager (per-server, real backend). Backed by the Flask
+  // /list_files, /file_contents, /save_file, /make_dir, /rename_file,
+  // /delete_files, /upload_url routes -- each account is transparently
+  // confined server-side to its own homeFolder (see notify_login.py).
+  // ---------------------------------------------------------------
+  (function(){
+    const LANGUAGES = ['C++','C+','C#','CSS','CQL','Diff','DockerFile','Git Markdown','Golang','HTML','HTTP',
+      'Java Script','Json','Lua','Markdown','MariaDB','MS SQL','MySQL','Nginx','PHP','Plain Text',
+      'Postgre SQL','Properties','Pug','Python','Ruby','Rust','Sass','Scss','Shell','Sql','Sqlite',
+      'TOML','TypeScript','VUE','XML','YAML'];
+
+    const EXT_LANG = {
+      cpp:'C++', cc:'C++', h:'C++', cs:'C#', css:'CSS', cql:'CQL', diff:'Diff',
+      dockerfile:'DockerFile', md:'Markdown', go:'Golang', html:'HTML', htm:'HTML',
+      http:'HTTP', js:'Java Script', mjs:'Java Script', json:'Json', lua:'Lua',
+      php:'PHP', txt:'Plain Text', sql:'Sql', sqlite:'Sqlite', toml:'TOML',
+      ts:'TypeScript', tsx:'TypeScript', vue:'VUE', xml:'XML', yaml:'YAML', yml:'YAML',
+      py:'Python', rb:'Ruby', rs:'Rust', sass:'Sass', scss:'Scss', sh:'Shell',
+      properties:'Properties', pug:'Pug', conf:'Nginx'
+    };
+
+    const LANG_EXT = {
+      'C++':'cpp','C+':'c','C#':'cs','CSS':'css','CQL':'cql','Diff':'diff','DockerFile':'Dockerfile',
+      'Git Markdown':'md','Golang':'go','HTML':'html','HTTP':'http','Java Script':'js','Json':'json',
+      'Lua':'lua','Markdown':'md','MariaDB':'sql','MS SQL':'sql','MySQL':'sql','Nginx':'conf','PHP':'php',
+      'Plain Text':'txt','Postgre SQL':'sql','Properties':'properties','Pug':'pug','Python':'py','Ruby':'rb',
+      'Rust':'rs','Sass':'sass','Scss':'scss','Shell':'sh','Sql':'sql','Sqlite':'sqlite','TOML':'toml',
+      'TypeScript':'ts','VUE':'vue','XML':'xml','YAML':'yaml'
+    };
+
+    const fmPath = document.getElementById('fmPath');
+    const fmList = document.getElementById('fmList');
+    const fmSelectAll = document.getElementById('fmSelectAll');
+    const fmFileInput = document.getElementById('fmFileInput');
+    const fmUploadBtn = document.getElementById('fmUploadBtn');
+    const fmEditorOverlay = document.getElementById('fmEditorOverlay');
+    const fmEditorName = document.getElementById('fmEditorName');
+    const fmEditorTextarea = document.getElementById('fmEditorTextarea');
+    const fmEditorHighlight = document.getElementById('fmEditorHighlight');
+    const fmLangBtn = document.getElementById('fmLangBtn');
+    const fmLangLabel = document.getElementById('fmLangLabel');
+    const fmLangMenu = document.getElementById('fmLangMenu');
+    const fmSaveBtn = document.getElementById('fmSaveBtn');
+
+    let currentPath = '/';     // path relative to this account's own scoped root
+    let currentItems = [];     // last list_files() result for the current folder
+    let selected = new Set();  // selected item names in the current folder
+    let editingFile = null;    // full path of the file currently open in the editor
+    let editingLang = 'Plain Text';
+
+    function joinPath(base, name){
+      return base === '/' ? '/' + name : base + '/' + name;
+    }
+
+    async function fmApi(route, extra){
+      const idToken = await auth.currentUser.getIdToken();
+      const res = await fetch(`http://localhost:5000/${route}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken, docId: pendingControlDoc, ...extra })
+      });
+      return res.json();
+    }
+
+    function formatSize(bytes){
+      if(bytes === undefined || bytes === null) return '—';
+      if(bytes < 1024) return `${bytes} B`;
+      if(bytes < 1024*1024) return `${(bytes/1024).toFixed(1)} KB`;
+      if(bytes < 1024*1024*1024) return `${(bytes/(1024*1024)).toFixed(1)} MB`;
+      return `${(bytes/(1024*1024*1024)).toFixed(1)} GB`;
+    }
+
+    function formatDate(ts){
+      const d = new Date(ts);
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const day = d.getDate();
+      const suffix = (day % 10 === 1 && day !== 11) ? 'st' : (day % 10 === 2 && day !== 12) ? 'nd' : (day % 10 === 3 && day !== 13) ? 'rd' : 'th';
+      const m = String(d.getMinutes()).padStart(2,'0');
+      return `${months[d.getMonth()]} ${day}${suffix}, ${d.getFullYear()} ${String(d.getHours()).padStart(2,'0')}:${m}`;
+    }
+
+    function langForName(name){
+      const ext = name.includes('.') ? name.split('.').pop().toLowerCase() : '';
+      return EXT_LANG[ext] || 'Plain Text';
+    }
+
+    function renderPath(){
+      const segs = currentPath === '/' ? [] : currentPath.split('/').filter(Boolean);
+      fmPath.innerHTML = '';
+      const rootBtn = document.createElement('button');
+      rootBtn.type = 'button';
+      rootBtn.className = 'fm-path-seg' + (segs.length === 0 ? ' current' : '');
+      rootBtn.textContent = 'home/container';
+      rootBtn.addEventListener('click', () => { currentPath = '/'; selected.clear(); render(); });
+      fmPath.appendChild(rootBtn);
+
+      segs.forEach((seg, i) => {
+        const sep = document.createElement('span');
+        sep.className = 'fm-path-sep';
+        sep.textContent = '/';
+        fmPath.appendChild(sep);
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'fm-path-seg' + (i === segs.length - 1 ? ' current' : '');
+        btn.textContent = seg;
+        btn.addEventListener('click', () => { currentPath = '/' + segs.slice(0, i + 1).join('/'); selected.clear(); render(); });
+        fmPath.appendChild(btn);
+      });
+    }
+
+    function folderIconSvg(){
+      return '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 7a1.5 1.5 0 0 1 1.5-1.5H9l2 2h8.5A1.5 1.5 0 0 1 21 9v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18V7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
+    }
+    function fileIconSvg(){
+      return '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3.5h8l4 4V19.5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 19.5v-14A1.5 1.5 0 0 1 5.5 3.5H6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 3.5V8h4.5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+    }
+
+    function closeAllDropdowns(){
+      document.querySelectorAll('.fm-dropdown.show').forEach(d => d.classList.remove('show'));
+    }
+
+    async function render(){
+      renderPath();
+      fmList.innerHTML = '<div class="fm-drop-hint">Drop files here to upload</div><div class="fm-empty">Loading…</div>';
+
+      const data = await fmApi('list_files', { path: currentPath });
+      if(!data.ok){
+        fmList.innerHTML = `<div class="fm-drop-hint">Drop files here to upload</div><div class="fm-empty">${data.error || 'Could not load files.'}</div>`;
+        return;
+      }
+
+      currentItems = (data.files || []).sort((a, b) => {
+        if(a.is_file !== b.is_file) return a.is_file ? 1 : -1;
+        return a.name.localeCompare(b.name);
+      });
+
+      fmList.innerHTML = '<div class="fm-drop-hint">Drop files here to upload</div>';
+
+      if(currentItems.length === 0){
+        const empty = document.createElement('div');
+        empty.className = 'fm-empty';
+        empty.textContent = 'This folder is empty.';
+        fmList.appendChild(empty);
+      }
+
+      currentItems.forEach(item => {
+        const box = document.createElement('div');
+        box.className = 'fm-file-box';
+
+        const check = document.createElement('button');
+        check.type = 'button';
+        check.className = 'fm-checkbox' + (selected.has(item.name) ? ' checked' : '');
+        check.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if(selected.has(item.name)) selected.delete(item.name); else selected.add(item.name);
+          render();
+        });
+        box.appendChild(check);
+
+        const icon = document.createElement('div');
+        icon.className = 'fm-file-icon';
+        icon.innerHTML = item.is_file ? fileIconSvg() : folderIconSvg();
+        box.appendChild(icon);
+
+        const nameEl = document.createElement('div');
+        nameEl.className = 'fm-file-name';
+        nameEl.textContent = item.name;
+        box.appendChild(nameEl);
+
+        const sizeEl = document.createElement('div');
+        sizeEl.className = 'fm-file-size';
+        sizeEl.textContent = item.is_file ? formatSize(item.size) : '—';
+        box.appendChild(sizeEl);
+
+        const dateEl = document.createElement('div');
+        dateEl.className = 'fm-file-date';
+        dateEl.textContent = item.modified_at ? formatDate(new Date(item.modified_at).getTime()) : '—';
+        box.appendChild(dateEl);
+
+        const dotsWrap = document.createElement('div');
+        dotsWrap.style.position = 'relative';
+        const dots = document.createElement('button');
+        dots.type = 'button';
+        dots.className = 'fm-file-dots';
+        dots.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="5" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="19" r="1.6" fill="currentColor"/></svg>';
+
+        const menu = document.createElement('div');
+        menu.className = 'fm-dropdown';
+        menu.innerHTML = `
+          <button type="button" data-act="rename">Rename</button>
+          <button type="button" data-act="download">Download</button>
+          <button type="button" class="danger" data-act="delete">Delete</button>
+        `;
+
+        dots.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const willShow = !menu.classList.contains('show');
+          closeAllDropdowns();
+          if(willShow) menu.classList.add('show');
+        });
+
+        menu.addEventListener('click', (e) => {
+          const act = e.target.getAttribute('data-act');
+          if(!act) return;
+          e.stopPropagation();
+          menu.classList.remove('show');
+          if(act === 'rename') renameItem(item);
+          if(act === 'delete') deleteItem(item);
+          if(act === 'download') downloadItem(item);
+        });
+
+        dotsWrap.appendChild(dots);
+        dotsWrap.appendChild(menu);
+        box.appendChild(dotsWrap);
+
+        box.addEventListener('click', () => {
+          if(!item.is_file){
+            currentPath = joinPath(currentPath, item.name);
+            selected.clear();
+            render();
+          }else{
+            openEditor(item);
+          }
+        });
+
+        fmList.appendChild(box);
+      });
+
+      fmSelectAll.classList.toggle('checked', currentItems.length > 0 && selected.size === currentItems.length);
+    }
+
+    async function createDirectory(){
+      const name = prompt('New folder name:');
+      if(!name) return;
+      const data = await fmApi('make_dir', { path: currentPath, name });
+      if(!data.ok) alert(data.error || 'Could not create the folder.');
+      render();
+    }
+
+    async function createNewFile(){
+      const name = prompt('New file name (with extension):', 'untitled.txt');
+      if(!name) return;
+      const path = joinPath(currentPath, name);
+      const data = await fmApi('save_file', { path, content: '' });
+      if(!data.ok){ alert(data.error || 'Could not create the file.'); return; }
+      render();
+      openEditor({ name });
+    }
+
+    async function uploadFiles(fileList){
+      const files = Array.from(fileList || []);
+      if(!files.length) return;
+      if(!pendingControlDoc){ alert('No server selected.'); return; }
+
+      fmUploadBtn.disabled = true;
+      const originalLabel = fmUploadBtn.querySelector('span').textContent;
+
+      try{
+        for(const f of files){
+          fmUploadBtn.querySelector('span').textContent = `Uploading ${f.name}…`;
+
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+          try{
+            const idToken = await auth.currentUser.getIdToken();
+            const form = new FormData();
+            form.append('idToken', idToken);
+            form.append('docId', pendingControlDoc);
+            form.append('path', currentPath);
+            form.append('file', f);
+
+            const res = await fetch('http://localhost:5000/upload_file', {
+              method: 'POST',
+              body: form,
+              signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            let data;
+            try{ data = await res.json(); }
+            catch(parseErr){ data = { ok: false, error: `bad response (${res.status})` }; }
+
+            if(!data.ok){
+              console.error('upload_file failed:', data.error, res.status);
+              alert(`Upload failed for ${f.name}: ${data.error || res.status}`);
+            }
+          }catch(e){
+            clearTimeout(timeoutId);
+            const msg = e.name === 'AbortError' ? 'timed out after 30s' : (e.message || e);
+            console.error('upload_file error:', e);
+            alert(`Upload failed for ${f.name}: ${msg}`);
+          }
+        }
+      }finally{
+        fmUploadBtn.querySelector('span').textContent = originalLabel;
+        fmUploadBtn.disabled = false;
+        render();
+      }
+    }
+
+    async function renameItem(item){
+      const newName = prompt('Rename to:', item.name);
+      if(!newName || newName === item.name) return;
+      const data = await fmApi('rename_file', { path: currentPath, from: item.name, to: newName });
+      if(!data.ok) alert(data.error || 'Could not rename this item.');
+      render();
+    }
+
+    async function deleteItem(item){
+      if(!confirm(`Delete "${item.name}"? This cannot be undone.`)) return;
+      const data = await fmApi('delete_files', { path: currentPath, names: [item.name] });
+      if(!data.ok) alert(data.error || 'Could not delete this item.');
+      selected.delete(item.name);
+      render();
+    }
+
+    async function downloadItem(item){
+      if(!item.is_file) return;
+      const data = await fmApi('file_contents', { path: joinPath(currentPath, item.name) });
+      if(!data.ok){ alert(data.error || 'Could not download this file.'); return; }
+      const blob = new Blob([data.content || ''], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = item.name;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    async function deleteSelected(){
+      if(selected.size === 0) return;
+      if(!confirm(`Delete ${selected.size} selected item(s)?`)) return;
+      const data = await fmApi('delete_files', { path: currentPath, names: [...selected] });
+      if(!data.ok) alert(data.error || 'Could not delete the selected items.');
+      selected.clear();
+      render();
+    }
+
+    // -- Editor --
+    function buildLangMenu(){
+      fmLangMenu.innerHTML = '';
+      LANGUAGES.forEach(lang => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = lang;
+        b.addEventListener('click', () => {
+          editingLang = lang;
+          fmLangLabel.textContent = lang;
+          fmLangMenu.classList.remove('show');
+        });
+        fmLangMenu.appendChild(b);
+      });
+    }
+    buildLangMenu();
+
+    function syncHighlight(){
+      fmEditorHighlight.innerHTML = highlightCode(fmEditorTextarea.value);
+    }
+    fmEditorTextarea.addEventListener('input', syncHighlight);
+    fmEditorTextarea.addEventListener('scroll', () => {
+      fmEditorHighlight.scrollTop = fmEditorTextarea.scrollTop;
+      fmEditorHighlight.scrollLeft = fmEditorTextarea.scrollLeft;
+    });
+
+    async function openEditor(item){
+      editingFile = joinPath(currentPath, item.name);
+      editingLang = langForName(item.name);
+      fmEditorName.textContent = item.name;
+      fmEditorTextarea.value = '';
+      fmLangLabel.textContent = editingLang;
+      fmEditorOverlay.classList.add('show');
+      fmEditorTextarea.focus();
+      syncHighlight();
+
+      const data = await fmApi('file_contents', { path: editingFile });
+      if(data.ok) fmEditorTextarea.value = data.content || '';
+      syncHighlight();
+    }
+
+    function closeEditor(){
+      fmEditorOverlay.classList.remove('show');
+      editingFile = null;
+    }
+
+    async function saveCurrentFile(){
+      if(!editingFile) return;
+      const ext = LANG_EXT[editingLang];
+      const dir = editingFile.includes('/') ? editingFile.substring(0, editingFile.lastIndexOf('/')) : '/';
+      const oldName = editingFile.split('/').pop();
+      let finalName = oldName;
+      if(ext && !oldName.toLowerCase().endsWith('.' + ext.toLowerCase()) && editingLang !== 'Plain Text'){
+        const base = oldName.includes('.') ? oldName.substring(0, oldName.lastIndexOf('.')) : oldName;
+        finalName = `${base}.${ext}`;
+      }
+      const finalPath = joinPath(dir, finalName);
+
+      const data = await fmApi('save_file', { path: finalPath, content: fmEditorTextarea.value });
+      if(!data.ok){ alert(data.error || 'Could not save this file.'); return; }
+      if(finalName !== oldName){
+        await fmApi('delete_files', { path: dir, names: [oldName] });
+      }
+
+      editingFile = finalPath;
+      fmEditorName.textContent = finalName;
+      fmSaveBtn.classList.add('saved');
+      fmSaveBtn.textContent = 'Saved';
+      setTimeout(() => { fmSaveBtn.classList.remove('saved'); fmSaveBtn.textContent = 'Save'; }, 1200);
+    }
+
+    // -- Wiring --
+    document.getElementById('fmCreateDirBtn').addEventListener('click', createDirectory);
+    document.getElementById('fmNewFileBtn').addEventListener('click', createNewFile);
+    document.getElementById('fmUploadBtn').addEventListener('click', () => fmFileInput.click());
+    fmFileInput.addEventListener('change', () => { uploadFiles(fmFileInput.files); fmFileInput.value = ''; });
+
+    fmSelectAll.addEventListener('click', () => {
+      if(selected.size === currentItems.length) selected.clear();
+      else currentItems.forEach(item => selected.add(item.name));
+      render();
+    });
+
+    fmLangBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      fmLangMenu.classList.toggle('show');
+    });
+    document.addEventListener('click', () => { fmLangMenu.classList.remove('show'); closeAllDropdowns(); });
+
+    fmSaveBtn.addEventListener('click', saveCurrentFile);
+    document.getElementById('fmEditorClose').addEventListener('click', closeEditor);
+
+    let fmDragCounter = 0;
+    fmList.addEventListener('dragenter', (e) => {
+      e.preventDefault();
+      fmDragCounter++;
+      fmList.classList.add('dragover');
+    });
+    fmList.addEventListener('dragover', (e) => { e.preventDefault(); });
+    fmList.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      fmDragCounter = Math.max(0, fmDragCounter - 1);
+      if(fmDragCounter === 0) fmList.classList.remove('dragover');
+    });
+    fmList.addEventListener('drop', (e) => {
+      e.preventDefault();
+      fmDragCounter = 0;
+      fmList.classList.remove('dragover');
+      if(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length){
+        uploadFiles(e.dataTransfer.files);
+      }
+    });
+
+    document.getElementById('navFiles').addEventListener('click', () => {
+      document.getElementById('serverControlOverlay').classList.remove('show');
+      document.getElementById('manageServersOverlay').classList.remove('show');
+      document.getElementById('serverUsersOverlay').classList.remove('show');
+      document.getElementById('startupOverlay').classList.remove('show');
+      serverList.classList.remove('show');
+      currentPath = '/';
+      selected.clear();
+      document.getElementById('filesOverlay').classList.add('show');
+      render();
+    });
+
+    // Terminal nav button: re-opens the terminal/stats window for
+    // whichever server is currently being controlled, even if the
+    // user had navigated away to Files/Manage Servers first.
+    document.getElementById('navTerminal').addEventListener('click', () => {
+      if(!pendingControlDoc) return;
+      document.getElementById('filesOverlay').classList.remove('show');
+      document.getElementById('manageServersOverlay').classList.remove('show');
+      document.getElementById('serverUsersOverlay').classList.remove('show');
+      document.getElementById('startupOverlay').classList.remove('show');
+      serverList.classList.remove('show');
+      document.getElementById('serverControlOverlay').classList.add('show');
+      startTerminalPolling();
+    });
+  })();
+</script>
+
+<script>
+  (function(){
+    const startupOverlay = document.getElementById('startupOverlay');
+    const startupCommandInput = document.getElementById('startupCommandInput');
+    const startupImageSelect = document.getElementById('startupImageSelect');
+    const startupVarsBox = document.getElementById('startupVarsBox');
+    const startupError = document.getElementById('startupError');
+    const startupSaveBtn = document.getElementById('startupSaveBtn');
+    let currentVariables = [];
+
+    function boolLike(rules){
+      return typeof rules === 'string' && rules.includes('boolean');
+    }
+
+    function renderVariables(){
+      startupVarsBox.innerHTML = '';
+      currentVariables.forEach((v) => {
+        const row = document.createElement('div');
+        row.className = 'field';
+        row.style.marginTop = '18px';
+
+        if(boolLike(v.rules)){
+          const on = v.server_value === '1' || v.server_value === 1 || v.server_value === true;
+          row.innerHTML = `
+            <label>${v.name}</label>
+            <p class="subtext" style="margin:4px 0 8px; font-size:12px;">${v.description || ''}</p>
+            <button type="button" class="toggle-btn" data-env="${v.env_variable}" data-on="${on}" style="width:auto; padding:8px 18px; border-radius:10px; border:1px solid var(--panel-border); background:${on ? 'var(--success)' : 'transparent'}; color:${on ? '#0a1a12' : 'var(--text)'}; cursor:pointer;">${on ? 'On' : 'Off'}</button>
+          `;
+        }else{
+          row.innerHTML = `
+            <label>${v.name}</label>
+            <p class="subtext" style="margin:4px 0 8px; font-size:12px;">${v.description || ''}</p>
+            <input type="text" data-env="${v.env_variable}" value="${(v.server_value ?? '').toString().replace(/"/g,'&quot;')}">
+          `;
+        }
+        startupVarsBox.appendChild(row);
+      });
+
+      startupVarsBox.querySelectorAll('.toggle-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const nowOn = btn.dataset.on !== 'true';
+          btn.dataset.on = nowOn;
+          btn.textContent = nowOn ? 'On' : 'Off';
+          btn.style.background = nowOn ? 'var(--success)' : 'transparent';
+          btn.style.color = nowOn ? '#0a1a12' : 'var(--text)';
+        });
+      });
+    }
+
+    async function openStartupWindow(){
+      if(!pendingControlDoc) return;
+      hideAllScreens();
+      startupOverlay.classList.add('show');
+      startupError.textContent = '';
+      startupCommandInput.value = 'Loading…';
+      startupImageSelect.innerHTML = '';
+      startupVarsBox.innerHTML = '<p class="server-list-empty">Loading…</p>';
+      document.getElementById('navTerminal').style.display = 'flex';
+      document.getElementById('navFiles').style.display = 'flex';
+      document.getElementById('navSchedule').style.display = 'flex';
+      document.getElementById('navUsers').style.display = document.body.classList.contains('role-admin') ? 'flex' : 'none';
+      document.getElementById('navStartup').style.display = 'flex';
+
+      try{
+        const idToken = await auth.currentUser.getIdToken();
+        const res = await fetch('http://localhost:5000/server_startup_info', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken, docId: pendingControlDoc })
+        });
+        const data = await res.json();
+        if(!data.ok){
+          startupError.textContent = data.error || 'Could not load startup info.';
+          startupCommandInput.value = '';
+          startupVarsBox.innerHTML = '';
+          return;
+        }
+
+        startupCommandInput.value = data.startup_command || '';
+        startupImageSelect.innerHTML = '';
+        Object.entries(data.docker_images || {}).forEach(([label, image]) => {
+          const opt = document.createElement('option');
+          opt.value = image;
+          opt.textContent = label;
+          startupImageSelect.appendChild(opt);
+        });
+
+        currentVariables = data.variables || [];
+        renderVariables();
+      }catch(err){
+        startupError.textContent = 'Could not reach the backend.';
+      }
+    }
+
+    startupSaveBtn.addEventListener('click', async () => {
+      if(!pendingControlDoc) return;
+      startupError.textContent = '';
+      const environment = {};
+      startupVarsBox.querySelectorAll('[data-env]').forEach((el) => {
+        if(el.classList.contains('toggle-btn')){
+          environment[el.dataset.env] = el.dataset.on === 'true' ? '1' : '0';
+        }else{
+          environment[el.dataset.env] = el.value;
+        }
+      });
+
+      try{
+        const idToken = await auth.currentUser.getIdToken();
+        const res = await fetch('http://localhost:5000/server_startup_update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            idToken,
+            docId: pendingControlDoc,
+            startup: startupCommandInput.value,
+            image: startupImageSelect.value,
+            environment
+          })
+        });
+        const data = await res.json();
+        if(!data.ok){
+          startupError.textContent = data.error || 'Could not save startup settings.';
+          return;
+        }
+        startupSaveBtn.classList.add('saved');
+        startupSaveBtn.textContent = 'Saved';
+        setTimeout(() => { startupSaveBtn.classList.remove('saved'); startupSaveBtn.textContent = 'Save'; }, 1200);
+      }catch(err){
+        startupError.textContent = 'Could not reach the backend.';
+      }
+    });
+
+    document.getElementById('navStartup').addEventListener('click', openStartupWindow);
+  })();
+</script>
+
+</body>
+</html>
