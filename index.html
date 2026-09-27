@@ -1900,6 +1900,13 @@
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 16V4M12 4l-4 4M12 4l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         <span>Upload</span>
       </button>
+      <div id="fmUploadProgress" style="display:none; position:relative; width:34px; height:34px;">
+        <svg viewBox="0 0 36 36" width="34" height="34">
+          <circle cx="18" cy="18" r="15.5" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="3"></circle>
+          <circle id="fmUploadProgressRing" cx="18" cy="18" r="15.5" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-dasharray="97.4" stroke-dashoffset="97.4" transform="rotate(-90 18 18)"></circle>
+        </svg>
+        <span id="fmUploadProgressLabel" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:9px; font-family:var(--mono); color:var(--text);">0%</span>
+      </div>
       <button type="button" class="fm-btn" id="fmNewFileBtn">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3.5h8l4 4V19.5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 19.5v-14A1.5 1.5 0 0 1 5.5 3.5H6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 11v5M9.5 13.5h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
         <span>New File</span>
@@ -3208,6 +3215,59 @@
     const fmSelectAll = document.getElementById('fmSelectAll');
     const fmFileInput = document.getElementById('fmFileInput');
     const fmUploadBtn = document.getElementById('fmUploadBtn');
+    const fmUploadProgress = document.getElementById('fmUploadProgress');
+    const fmUploadProgressRing = document.getElementById('fmUploadProgressRing');
+    const fmUploadProgressLabel = document.getElementById('fmUploadProgressLabel');
+    const FM_RING_CIRCUMFERENCE = 97.4;
+
+    function setUploadProgress(percent){
+      const offset = FM_RING_CIRCUMFERENCE - (FM_RING_CIRCUMFERENCE * percent / 100);
+      fmUploadProgressRing.setAttribute('stroke-dashoffset', offset.toFixed(2));
+      fmUploadProgressLabel.textContent = `${Math.round(percent)}%`;
+    }
+
+    function uploadOneFile(f, idToken){
+      return new Promise((resolve) => {
+        const form = new FormData();
+        form.append('idToken', idToken);
+        form.append('docId', pendingControlDoc);
+        form.append('path', currentPath);
+        form.append('file', f);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:5000/upload_file');
+        xhr.timeout = 60000;
+
+        xhr.upload.addEventListener('progress', (e) => {
+          if(e.lengthComputable) setUploadProgress((e.loaded / e.total) * 100);
+        });
+
+        xhr.onload = () => {
+          let data;
+          try{ data = JSON.parse(xhr.responseText); }
+          catch(parseErr){ data = { ok: false, error: `bad response (${xhr.status})` }; }
+          if(!data.ok){
+            console.error('upload_file failed:', data.error, xhr.status);
+            alert(`Upload failed for ${f.name}: ${data.error || xhr.status}`);
+          }
+          resolve();
+        };
+
+        xhr.onerror = () => {
+          console.error('upload_file error: network error');
+          alert(`Upload failed for ${f.name}: network error`);
+          resolve();
+        };
+
+        xhr.ontimeout = () => {
+          console.error('upload_file error: timed out');
+          alert(`Upload failed for ${f.name}: timed out after 60s`);
+          resolve();
+        };
+
+        xhr.send(form);
+      });
+    }
     const fmEditorOverlay = document.getElementById('fmEditorOverlay');
     const fmEditorName = document.getElementById('fmEditorName');
     const fmEditorTextarea = document.getElementById('fmEditorTextarea');
@@ -3430,47 +3490,23 @@
 
       fmUploadBtn.disabled = true;
       const originalLabel = fmUploadBtn.querySelector('span').textContent;
+      fmUploadProgress.style.display = 'block';
 
       try{
-        for(const f of files){
-          fmUploadBtn.querySelector('span').textContent = `Uploading ${f.name}…`;
-
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 30000);
-
-          try{
-            const idToken = await auth.currentUser.getIdToken();
-            const form = new FormData();
-            form.append('idToken', idToken);
-            form.append('docId', pendingControlDoc);
-            form.append('path', currentPath);
-            form.append('file', f);
-
-            const res = await fetch('http://localhost:5000/upload_file', {
-              method: 'POST',
-              body: form,
-              signal: controller.signal
-            });
-            clearTimeout(timeoutId);
-
-            let data;
-            try{ data = await res.json(); }
-            catch(parseErr){ data = { ok: false, error: `bad response (${res.status})` }; }
-
-            if(!data.ok){
-              console.error('upload_file failed:', data.error, res.status);
-              alert(`Upload failed for ${f.name}: ${data.error || res.status}`);
-            }
-          }catch(e){
-            clearTimeout(timeoutId);
-            const msg = e.name === 'AbortError' ? 'timed out after 30s' : (e.message || e);
-            console.error('upload_file error:', e);
-            alert(`Upload failed for ${f.name}: ${msg}`);
-          }
+        const idToken = await auth.currentUser.getIdToken();
+        for(let i = 0; i < files.length; i++){
+          const f = files[i];
+          fmUploadBtn.querySelector('span').textContent = files.length > 1
+            ? `Uploading ${i + 1}/${files.length}…`
+            : `Uploading ${f.name}…`;
+          setUploadProgress(0);
+          await uploadOneFile(f, idToken);
         }
       }finally{
         fmUploadBtn.querySelector('span').textContent = originalLabel;
         fmUploadBtn.disabled = false;
+        fmUploadProgress.style.display = 'none';
+        setUploadProgress(0);
         render();
       }
     }
