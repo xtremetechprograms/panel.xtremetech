@@ -736,6 +736,181 @@
     color: var(--text);
   }
 
+  .cfg-box{ background:#0a0b0d; border:1px solid var(--panel-border); border-radius:14px; padding:18px; margin-bottom:16px; }
+  .cfg-head{ display:flex; gap:22px; align-items:center; flex-wrap:wrap; }
+  .cfg-icon{
+    position:relative; width:96px; height:96px; border-radius:50%; flex-shrink:0; cursor:pointer; overflow:hidden;
+    border:2px dashed var(--panel-border); display:flex; align-items:center; justify-content:center; color:var(--text-faint);
+  }
+  .cfg-icon.has{ border-style:solid; }
+  .cfg-icon img{ width:100%; height:100%; object-fit:cover; image-rendering:pixelated; }
+  .cfg-icon .cfg-icon-hover{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.55);
+    color:#fff; opacity:0; transition:opacity .15s;
+  }
+  .cfg-icon:hover .cfg-icon-hover{ opacity:1; }
+  .cfg-head-main{ flex:1; min-width:240px; }
+  .cfg-label{ font-family:var(--mono); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-faint); margin-bottom:6px; }
+  .cfg-ip-row,.cfg-desc-row{ display:flex; gap:10px; align-items:center; }
+  .cfg-ip{ font-family:var(--mono); font-size:15px; color:var(--text); word-break:break-all; }
+  .cfg-motd{
+    flex:1; min-width:0; background:#2b2b2b; border-radius:8px; padding:8px 12px; font-family:var(--mono); font-size:14px;
+    line-height:1.45; min-height:44px; color:#aaa; overflow:hidden;
+  }
+  .cfg-motd div{ white-space:pre-wrap; word-break:break-word; min-height:1.45em; }
+  .cfg-pencil{
+    width:38px; height:38px; flex-shrink:0; display:flex; align-items:center; justify-content:center; cursor:pointer;
+    background:transparent; color:var(--text); border:1px solid var(--panel-border); border-radius:10px;
+  }
+  .cfg-pencil:hover{ border-color:var(--text-muted); }
+  .cfg-title{ font-size:15px; color:var(--text); margin-bottom:16px; }
+  .cfg-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:18px; }
+  .cfg-field label.cfg-label{ display:flex; margin-bottom:8px; }
+  .cfg-field input,.cfg-field select,#motdInput{
+    width:100%; box-sizing:border-box; background:#0a0b0d; color:var(--text); border:1px solid var(--panel-border);
+    border-radius:10px; padding:10px 12px; font-family:var(--mono); font-size:13px;
+  }
+  .cfg-field.wide{ grid-column:1 / -1; }
+  .mc-switch{
+    position:relative; width:46px; height:26px; border-radius:13px; border:1px solid var(--panel-border);
+    background:transparent; cursor:pointer; padding:0; vertical-align:middle; transition:background .15s;
+  }
+  .mc-switch span{ position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%; background:var(--text-muted); transition:transform .15s, background .15s; }
+  .mc-switch[aria-checked="true"]{ background:var(--success); border-color:var(--success); }
+  .mc-switch[aria-checked="true"] span{ transform:translateX(20px); background:#0a1a12; }
+  .mc-switch-label{ font-family:var(--mono); font-size:12.5px; color:var(--text-muted); margin-left:10px; vertical-align:middle; }
+  .cfg-actions{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:24px; }
+  .motd-preview{ background:#2b2b2b; border-radius:8px; padding:10px 12px; font-family:var(--mono); font-size:14px; line-height:1.45; min-height:62px; margin:12px 0; color:#aaa; }
+  .motd-preview div{ white-space:pre-wrap; min-height:1.45em; }
+  .motd-swatches{ display:flex; flex-wrap:wrap; gap:6px; margin:12px 0 8px; }
+  .motd-swatch{ width:28px; height:28px; border-radius:6px; border:1px solid var(--panel-border); cursor:pointer; padding:0; }
+  .motd-fmts{ display:flex; flex-wrap:wrap; gap:6px; }
+  .motd-fmts .plg-btn{ padding:6px 12px; font-size:12px; }
+  .mc-magic{ letter-spacing:1px; text-decoration:underline dotted; }
+  .cfg-label{ font-weight:700; color:var(--text); display:flex; align-items:center; gap:7px; }
+  .cfg-ico{ flex-shrink:0; color:var(--text-muted); }
+  .cfg-title{ font-size:18px !important; font-weight:700; letter-spacing:.01em; margin-bottom:6px !important; }
+  .cfg-section{ padding:18px 0 4px; border-top:1px solid var(--panel-border); margin-top:14px; }
+  .cfg-section-title{ display:flex; align-items:center; gap:8px; font-weight:700; font-size:14px; color:var(--text); margin-bottom:14px; }
+  .cfg-section .cfg-grid{ grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); }
+  .cfg-hint{ font-size:12px; color:var(--text-faint); margin-top:7px; line-height:1.4; }
+  .cfg-input-wrap{ position:relative; }
+  .cfg-input-wrap .has-suffix{ padding-right:84px; }
+  .cfg-suffix{ position:absolute; right:12px; top:50%; transform:translateY(-50%); font-family:var(--mono); font-size:12px; color:var(--text-faint); pointer-events:none; }
+  .cfg-row{ display:flex; align-items:center; justify-content:space-between; gap:14px; border:1px solid var(--panel-border); border-radius:12px; padding:12px 14px; }
+  .cfg-row-title{ display:flex; align-items:center; gap:7px; font-weight:700; font-size:13px; color:var(--text); }
+  .cfg-row-hint{ font-size:12px; color:var(--text-faint); margin-top:4px; line-height:1.4; }
+  .cfg-row-ctl{ display:flex; align-items:center; flex-shrink:0; }
+  .cfg-field.wide{ grid-column:1 / -1; }
+  .cfg-section.boxed .cfg-grid{ grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:16px; }
+  .cfg-section.boxed .cfg-row,.cfg-section.boxed .cfg-field{
+    background:rgba(255,255,255,.025); border:1px solid var(--panel-border); border-radius:16px;
+    padding:20px 22px; min-height:112px; box-sizing:border-box;
+  }
+  .cfg-section.boxed .cfg-row:hover,.cfg-section.boxed .cfg-field:hover{ border-color:var(--text-faint); }
+  .cfg-section.boxed .cfg-field{ display:flex; flex-direction:column; justify-content:center; }
+  .cfg-section.boxed .cfg-label,.cfg-section.boxed .cfg-row-title{ font-size:14px; }
+  .cfg-section.boxed .cfg-ico{ width:17px; height:17px; }
+  .cfg-section.boxed .cfg-hint,.cfg-section.boxed .cfg-row-hint{ font-size:12.5px; margin-top:8px; }
+  .cfg-section.boxed .cfg-field input,.cfg-section.boxed .cfg-field select{ padding:12px 14px; font-size:14px; border-radius:12px; }
+  .cfg-section.boxed .mc-switch{ width:54px; height:30px; border-radius:15px; }
+  .cfg-section.boxed .mc-switch span{ top:4px; left:4px; width:20px; height:20px; }
+  .cfg-section.boxed .mc-switch[aria-checked="true"] span{ transform:translateX(24px); }
+  .cfg-section.boxed .mc-switch-label{ font-size:13px; min-width:26px; display:inline-block; }
+  .cfg-section.boxed .cfg-field.wide{ min-height:0; }
+  .sch-actions{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end; flex-shrink:0; }
+  .sch-actions .plg-btn{ padding:7px 12px; font-size:12px; }
+  .sch-actions .plg-btn.danger:hover{ border-color:#ff6b6b; color:#ff6b6b; }
+  .sch-card .plg-title span{ margin-left:0; }
+  .sch-badge{ display:inline-block; margin-left:10px; padding:2px 8px; border-radius:20px; border:1px solid var(--panel-border); font-family:var(--mono); font-size:11px; color:var(--text-faint); }
+  .sch-inline{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .sch-inline input,.sch-inline select{ width:auto; min-width:0; }
+  .sch-days{ display:flex; gap:6px; flex-wrap:wrap; }
+  .sch-day{ padding:8px 12px; border-radius:10px; border:1px solid var(--panel-border); background:transparent; color:var(--text-muted); font-family:var(--mono); font-size:12.5px; cursor:pointer; }
+  .sch-day.on{ background:var(--success); border-color:var(--success); color:#0a1a12; }
+  .sch-custom{ display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+  .sch-custom small{ display:block; font-family:var(--mono); font-size:10.5px; color:var(--text-faint); margin-bottom:4px; text-transform:uppercase; }
+  #schModal .cfg-field{ margin-bottom:16px; }
+  #schModal .cfg-row{ margin-bottom:10px; padding:10px 14px; }
+
+  .wd-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; }
+  .wd-box{ position:relative; height:170px; border-radius:16px; border:1px solid var(--panel-border); overflow:hidden; cursor:pointer; background:#0a0b0d var(--bg) center/cover no-repeat; transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
+  .wd-box::before{ content:''; position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.75), rgba(0,0,0,.05) 60%); }
+  .wd-box:hover{ transform:translateY(-2px); border-color:#fff; box-shadow:0 8px 20px rgba(0,0,0,.5); }
+  .wd-box span{ position:absolute; left:16px; bottom:14px; font-size:17px; color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.8); }
+  .wd-tag{ position:absolute; top:12px; right:12px; font-family:var(--mono); font-size:11px; color:#fff; background:rgba(0,0,0,.6); border:1px solid rgba(255,255,255,.25); border-radius:999px; padding:3px 10px; }
+  .wd-opts{ display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:12px; margin-top:12px; }
+  .wd-opt{ display:flex; align-items:center; gap:12px; background:#0a0b0d; color:var(--text); border:1px solid var(--panel-border); border-radius:14px; padding:18px; font-family:var(--mono); font-size:14px; cursor:pointer; transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease; }
+  .wd-opt:hover:not(:disabled){ transform:translateY(-2px); border-color:#fff; box-shadow:0 8px 20px rgba(0,0,0,.5); }
+  .wd-opt:disabled{ opacity:.55; cursor:default; }
+  .vi-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; }
+  .vi-box{ background:#0a0b0d; border:1px solid var(--panel-border); border-radius:12px; padding:16px; cursor:pointer; color:var(--text); font-size:15px; transition:transform .15s ease, border-color .15s ease; }
+  .vi-box small{ display:block; margin-top:4px; font-family:var(--mono); font-size:11.5px; color:var(--text-faint); }
+  .vi-box:hover{ transform:translateY(-2px); border-color:#fff; }
+  .vi-vers{ display:grid; grid-template-columns:repeat(auto-fill,minmax(96px,1fr)); gap:8px; max-height:320px; overflow:auto; margin-top:12px; }
+  .vi-ver{ background:transparent; color:var(--text); border:1px solid var(--panel-border); border-radius:999px; padding:8px 10px; font-family:var(--mono); font-size:12.5px; cursor:pointer; }
+  .vi-ver:hover:not(:disabled){ border-color:#fff; }
+  .vi-ver:disabled{ opacity:.5; cursor:default; }
+  .mm-tabs{ display:flex; flex-wrap:wrap; gap:6px; padding:6px; background:#0a0b0d; border:1px solid var(--panel-border); border-radius:999px; margin-bottom:18px; width:fit-content; max-width:100%; }
+  .mm-tab{ background:transparent; color:var(--text-muted); border:1px solid transparent; border-radius:999px; padding:9px 18px; font-family:var(--mono); font-size:13px; cursor:pointer; transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease, color .15s ease; }
+  .mm-tab:hover{ color:var(--text); }
+  .mm-tab.active{ color:#fff; background:rgba(255,255,255,0.07); border-color:#fff; transform:translateY(-1px); box-shadow:0 6px 16px rgba(0,0,0,0.5); }
+  .mm-bar{ display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+  .mm-bar input{ flex:1 1 220px; background:#0a0b0d; color:var(--text); border:1px solid var(--panel-border); border-radius:999px; padding:10px 16px; font-family:var(--mono); font-size:13px; min-width:0; }
+  .mm-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:10px; }
+  .mm-card{ display:flex; align-items:center; gap:12px; background:#0a0b0d; border:1px solid var(--panel-border); border-radius:12px; padding:10px 12px; min-width:0; }
+  .mm-head{ width:40px; height:40px; border-radius:8px; flex-shrink:0; background:#15171b; image-rendering:pixelated; }
+  .mm-ipico{ width:40px; height:40px; border-radius:8px; flex-shrink:0; background:#15171b; display:flex; align-items:center; justify-content:center; color:var(--text-muted); }
+  .mm-name{ flex:1; min-width:0; font-size:14px; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .mm-name small{ display:block; font-family:var(--mono); font-size:11px; color:var(--text-faint); overflow:hidden; text-overflow:ellipsis; }
+  .mm-card .plg-btn{ padding:7px 12px; font-size:12px; }
+  .mm-card .plg-btn.danger:hover{ border-color:#ff6b6b; color:#ff6b6b; }
+  .mm-sub{ font-family:var(--mono); font-size:12px; color:var(--text-faint); margin:0 0 10px; }
+  .mm-sw{ position:relative; width:40px; height:22px; flex-shrink:0; border-radius:999px; border:1px solid var(--panel-border); background:transparent; cursor:pointer; padding:0; }
+  .mm-sw::after{ content:''; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:var(--text-faint); transition:.15s; }
+  .mm-sw.on{ background:var(--success); border-color:var(--success); }
+  .mm-sw.on::after{ left:20px; background:#0a1a12; }
+  .acc-perms{ display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:10px; margin:14px 0; }
+  .acc-perms .mm-card{ justify-content:space-between; }
+  .acc-user{ cursor:pointer; }
+  .acc-user:hover{ border-color:var(--text-faint); }
+  #accessOverlay .field input{ width:100%; }
+  .plg-bar{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:16px; }
+  .plg-bar input,.plg-bar select{
+    background:#0a0b0d; color:var(--text); border:1px solid var(--panel-border); border-radius:10px;
+    padding:10px 12px; font-family:var(--mono); font-size:13px; min-width:0;
+  }
+  .plg-bar input{ flex:1 1 220px; }
+  .plg-list{ display:flex; flex-direction:column; gap:10px; }
+  .plg-card{
+    display:flex; gap:14px; align-items:center; background:#0a0b0d; border:1px solid var(--panel-border);
+    border-radius:12px; padding:12px 14px;
+  }
+  .plg-icon{ width:48px; height:48px; border-radius:10px; flex-shrink:0; background:#15171b; object-fit:cover; }
+  .plg-body{ flex:1; min-width:0; }
+  .plg-title{ font-size:15px; color:var(--text); }
+  .plg-title span{ font-family:var(--mono); font-size:12px; color:var(--text-faint); margin-left:8px; }
+  .plg-desc{ font-size:13px; color:var(--text-muted); margin-top:3px; overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+  .plg-meta{ font-family:var(--mono); font-size:11.5px; color:var(--text-faint); margin-top:5px; }
+  .plg-btn{
+    flex-shrink:0; background:transparent; color:var(--text); border:1px solid var(--panel-border);
+    border-radius:10px; padding:9px 16px; font-family:var(--mono); font-size:13px; cursor:pointer;
+  }
+  .plg-btn:hover:not(:disabled){ border-color:var(--text-muted); }
+  .plg-btn:disabled{ opacity:.6; cursor:default; }
+  .plg-pager{ display:flex; align-items:center; justify-content:center; gap:14px; margin:18px 0 6px; }
+  .plg-status{ font-family:var(--mono); font-size:12.5px; color:var(--text-faint); min-height:18px; margin-bottom:10px; }
+  .plg-status.err{ color:#ff6b6b; }
+  .server-section{ display: flex; flex-direction: column; gap: 14px; }
+  .server-section-title{
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    padding: 6px 2px 0;
+  }
+  .server-section-title span{ opacity: 0.6; margin-left: 8px; }
   .server-list-empty{
     font-family: var(--mono);
     font-size: 13px;
@@ -1572,6 +1747,15 @@
       <span class="sidebar-tooltip">Terminal</span>
     </button>
 
+    <button type="button" class="sidebar-btn ctx-terminal" id="navConfig" data-label="Configurations" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 7h9M17 7h3M4 17h3M11 17h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="15" cy="7" r="2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="9" cy="17" r="2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="sidebar-tooltip">Configurations</span>
+    </button>
+
     <button type="button" class="sidebar-btn ctx-terminal" id="navFiles" data-label="Files" style="display:none;">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M3 7a1.5 1.5 0 0 1 1.5-1.5H9l2 2h8.5A1.5 1.5 0 0 1 21 9v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18V7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
@@ -1585,6 +1769,13 @@
         <path d="M12 7.5v5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <span class="sidebar-tooltip">Startup</span>
+    </button>
+
+    <button type="button" class="sidebar-btn ctx-terminal" id="navPlugins" data-label="Plugins" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9.5 4.5a1.8 1.8 0 0 1 3.6 0V6H17a1 1 0 0 1 1 1v3.5h-1.5a1.8 1.8 0 0 0 0 3.6H18V18a1 1 0 0 1-1 1h-3.9v-1.5a1.8 1.8 0 0 0-3.6 0V19H6a1 1 0 0 1-1-1v-3.9h1.5a1.8 1.8 0 0 0 0-3.6H5V7a1 1 0 0 1 1-1h3.5V4.5z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="sidebar-tooltip">Plugins</span>
     </button>
 
     <button type="button" class="sidebar-btn ctx-terminal" id="navSchedule" data-label="Schedule" style="display:none;">
@@ -1603,6 +1794,31 @@
         <path d="M14.8 14.3c2.4.3 4 2 4.6 4.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
       </svg>
       <span class="sidebar-tooltip">Users</span>
+    </button>
+
+    <button type="button" class="sidebar-btn ctx-terminal" id="navMembers" data-label="Manage Members" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="8.5" cy="8" r="2.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M3 19c.6-3 2.6-5 5.5-5s4.9 2 5.5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M18 7.5v5M15.5 10h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="sidebar-tooltip">Manage Members</span>
+    </button>
+
+    <button type="button" class="sidebar-btn ctx-terminal" id="navAccess" data-label="Access" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="8" cy="15" r="3.5" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M10.5 12.5L19 4M16 7l2.5 2.5M13.5 9.5L15.5 11.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="sidebar-tooltip">Access</span>
+    </button>
+
+    <button type="button" class="sidebar-btn ctx-terminal" id="navWorlds" data-label="Worlds" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M3.5 12h17M12 3.5c2.3 2.4 3.5 5.2 3.5 8.5s-1.2 6.1-3.5 8.5c-2.3-2.4-3.5-5.2-3.5-8.5S9.7 5.9 12 3.5z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="sidebar-tooltip">Worlds</span>
     </button>
 
     <div class="sidebar-divider admin-only"></div>
@@ -1637,7 +1853,21 @@
     <div style="display:flex; flex-direction:column; gap:10px;">
       <button type="button" id="typeVDS" class="signout">VDS</button>
       <button type="button" id="typeVPS" class="signout">VPS</button>
-      <button type="button" id="typeDedicated" class="submit">Dedicated Server</button>
+      <button type="button" id="typeCloud" class="signout">Cloud Storage</button>
+      <button type="button" id="typeDedicated" class="submit">Dedicated Resource Server</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="resourceTypeOverlay">
+  <div class="modal-box" style="max-width:380px; text-align:center;">
+    <button type="button" class="modal-close" id="resourceTypeClose">✕</button>
+    <h1 class="heading" style="justify-content:center;">Dedicated Resource Server</h1>
+    <p class="subtext" style="margin-bottom:20px;">Choose one to continue.</p>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <button type="button" class="signout resource-type-btn" data-category="minecraft">Minecraft Server</button>
+      <button type="button" class="signout resource-type-btn" data-category="discord">Discord Bots</button>
+      <button type="button" class="signout resource-type-btn" data-category="database">Database</button>
     </div>
   </div>
 </div>
@@ -1646,7 +1876,7 @@
   <div class="modal-box">
     <button type="button" class="modal-close" id="addServerClose">✕</button>
     <h1 class="heading" style="text-align:left; justify-content:flex-start;">Add Server</h1>
-    <p class="subtext" style="text-align:left; margin-bottom:20px;">Fill in the details for the new server.</p>
+    <p class="subtext" id="addServerSub" style="text-align:left; margin-bottom:20px;">Fill in the details for the new server.</p>
 
     <form id="addServerForm" autocomplete="off">
       <div class="field">
@@ -1848,6 +2078,10 @@
     </div>
   </div>
 
+  <label style="display:flex;align-items:center;gap:8px;margin-top:14px;font-size:13px;">
+    <input type="checkbox" id="addUserFullAccess"> Give access to the whole server (all files)
+  </label>
+
   <p class="subtext" style="margin-top:14px; font-size:12px;">
     CPU and RAM limits are applied for real on the panel. A private folder named after their email is
     created in Files, and they'll only ever see that folder. Storage/network are shown as caps in the
@@ -1857,6 +2091,236 @@
   <button type="button" class="submit" id="addUserSaveBtn" style="margin-top:20px;">
     <span>Add User</span>
   </button>
+</div>
+
+<div class="manage-view" id="mcConfigOverlay">
+  <h1 class="heading" style="text-align:left; justify-content:flex-start;">Configurations</h1>
+  <div class="plg-status" id="cfgStatus"></div>
+  <div class="cfg-box cfg-head">
+    <label class="cfg-icon" id="cfgIcon" title="Change server logo">
+      <img id="cfgIconImg" alt="" hidden>
+      <span id="cfgIconPh"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 8h3l1.5-2h7L17 8h3v11H4V8z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.2" stroke="currentColor" stroke-width="1.8"/></svg></span>
+      <span class="cfg-icon-hover"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 8h3l1.5-2h7L17 8h3v11H4V8z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.2" stroke="currentColor" stroke-width="1.8"/></svg></span>
+      <input type="file" id="cfgIconFile" accept="image/*" hidden>
+    </label>
+    <div class="cfg-head-main">
+      <div class="cfg-label">Server IP</div>
+      <div class="cfg-ip-row"><span class="cfg-ip" id="cfgIp">—</span><button type="button" class="plg-btn" id="cfgCopy" style="padding:6px 12px; font-size:12px;">Copy</button></div>
+      <div class="cfg-label" style="margin-top:16px;">Description</div>
+      <div class="cfg-desc-row">
+        <div class="cfg-motd" id="cfgMotd"></div>
+        <button type="button" class="cfg-pencil" id="cfgEditMotd" aria-label="Edit description"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 17v3z M14 7l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+  </div>
+  <div class="cfg-box">
+    <div class="cfg-title">Server Properties</div>
+    <div class="cfg-section">
+      <div class="cfg-section-title"><svg class="cfg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/></svg>General</div>
+      <div class="cfg-grid">
+        <div class="cfg-field"><label class="cfg-label"><svg class="cfg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 19c.5-3 2.8-5 6-5s5.5 2 6 5M16 5.5a3 3 0 0 1 0 5.5M18 14.5c1.8.6 3 2.2 3.4 4.5"/></svg>Slots</label><div class="cfg-input-wrap"><input type="number" id="cfgSlots" class="has-suffix" min="1" max="100000" step="1"><span class="cfg-suffix">members</span></div><div class="cfg-hint"><span id="cfgSlotsHint">Total members that can be online at once.</span></div></div>
+        <div class="cfg-field"><label class="cfg-label"><svg class="cfg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="10" rx="4"/><path d="M8 11v4M6 13h4M15.5 12h.01M18 14h.01"/></svg>Gamemode</label><select id="cfgGamemode"><option value="survival">Survival</option><option value="creative">Creative</option><option value="adventure">Adventure</option><option value="spectator">Spectator</option></select><div class="cfg-hint">Default mode for players joining.</div></div>
+        <div class="cfg-field"><label class="cfg-label"><svg class="cfg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a7 7 0 0 0-7 7c0 2.4 1.2 4 3 5v3h8v-3c1.8-1 3-2.6 3-5a7 7 0 0 0-7-7z"/><path d="M9.5 11h.01M14.5 11h.01"/></svg>Difficulty</label><select id="cfgDifficulty"><option value="peaceful">Peaceful</option><option value="easy">Easy</option><option value="normal">Normal</option><option value="hard">Hard</option></select><div class="cfg-hint">How tough mobs and hunger are.</div></div>
+      </div>
+    </div>
+    <div class="cfg-section boxed">
+      <div class="cfg-section-title"><svg class="cfg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"/></svg>Access &amp; Gameplay</div>
+      <div class="cfg-grid">
+        <div class="cfg-row"><div class="cfg-row-text"><div class="cfg-row-title"><svg class="cfg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg>Whitelist</div><div class="cfg-row-hint">Only approved players can join.</div></div><div class="cfg-row-ctl"><button type="button" class="mc-switch" id="cfgWhitelist" role="switch" aria-checked="false"><span></span></button><span class="mc-switch-label">Off</span></div></div>
+        <div class="cfg-row"><div class="cfg-row-text"><div class="cfg-row-title"><svg class="cfg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 7.5-2"/></svg>Cracked</div><div class="cfg-row-hint">Allow offline (non-premium) accounts.</div></div><div class="cfg-row-ctl"><button type="button" class="mc-switch" id="cfgCracked" role="switch" aria-checked="false"><span></span></button><span class="mc-switch-label">Off</span></div></div>
+        <div class="cfg-row"><div class="cfg-row-text"><div class="cfg-row-title"><svg class="cfg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c4 0 8-2 10-6 1-2 3-4 8-4-1 5-3 9-8 10-3 .6-6 .4-10 0z"/></svg>Fly</div><div class="cfg-row-hint">Allow flying without being kicked.</div></div><div class="cfg-row-ctl"><button type="button" class="mc-switch" id="cfgFly" role="switch" aria-checked="false"><span></span></button><span class="mc-switch-label">Off</span></div></div>
+        <div class="cfg-row"><div class="cfg-row-text"><div class="cfg-row-title"><svg class="cfg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Force Gamemode</div><div class="cfg-row-hint">Reset players to the default gamemode on join.</div></div><div class="cfg-row-ctl"><button type="button" class="mc-switch" id="cfgForceGm" role="switch" aria-checked="false"><span></span></button><span class="mc-switch-label">Off</span></div></div>
+        <div class="cfg-field"><label class="cfg-label"><svg class="cfg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"/></svg>Spawn Protection</label><div class="cfg-input-wrap"><input type="number" id="cfgSpawn" class="has-suffix" min="0" max="10000" step="1"><span class="cfg-suffix">blocks</span></div><div class="cfg-hint">Radius around spawn only operators can edit.</div></div>
+      </div>
+    </div>
+    <div class="cfg-section boxed">
+      <div class="cfg-section-title"><svg class="cfg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-5 9 5v8l-9 5-9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>Resource Pack</div>
+      <div class="cfg-grid">
+        <div class="cfg-row"><div class="cfg-row-text"><div class="cfg-row-title"><svg class="cfg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Resource Pack Required</div><div class="cfg-row-hint">Kick players who decline the pack.</div></div><div class="cfg-row-ctl"><button type="button" class="mc-switch" id="cfgReqPack" role="switch" aria-checked="false"><span></span></button><span class="mc-switch-label">Off</span></div></div>
+        <div class="cfg-field"><label class="cfg-label"><svg class="cfg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-5 9 5v8l-9 5-9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>Resource Pack</label><select id="cfgPackType"><option value="none">None</option><option value="link">Link</option></select><div class="cfg-hint">Where players download the pack from.</div></div>
+        <div class="cfg-field wide" id="cfgPackLinkWrap"><label class="cfg-label"><svg class="cfg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>Resource Pack Link</label><input type="text" id="cfgPackLink" placeholder="https://example.com/pack.zip" autocomplete="off" spellcheck="false"><div class="cfg-hint">Direct download URL of the .zip pack.</div></div>
+      </div>
+    </div>
+    <div class="cfg-section boxed">
+      <div class="cfg-section-title"><svg class="cfg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></svg>System</div>
+      <div class="cfg-grid">
+        <div class="cfg-field"><label class="cfg-label"><svg class="cfg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Timezone</label><input type="text" id="cfgTz" list="cfgTzList" placeholder="Asia/Calcutta" autocomplete="off" spellcheck="false"><datalist id="cfgTzList"></datalist><div class="cfg-hint">Clock used by the server and its logs.</div></div>
+        <div class="cfg-field"><label class="cfg-label"><svg class="cfg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></svg>Environment</label><select id="cfgEnv"></select><div class="cfg-hint">Java version the server runs on.</div></div>
+      </div>
+    </div>
+    <div class="cfg-section boxed" id="viBox">
+      <div class="cfg-section-title">Version Installer</div>
+      <p class="mm-sub">Install a specific Minecraft version. This replaces the server jar, so stop the server first.</p>
+      <div class="plg-status" id="viStatus"></div>
+      <div class="vi-grid" id="viSoft">
+        <div class="vi-box" data-soft="vanilla">Vanilla<small>Official Mojang</small></div>
+        <div class="vi-box" data-soft="paper">Paper<small>Bukkit plugins</small></div>
+        <div class="vi-box" data-soft="folia">Folia<small>Paper, multithreaded</small></div>
+        <div class="vi-box" data-soft="purpur">Purpur<small>Paper fork</small></div>
+        <div class="vi-box" data-soft="fabric">Fabric<small>Mod loader</small></div>
+      </div>
+      <div id="viPick" style="display:none;">
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <button type="button" class="plg-btn" id="viBack">← Back</button>
+          <span id="viTitle" style="font-size:15px;"></span>
+        </div>
+        <div class="mm-bar" style="margin:12px 0 0;"><input type="text" id="viSearch" placeholder="Search versions…" autocomplete="off"></div>
+        <div class="vi-vers" id="viVers"></div>
+      </div>
+    </div>
+  </div>
+  <div class="cfg-actions">
+    <button type="button" class="plg-btn" id="cfgSave">Save changes</button>
+    <span class="plg-status" style="margin:0;">Stop the server before saving, then start it to apply.</span>
+  </div>
+</div>
+
+<div class="modal-overlay" id="motdOverlay">
+  <div class="modal-box" style="max-width:540px; text-align:left;">
+    <button type="button" class="modal-close" id="motdClose">✕</button>
+    <h1 class="heading" style="justify-content:flex-start;">Edit Description</h1>
+    <p class="subtext" style="text-align:left; margin-bottom:0;">Use &amp; codes for colors and styles. Two lines max.</p>
+    <div class="motd-preview" id="motdPreview"></div>
+    <textarea id="motdInput" rows="2" maxlength="120" spellcheck="false"></textarea>
+    <div class="motd-swatches" id="motdSwatches"></div>
+    <div class="motd-fmts" id="motdFmts"></div>
+    <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:18px;">
+      <button type="button" class="plg-btn" id="motdCancel">Cancel</button>
+      <button type="button" class="plg-btn" id="motdApply">Apply</button>
+    </div>
+  </div>
+</div>
+
+<div class="manage-view" id="scheduleOverlay">
+  <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+    <h1 class="heading" style="text-align:left; justify-content:flex-start; margin:0;">Schedule</h1>
+    <button type="button" class="plg-btn" id="schNew">+ New schedule</button>
+  </div>
+  <p class="subtext" style="text-align:left; margin:6px 0 16px;">Automatically restart your server on a timer.</p>
+  <div class="plg-status" id="schStatus"></div>
+  <div class="plg-list" id="schList"></div>
+</div>
+
+<div class="modal-overlay" id="schModal">
+  <div class="modal-box" style="max-width:540px; text-align:left; max-height:90vh; overflow-y:auto;">
+    <button type="button" class="modal-close" id="schClose">✕</button>
+    <h1 class="heading" style="justify-content:flex-start;" id="schTitle">New schedule</h1>
+    <div class="cfg-field" style="margin-top:14px;"><label class="cfg-label" for="schName">Name</label><input type="text" id="schName" maxlength="60" placeholder="Daily restart" autocomplete="off"></div>
+    <div class="cfg-field"><label class="cfg-label" for="schAction">Action</label><select id="schAction"><option value="restart">Restart</option><option value="stop">Stop</option><option value="start">Start</option></select></div>
+    <div class="cfg-field"><label class="cfg-label" for="schMode">Repeat</label><select id="schMode"><option value="hours">Every few hours</option><option value="daily">Every day</option><option value="weekly">On selected days</option><option value="custom">Custom cron</option></select></div>
+    <div class="cfg-field" id="schHoursWrap"><div class="sch-inline"><span class="cfg-hint" style="margin:0;">Every</span><select id="schEvery"><option>1</option><option>2</option><option>3</option><option>4</option><option>6</option><option>8</option><option>12</option></select><span class="cfg-hint" style="margin:0;">hours at minute</span><input type="number" id="schMinute" min="0" max="59" value="0" style="width:84px;"></div></div>
+    <div class="cfg-field" id="schTimeWrap"><label class="cfg-label" for="schTime">Time</label><input type="time" id="schTime" value="04:00"></div>
+    <div class="cfg-field" id="schDaysWrap"><label class="cfg-label">Days</label><div class="sch-days" id="schDays"></div></div>
+    <div class="cfg-field" id="schCustomWrap"><label class="cfg-label">Cron fields</label><div class="sch-custom"><div><small>Min</small><input type="text" id="schCMin" value="0"></div><div><small>Hour</small><input type="text" id="schCHour" value="4"></div><div><small>Day</small><input type="text" id="schCDom" value="*"></div><div><small>Month</small><input type="text" id="schCMon" value="*"></div><div><small>Weekday</small><input type="text" id="schCDow" value="*"></div></div></div>
+    <div class="cfg-row"><div class="cfg-row-text"><div class="cfg-row-title">Warn players</div><div class="cfg-row-hint">Sends a chat warning 1 minute before.</div></div><div class="cfg-row-ctl"><button type="button" class="mc-switch" id="schWarn" role="switch" aria-checked="false"><span></span></button><span class="mc-switch-label">Off</span></div></div>
+    <div class="cfg-row"><div class="cfg-row-text"><div class="cfg-row-title">Only when server is online</div><div class="cfg-row-hint">Skip the run if the server is offline.</div></div><div class="cfg-row-ctl"><button type="button" class="mc-switch" id="schOnline" role="switch" aria-checked="false"><span></span></button><span class="mc-switch-label">Off</span></div></div>
+    <div class="cfg-row"><div class="cfg-row-text"><div class="cfg-row-title">Active</div><div class="cfg-row-hint">Turn off to pause this schedule.</div></div><div class="cfg-row-ctl"><button type="button" class="mc-switch" id="schActive" role="switch" aria-checked="false"><span></span></button><span class="mc-switch-label">Off</span></div></div>
+    <div class="plg-status" id="schError" style="margin-top:6px;"></div>
+    <p class="cfg-hint" style="margin:0 0 4px;">Times follow the panel's timezone.</p>
+    <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:14px;">
+      <button type="button" class="plg-btn" id="schCancel">Cancel</button>
+      <button type="button" class="plg-btn" id="schSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="manage-view" id="pluginsOverlay">
+  <h1 class="heading" style="text-align:left; justify-content:flex-start;">Plugins</h1>
+  <p class="subtext" style="text-align:left; margin-bottom:16px;">Browse and install from Modrinth.</p>
+  <div class="plg-bar">
+    <input type="text" id="plgQuery" placeholder="Search plugins…" autocomplete="off">
+    <select id="plgLoader">
+      <option value="paper">Paper</option>
+      <option value="spigot">Spigot</option>
+      <option value="bukkit">Bukkit</option>
+      <option value="purpur">Purpur</option>
+      <option value="folia">Folia</option>
+      <option value="fabric">Fabric</option>
+      <option value="forge">Forge</option>
+      <option value="neoforge">NeoForge</option>
+      <option value="quilt">Quilt</option>
+    </select>
+    <select id="plgVersion"><option value="">Any version</option></select>
+    <select id="plgSort">
+      <option value="relevance">Relevance</option>
+      <option value="downloads">Downloads</option>
+      <option value="follows">Follows</option>
+      <option value="newest">Newest</option>
+      <option value="updated">Updated</option>
+    </select>
+  </div>
+  <div class="plg-status" id="plgStatus"></div>
+  <div class="plg-list" id="plgList"></div>
+  <div class="plg-pager">
+    <button type="button" class="plg-btn" id="plgPrev">← Prev</button>
+    <span class="plg-status" id="plgPage" style="margin:0;"></span>
+    <button type="button" class="plg-btn" id="plgNext">Next →</button>
+  </div>
+</div>
+
+<div class="manage-view" id="membersOverlay">
+  <h1 class="heading" style="text-align:left; justify-content:flex-start;">Manage Members</h1>
+  <div class="plg-status" id="mmStatus"></div>
+  <div class="mm-tabs" id="mmTabs">
+    <button type="button" class="mm-tab active" data-tab="whitelist">Whitelist</button>
+    <button type="button" class="mm-tab" data-tab="ops">Operators</button>
+    <button type="button" class="mm-tab" data-tab="banned">Banned Players</button>
+    <button type="button" class="mm-tab" data-tab="bannedIps">Banned IPs</button>
+    <button type="button" class="mm-tab" data-tab="known">Members</button>
+  </div>
+  <div class="mm-bar" id="mmBar" style="display:none;">
+    <input type="text" id="mmInput" autocomplete="off" spellcheck="false">
+    <button type="button" class="plg-btn" id="mmAdd">Add</button>
+  </div>
+  <div class="mm-grid" id="mmPick"></div>
+  <p class="mm-sub" id="mmListTitle"></p>
+  <div class="mm-grid" id="mmList"></div>
+</div>
+
+<div class="manage-view" id="accessOverlay">
+  <h1 class="heading" style="text-align:left; justify-content:flex-start;">Access</h1>
+  <p class="subtext" style="text-align:left; margin-bottom:16px;">Give someone a login to this server and choose what they can do.</p>
+  <div class="plg-status" id="accStatus"></div>
+  <p class="mm-sub">People with access</p>
+  <div class="mm-grid" id="accList" style="margin-bottom:26px;"></div>
+  <p class="mm-sub" id="accFormTitle">Grant access</p>
+  <div class="field"><label for="accEmail">Email</label><input type="email" id="accEmail" placeholder="someone@example.com" autocomplete="off"></div>
+  <div class="field" style="margin-top:14px;"><label for="accPass">Password</label><input type="password" id="accPass" placeholder="Leave blank to keep the existing password" autocomplete="new-password"></div>
+  <div class="acc-perms" id="accPerms"></div>
+  <div style="display:flex; gap:10px;">
+    <button type="button" class="plg-btn" id="accSave">Save access</button>
+    <button type="button" class="plg-btn" id="accReset">Clear</button>
+  </div>
+</div>
+
+<div class="manage-view" id="mcBlankOverlay">
+  <h1 class="heading" style="text-align:left; justify-content:flex-start;" id="mcBlankTitle"></h1>
+  <div class="wd-grid" id="worldsGrid">
+    <div class="wd-box" data-dim="overworld" style="--bg:url('https://github.com/xtremetechprograms/IMAGES/blob/main/Overworld.jpeg?raw=true')"><span>Overworld</span></div>
+    <div class="wd-box" data-dim="nether" style="--bg:url('https://github.com/xtremetechprograms/IMAGES/blob/main/nether.png?raw=true')"><span>Nether</span></div>
+    <div class="wd-box" data-dim="end" style="--bg:url('https://github.com/xtremetechprograms/IMAGES/blob/main/end.png?raw=true')"><span>The End</span></div>
+  </div>
+  <div id="worldDetail" style="display:none;">
+    <button type="button" class="plg-btn" id="wdBack">← Back</button>
+    <h2 class="heading" id="wdTitle" style="font-size:20px; text-align:left; justify-content:flex-start; margin:14px 0 4px;"></h2>
+    <div class="plg-status" id="wdStatus"></div>
+    <div class="wd-opts">
+      <button type="button" class="wd-opt" data-opt="download"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 19.5h14"/></svg><span>Download</span></button>
+      <button type="button" class="wd-opt" data-opt="upload"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7.5 8.5L12 4l4.5 4.5M5 19.5h14"/></svg><span>Upload</span></button>
+      <button type="button" class="wd-opt" data-opt="files"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5A1.5 1.5 0 0 1 5 6h4l2 2.5h8A1.5 1.5 0 0 1 20.5 10v8A1.5 1.5 0 0 1 19 19.5H5A1.5 1.5 0 0 1 3.5 18z"/></svg><span>Files</span></button>
+      <button type="button" class="wd-opt" data-opt="generate"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9M20 4v4.5h-4.5"/></svg><span>Generate</span></button>
+    </div>
+    <div class="cfg-box" id="wdGen" style="display:none; margin-top:16px;">
+      <div class="cfg-title" id="wdGenTitle">Generate a new world</div>
+      <p class="mm-sub" id="wdGenHint"></p>
+      <div class="mm-bar" style="margin-bottom:0;">
+        <input type="text" id="wdSeed" placeholder="Seed (optional)" autocomplete="off" spellcheck="false">
+        <button type="button" class="plg-btn" id="wdGenGo">Generate</button>
+        <button type="button" class="plg-btn" id="wdGenCancel">Cancel</button>
+      </div>
+    </div>
+    <input type="file" id="wdFile" accept=".zip,.tar.gz,.tgz" hidden>
+  </div>
 </div>
 
 <!-- Startup section: docker image + startup command, and egg variables -->
@@ -1869,7 +2333,12 @@
   <div style="background:#0a0b0d; border:1px solid var(--panel-border); border-radius:10px; padding:16px; margin-bottom:20px;">
     <div class="field">
       <label for="startupCommandInput">Startup Command</label>
-      <input type="text" id="startupCommandInput" style="font-family:var(--mono); font-size:12.5px;">
+      <div style="display:flex; gap:8px; align-items:center;">
+        <input type="text" id="startupCommandInput" style="flex:1; font-family:var(--mono); font-size:12.5px;">
+        <button type="button" id="startupCopyBtn" title="Copy" style="flex-shrink:0; background:transparent; border:1px solid var(--panel-border); border-radius:10px; padding:9px 12px; color:var(--text); cursor:pointer; display:flex; align-items:center; justify-content:center;">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16"><rect x="8.5" y="8.5" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M15 8.5V6a1.5 1.5 0 0 0-1.5-1.5H6A1.5 1.5 0 0 0 4.5 6v7.5A1.5 1.5 0 0 0 6 15h2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+      </div>
     </div>
     <div class="field" style="margin-top:16px;">
       <label for="startupImageSelect">Available Docker Images</label>
@@ -1994,7 +2463,9 @@
 
   // Where notify_login.py is running. Change this if you host it
   // somewhere other than your own machine on port 5000.
-  const BACKEND_URL = "http://localhost:5000/notify";
+  const API_BASE = window.API_BASE || "http://localhost:5000";
+  const WS_BASE = API_BASE.replace(/^http/, "ws");
+  const BACKEND_URL = `${API_BASE}/notify`;
 
   function setBackground(url){
     document.body.style.backgroundImage = `url('${url}')`;
@@ -2076,7 +2547,11 @@
   // offline, the person still gets the normal logged-in view, just
   // never the admin panel (fails safe, not open).
   async function checkAdminAndRoute(user){
-    showLoggedIn(); // default view while we wait on the backend
+    loginView.style.display = 'none';
+    mainStack.style.display = 'none';
+    adminBrand.classList.remove('show');
+    adminSidebar.classList.remove('show');
+    serverList.classList.remove('show');
     let isAdmin = false;
     try{
       const idToken = await user.getIdToken();
@@ -2125,7 +2600,10 @@
     document.getElementById('navAddServer').style.display = '';
     document.getElementById('navRemoveServer').style.display = '';
     document.getElementById('navManageServers').style.display = '';
-    if(document.body.classList.contains('role-admin')) serverList.classList.add('show');
+    // Show the server list panel again regardless of role -- both the
+    // admin's live listener and attachOwnerServerListener() already
+    // populated it once on login, this just needs to reveal it.
+    serverList.classList.add('show');
     // Home doesn't open anything -- it just clears whatever popup/panel
     // might currently be open, back to the plain dashboard view.
     document.querySelectorAll('.server-context-btn').forEach(el => el.classList.remove('ctx-visible'));
@@ -2146,7 +2624,17 @@
   const addServerOverlay = document.getElementById('addServerOverlay');
   const addServerForm = document.getElementById('addServerForm');
 
-  function openAddServerModal(){
+  const SERVER_KINDS = {
+    minecraft: { type: 'dedicated', label: 'Minecraft Server' },
+    discord: { type: 'dedicated', label: 'Discord Bots' },
+    database: { type: 'dedicated', label: 'Database' },
+    cloud_storage: { type: 'cloud', label: 'Cloud Storage' }
+  };
+  let pendingCategory = 'minecraft';
+
+  function openAddServerModal(category){
+    if(SERVER_KINDS[category]) pendingCategory = category;
+    document.getElementById('addServerSub').textContent = `Fill in the details for the new ${SERVER_KINDS[pendingCategory].label}.`;
     addServerOverlay.classList.add('show');
   }
 
@@ -2175,8 +2663,25 @@
 
   document.getElementById('typeDedicated').addEventListener('click', () => {
     document.getElementById('serverTypeOverlay').classList.remove('show');
-    if(pendingTypeAction === 'add') openAddServerModal();
+    if(pendingTypeAction === 'add') document.getElementById('resourceTypeOverlay').classList.add('show');
     if(pendingTypeAction === 'remove') openRemoveServerModal();
+  });
+
+  document.getElementById('typeCloud').addEventListener('click', () => {
+    document.getElementById('serverTypeOverlay').classList.remove('show');
+    if(pendingTypeAction === 'add') openAddServerModal('cloud_storage');
+    if(pendingTypeAction === 'remove') openRemoveServerModal();
+  });
+
+  document.getElementById('resourceTypeClose').addEventListener('click', () => {
+    document.getElementById('resourceTypeOverlay').classList.remove('show');
+  });
+
+  document.querySelectorAll('.resource-type-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('resourceTypeOverlay').classList.remove('show');
+      openAddServerModal(btn.dataset.category);
+    });
   });
 
   if(document.getElementById('navAddServer')) document.getElementById('navAddServer').addEventListener('click', () => openServerTypeSelector('add'));
@@ -2283,11 +2788,13 @@
   const addUserRamLimit = document.getElementById('addUserRamLimit');
   const addUserStorageLimit = document.getElementById('addUserStorageLimit');
   const addUserNetworkLimit = document.getElementById('addUserNetworkLimit');
+  const addUserFullAccess = document.getElementById('addUserFullAccess');
   const addUserError = document.getElementById('addUserError');
   const addUserSaveBtn = document.getElementById('addUserSaveBtn');
 
   let pendingServerDocId = null;
   let pendingControlDoc = null;
+  let pendingControlCategory = 'discord';
 
   async function sendPower(signal, btn){
     if(!pendingControlDoc) return;
@@ -2297,7 +2804,7 @@
 
     const idToken = await auth.currentUser.getIdToken();
     try{
-      const res = await fetch('http://localhost:5000/server_power', {
+      const res = await fetch(`${API_BASE}/server_power`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idToken, docId: pendingControlDoc, signal })
@@ -2373,8 +2880,10 @@
     const max = Math.max(...data, limit || 0, 1);
     drawLine(ctx, data, w, h, max, '#e8a33d', 'rgba(232,163,61,0.15)');
 
-    // Reference line at this user's specific limit for this metric
-    if(limit){
+    // Reference line at this user's specific limit for this metric --
+    // only once there's at least 2 real points, otherwise it renders
+    // as a lone dashed line with nothing else on the chart.
+    if(limit && data.length >= 2){
       const y = h - (limit / max) * (h - 6) - 3;
       ctx.beginPath();
       ctx.setLineDash([5, 4]);
@@ -2393,7 +2902,7 @@
     if(!pendingControlDoc) return;
     try{
       const idToken = await auth.currentUser.getIdToken();
-      const res = await fetch('http://localhost:5000/server_console', {
+      const res = await fetch(`${API_BASE}/server_console`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idToken, docId: pendingControlDoc })
@@ -2407,6 +2916,7 @@
       if(atBottom) out.scrollTop = out.scrollHeight;
 
       const r = data.resources || {};
+      const d = data.dedicated;
       document.getElementById('infoAddress').textContent = data.address || '—';
       document.getElementById('infoUptime').textContent = r.uptime ? Math.floor(r.uptime/60000) + 'm' : '—';
       document.getElementById('infoCpu').textContent = (r.cpu_absolute ?? '—') + '%';
@@ -2414,6 +2924,15 @@
       document.getElementById('infoDisk').textContent = r.disk_bytes ? (r.disk_bytes/1048576).toFixed(1) + 'MB' : '—';
       document.getElementById('infoNetIn').textContent = r.network_rx_bytes ? (r.network_rx_bytes/1048576).toFixed(1) + 'MB' : '—';
       document.getElementById('infoNetOut').textContent = r.network_tx_bytes ? (r.network_tx_bytes/1048576).toFixed(1) + 'MB' : '—';
+
+      if(d){
+        const fmt = (used, limit, pct, unit) => limit ? `${used}${unit} / ${limit}${unit} (${pct}%)` : `${used}${unit}`;
+        document.getElementById('infoCpu').textContent = fmt(d.cpu_used, d.cpu_limit, d.cpu_pct, '%');
+        document.getElementById('infoMemory').textContent = fmt(d.mem_used_mb, d.mem_limit_mb, d.mem_pct, 'MB');
+        document.getElementById('infoDisk').textContent = fmt(d.disk_used_mb, d.disk_limit_mb, d.disk_pct, 'MB');
+        document.getElementById('infoAddress').textContent = d.state === 'running' ? 'Running' : 'Offline';
+        document.getElementById('infoUptime').textContent = d.state === 'running' ? Math.floor((d.uptime_ms||0)/60000) + 'm' : '—';
+      }
 
       pushGraphPoint('cpu', r.cpu_absolute || 0, data.limits ? data.limits.cpuLimit : null);
       pushGraphPoint('memory', r.memory_bytes ? r.memory_bytes/1048576 : 0, data.limits ? data.limits.ramLimit : null);
@@ -2505,12 +3024,77 @@
 
   let consoleSocket = null;
 
+  const ANSI_COLORS = {
+    30:'#6b7280',31:'#f87171',32:'#4ade80',33:'#facc15',34:'#60a5fa',35:'#c084fc',36:'#22d3ee',37:'#e5e7eb',
+    90:'#9ca3af',91:'#fca5a5',92:'#86efac',93:'#fde047',94:'#93c5fd',95:'#d8b4fe',96:'#67e8f9',97:'#ffffff'
+  };
+
+  const KEYWORD_RULES = [
+    { re: /\b(ERROR|SEVERE|FATAL|CRITICAL|Exception|Traceback|failed|denied|refused)\b/g, color: '#f87171' },
+    { re: /\b(WARN|WARNING|deprecated)\b/g, color: '#facc15' },
+    { re: /\b(INFO|Done|started|success|ready|listening|connected|online)\b/g, color: '#4ade80' },
+    { re: /\b(DEBUG|TRACE)\b/g, color: '#9ca3af' },
+    { re: /(https?:\/\/[^\s]+)/g, color: '#22d3ee' },
+    { re: /(\[\d{1,2}:\d{2}:\d{2}[^\]]*\])/g, color: '#6b7280' },
+    { re: /(\b\d+(?:\.\d+)?(?:ms|s|MB|GB|KB|%)\b)/g, color: '#c084fc' }
+  ];
+
+  function highlightKeywords(text, baseColor, bold, frag){
+    const marks = [];
+    KEYWORD_RULES.forEach(rule => {
+      rule.re.lastIndex = 0;
+      let m;
+      while((m = rule.re.exec(text)) !== null){
+        marks.push({ start: m.index, end: m.index + m[0].length, color: rule.color });
+        if(m[0].length === 0) rule.re.lastIndex++;
+      }
+    });
+    marks.sort((a, b) => a.start - b.start);
+    let pos = 0;
+    const push = (t, color) => {
+      if(!t) return;
+      const span = document.createElement('span');
+      span.textContent = t;
+      if(color) span.style.color = color;
+      if(bold) span.style.fontWeight = '700';
+      frag.appendChild(span);
+    };
+    marks.forEach(mk => {
+      if(mk.start < pos) return;
+      push(text.slice(pos, mk.start), baseColor);
+      push(text.slice(mk.start, mk.end), baseColor || mk.color);
+      pos = mk.end;
+    });
+    push(text.slice(pos), baseColor);
+  }
+
+  function colorizeConsoleLine(raw){
+    const frag = document.createDocumentFragment();
+    const parts = raw.split(/\u001b\[([0-9;]*)m/);
+    let color = null, bold = false;
+    for(let i = 0; i < parts.length; i++){
+      if(i % 2 === 1){
+        parts[i].split(';').forEach(code => {
+          const n = parseInt(code || '0', 10);
+          if(n === 0){ color = null; bold = false; }
+          else if(n === 1){ bold = true; }
+          else if(ANSI_COLORS[n]){ color = ANSI_COLORS[n]; }
+          else if(n === 39){ color = null; }
+        });
+      }else if(parts[i]){
+        highlightKeywords(parts[i], color, bold, frag);
+      }
+    }
+    frag.appendChild(document.createTextNode('\n'));
+    return frag;
+  }
+
   async function connectConsoleSocket(){
     disconnectConsoleSocket();
     try{
       const idToken = await auth.currentUser.getIdToken();
       const out = document.getElementById('terminalOutput');
-      const proxyUrl = `ws://localhost:5000/console_proxy?idToken=${encodeURIComponent(idToken)}&docId=${encodeURIComponent(pendingControlDoc)}`;
+      const proxyUrl = `${WS_BASE}/console_proxy?idToken=${encodeURIComponent(idToken)}&docId=${encodeURIComponent(pendingControlDoc)}`;
       consoleSocket = new WebSocket(proxyUrl);
 
       consoleSocket.onmessage = (msg) => {
@@ -2519,7 +3103,8 @@
 
         if(payload.event === 'console output'){
           const atBottom = out.scrollHeight - out.scrollTop - out.clientHeight < 40;
-          out.textContent += (payload.args && payload.args[0] ? payload.args[0] : '') + '\n';
+          out.appendChild(colorizeConsoleLine(payload.args && payload.args[0] ? payload.args[0] : ''));
+          while(out.childNodes.length > 2000) out.removeChild(out.firstChild);
           if(atBottom) out.scrollTop = out.scrollHeight;
         }
       };
@@ -2543,7 +3128,7 @@
     e.target.value = '';
     try{
       const idToken = await auth.currentUser.getIdToken();
-      await fetch('http://localhost:5000/server_command', {
+      await fetch(`${API_BASE}/server_command`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idToken, docId: pendingControlDoc, command: cmd })
@@ -2561,13 +3146,39 @@
     document.getElementById('serverControlOverlay').classList.remove('show');
     document.getElementById('filesOverlay').classList.remove('show');
     document.getElementById('startupOverlay').classList.remove('show');
-    document.getElementById('navTerminal').style.display = 'none';
-    document.getElementById('navFiles').style.display = 'none';
-    document.getElementById('navSchedule').style.display = 'none';
-    document.getElementById('navUsers').style.display = 'none';
-    document.getElementById('navStartup').style.display = 'none';
+    hideMcViews();
+    ['navTerminal','navFiles','navSchedule','navUsers','navStartup','navConfig','navPlugins','navMembers','navAccess','navWorlds']
+      .forEach(id => { document.getElementById(id).style.display = 'none'; });
     stopTerminalPolling();
     disconnectConsoleSocket();
+  }
+
+  function hideMcViews(){
+    document.getElementById('mcBlankOverlay').classList.remove('show');
+    document.getElementById('pluginsOverlay').classList.remove('show');
+    document.getElementById('mcConfigOverlay').classList.remove('show');
+    document.getElementById('scheduleOverlay').classList.remove('show');
+    document.getElementById('membersOverlay').classList.remove('show');
+    document.getElementById('accessOverlay').classList.remove('show');
+  }
+
+  function showControlNav(){
+    const mc = pendingControlCategory === 'minecraft';
+    const sched = document.getElementById('navSchedule');
+    if(mc) document.getElementById('navPlugins').before(sched);
+    else document.getElementById('navStartup').after(sched);
+    const on = (id, v) => { document.getElementById(id).style.display = v ? 'flex' : 'none'; };
+    on('navTerminal', true);
+    on('navFiles', true);
+    on('navSchedule', true);
+    on('navConfig', mc);
+    on('navPlugins', mc);
+    on('navMembers', mc);
+    on('navAccess', mc);
+    on('navWorlds', mc);
+    on('navStartup', !mc);
+    on('navUsers', !mc);
+    if(window.applyMcPerms) window.applyMcPerms();
   }
 
   async function openManageServersModal(){
@@ -2640,6 +3251,7 @@
     addUserRamLimit.value = '';
     addUserStorageLimit.value = '';
     addUserNetworkLimit.value = '';
+    addUserFullAccess.checked = false;
     addUserError.classList.remove('show');
 
     await refreshServerUsersList();
@@ -2649,7 +3261,7 @@
     serverUsersList.innerHTML = '<p class="server-list-empty">Loading…</p>';
     try{
       const idToken = await auth.currentUser.getIdToken();
-      const res = await fetch('http://localhost:5000/server_access_list', {
+      const res = await fetch(`${API_BASE}/server_access_list`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idToken, docId: pendingServerDocId })
@@ -2744,7 +3356,7 @@
 
     try{
       const idToken = await auth.currentUser.getIdToken();
-      const res = await fetch('http://localhost:5000/assign_server_access', {
+      const res = await fetch(`${API_BASE}/assign_server_access`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -2755,7 +3367,8 @@
           cpuLimit: cpuLimit ? Number(cpuLimit) : null,
           ramLimit: ramLimit ? Number(ramLimit) : null,
           storageLimit: storageLimit ? Number(storageLimit) : null,
-          networkLimit: networkLimit ? Number(networkLimit) : null
+          networkLimit: networkLimit ? Number(networkLimit) : null,
+          fullAccess: addUserFullAccess.checked
         })
       });
       const data = await res.json();
@@ -2803,7 +3416,7 @@
 
     try{
       const idToken = await auth.currentUser.getIdToken();
-      const res = await fetch('http://localhost:5000/remove_server_access', {
+      const res = await fetch(`${API_BASE}/remove_server_access`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idToken, docId: pendingServerDocId, email: pendingRemoveUser.email })
@@ -2855,8 +3468,23 @@
     }
 
     serverList.innerHTML = '';
+    const SECTIONS = [
+      { key: 'minecraft', title: 'Minecraft Server', always: false },
+      { key: 'discord', title: 'Discord Bots', always: false },
+      { key: 'database', title: 'Database', always: false },
+      { key: 'cloud_storage', title: 'Cloud Storage', always: false }
+    ];
+    const sectionBodies = {};
+    SECTIONS.forEach(sec => {
+      const wrap = document.createElement('div');
+      wrap.className = 'server-section';
+      wrap.dataset.key = sec.key;
+      wrap.innerHTML = `<div class="server-section-title">${sec.title}<span class="server-section-count"></span></div>`;
+      sectionBodies[sec.key] = wrap;
+    });
     snapshot.forEach((doc) => {
       const s = doc.data();
+      const category = sectionBodies[s.category] ? s.category : 'discord';
       const item = document.createElement('div');
       item.className = 'server-item';
       if(s.backgroundUrl){
@@ -2899,22 +3527,27 @@
       item.addEventListener('click', () => {
         const admin = document.body.classList.contains('role-admin');
         pendingControlDoc = doc.id;
+        pendingControlCategory = category;
         document.getElementById('serverControlName').textContent = s.name || 'Unnamed server';
         hideAllScreens();
         document.getElementById('navAddServer').style.display = 'none';
         document.getElementById('navRemoveServer').style.display = 'none';
         document.getElementById('navManageServers').style.display = 'none';
         document.getElementById('serverControlOverlay').classList.add('show');
-        document.getElementById('navTerminal').style.display = 'flex';
-        document.getElementById('navFiles').style.display = 'flex';
-        document.getElementById('navSchedule').style.display = 'flex';
-        document.getElementById('navUsers').style.display = admin ? 'flex' : 'none';
-        document.getElementById('navStartup').style.display = 'flex';
+        showControlNav();
         startTerminalPolling();
         connectConsoleSocket();
       });
-      serverList.appendChild(item);
+      sectionBodies[category].appendChild(item);
       fetchServerStats(doc.id);
+    });
+    SECTIONS.forEach(sec => {
+      const wrap = sectionBodies[sec.key];
+      const n = wrap.querySelectorAll('.server-item').length;
+      if(!n && !sec.always) return;
+      wrap.querySelector('.server-section-count').textContent = n ? `· ${n}` : '';
+      if(!n) wrap.insertAdjacentHTML('beforeend', '<p class="server-list-empty">No servers yet.</p>');
+      serverList.appendChild(wrap);
     });
   }
 
@@ -2930,7 +3563,7 @@
 
     try{
       const idToken = await auth.currentUser.getIdToken();
-      const res = await fetch('http://localhost:5000/server_stats', {
+      const res = await fetch(`${API_BASE}/server_stats`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idToken, docId })
@@ -2986,7 +3619,7 @@
 
     try{
       const idToken = await auth.currentUser.getIdToken();
-      const res = await fetch('http://localhost:5000/my_servers', {
+      const res = await fetch(`${API_BASE}/my_servers`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idToken })
@@ -2995,9 +3628,16 @@
 
       if(!data.ok || !data.servers || data.servers.length === 0){
         serverList.classList.remove('show');
+        // This account is real (Firebase let them log in), but nobody
+        // has assigned them a server yet -- there's nothing for them
+        // to do in the panel, so don't leave them staring at an empty
+        // dashboard. Kick back to the login screen instead.
+        await auth.signOut();
+        showError('This account has no servers assigned to it yet.');
         return;
       }
 
+      showLoggedIn();
       serverList.classList.add('show');
       // A tiny stand-in for a real Firestore QuerySnapshot, just
       // enough shape (.empty, .forEach) for renderServerList to work
@@ -3009,6 +3649,8 @@
       });
     }catch(err){
       serverList.classList.remove('show');
+      await auth.signOut();
+      showError('Could not verify your server access. Try again.');
     }
   }
 
@@ -3038,6 +3680,8 @@
         backgroundUrl: bgUrl,
         cost,
         uuid,
+        type: SERVER_KINDS[pendingCategory].type,
+        category: pendingCategory,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
       closeAddServerModal();
@@ -3235,7 +3879,7 @@
         form.append('file', f);
 
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:5000/upload_file');
+        xhr.open('POST', `${API_BASE}/upload_file`);
         xhr.timeout = 60000;
 
         xhr.upload.addEventListener('progress', (e) => {
@@ -3289,7 +3933,7 @@
 
     async function fmApi(route, extra){
       const idToken = await auth.currentUser.getIdToken();
-      const res = await fetch(`http://localhost:5000/${route}`, {
+      const res = await fetch(`${API_BASE}/${route}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idToken, docId: pendingControlDoc, ...extra })
@@ -3661,16 +4305,38 @@
       }
     });
 
+    window.openFilesAt = (p) => {
+      ['serverControlOverlay','manageServersOverlay','serverUsersOverlay','startupOverlay'].forEach(o => document.getElementById(o).classList.remove('show'));
+      hideMcViews();
+      serverList.classList.remove('show');
+      currentPath = p;
+      selected.clear();
+      document.getElementById('filesOverlay').classList.add('show');
+      render();
+    };
+
     document.getElementById('navFiles').addEventListener('click', () => {
       document.getElementById('serverControlOverlay').classList.remove('show');
       document.getElementById('manageServersOverlay').classList.remove('show');
       document.getElementById('serverUsersOverlay').classList.remove('show');
       document.getElementById('startupOverlay').classList.remove('show');
+      hideMcViews();
       serverList.classList.remove('show');
       currentPath = '/';
       selected.clear();
       document.getElementById('filesOverlay').classList.add('show');
       render();
+    });
+
+    [['navWorlds','Worlds']].forEach(([id, title]) => {
+      document.getElementById(id).addEventListener('click', () => {
+        if(!pendingControlDoc) return;
+        ['serverControlOverlay','filesOverlay','manageServersOverlay','serverUsersOverlay','startupOverlay'].forEach(o => document.getElementById(o).classList.remove('show'));
+        serverList.classList.remove('show');
+        hideMcViews();
+        document.getElementById('mcBlankTitle').textContent = title;
+        document.getElementById('mcBlankOverlay').classList.add('show');
+      });
     });
 
     // Terminal nav button: re-opens the terminal/stats window for
@@ -3682,6 +4348,7 @@
       document.getElementById('manageServersOverlay').classList.remove('show');
       document.getElementById('serverUsersOverlay').classList.remove('show');
       document.getElementById('startupOverlay').classList.remove('show');
+      hideMcViews();
       serverList.classList.remove('show');
       document.getElementById('serverControlOverlay').classList.add('show');
       startTerminalPolling();
@@ -3693,6 +4360,19 @@
   (function(){
     const startupOverlay = document.getElementById('startupOverlay');
     const startupCommandInput = document.getElementById('startupCommandInput');
+    const startupCopyBtn = document.getElementById('startupCopyBtn');
+
+    startupCopyBtn.addEventListener('click', async () => {
+      try{
+        await navigator.clipboard.writeText(startupCommandInput.value);
+      }catch(e){
+        startupCommandInput.select();
+        document.execCommand('copy');
+      }
+      const original = startupCopyBtn.innerHTML;
+      startupCopyBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      setTimeout(() => { startupCopyBtn.innerHTML = original; }, 1200);
+    });
     const startupImageSelect = document.getElementById('startupImageSelect');
     const startupVarsBox = document.getElementById('startupVarsBox');
     const startupError = document.getElementById('startupError');
@@ -3721,7 +4401,7 @@
           row.innerHTML = `
             <label>${v.name}</label>
             <p class="subtext" style="margin:4px 0 8px; font-size:12px;">${v.description || ''}</p>
-            <input type="text" data-env="${v.env_variable}" value="${(v.server_value ?? '').toString().replace(/"/g,'&quot;')}">
+            <input type="${v.secret ? 'password' : 'text'}" autocomplete="off" data-env="${v.env_variable}" value="${(v.server_value ?? '').toString().replace(/"/g,'&quot;')}">
           `;
         }
         startupVarsBox.appendChild(row);
@@ -3738,53 +4418,97 @@
       });
     }
 
+    let startupReq = 0;
+    let startupReady = false;
+
+    function setStartupBusy(busy){
+      startupCommandInput.disabled = busy;
+      startupImageSelect.disabled = busy;
+      startupSaveBtn.disabled = busy;
+    }
+
+    function failStartup(msg){
+      startupReady = false;
+      startupError.textContent = msg;
+      startupCommandInput.value = '';
+      startupCommandInput.placeholder = '';
+      startupImageSelect.innerHTML = '';
+      startupVarsBox.innerHTML = '';
+      currentVariables = [];
+      setStartupBusy(true);
+    }
+
     async function openStartupWindow(){
       if(!pendingControlDoc) return;
+      const req = ++startupReq;
       hideAllScreens();
       startupOverlay.classList.add('show');
       startupError.textContent = '';
-      startupCommandInput.value = 'Loading…';
+      startupReady = false;
+      startupCommandInput.value = '';
+      startupCommandInput.placeholder = 'Loading…';
       startupImageSelect.innerHTML = '';
       startupVarsBox.innerHTML = '<p class="server-list-empty">Loading…</p>';
-      document.getElementById('navTerminal').style.display = 'flex';
-      document.getElementById('navFiles').style.display = 'flex';
-      document.getElementById('navSchedule').style.display = 'flex';
-      document.getElementById('navUsers').style.display = document.body.classList.contains('role-admin') ? 'flex' : 'none';
-      document.getElementById('navStartup').style.display = 'flex';
+      setStartupBusy(true);
+      showControlNav();
 
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 20000);
       try{
-        const idToken = await auth.currentUser.getIdToken();
-        const res = await fetch('http://localhost:5000/server_startup_info', {
+        const user = auth.currentUser;
+        if(!user) throw new Error('Not signed in.');
+        const idToken = await user.getIdToken();
+        const res = await fetch(`${API_BASE}/server_startup_info`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ idToken, docId: pendingControlDoc })
+          body: JSON.stringify({ idToken, docId: pendingControlDoc }),
+          signal: ctrl.signal
         });
-        const data = await res.json();
-        if(!data.ok){
-          startupError.textContent = data.error || 'Could not load startup info.';
-          startupCommandInput.value = '';
-          startupVarsBox.innerHTML = '';
+        const raw = await res.text();
+        let data;
+        try{ data = JSON.parse(raw); }catch(e){ throw new Error(`Bad backend response (HTTP ${res.status}).`); }
+        if(req !== startupReq) return;
+        if(!res.ok || !data.ok){
+          failStartup(data.error || `Could not load startup info (HTTP ${res.status}).`);
           return;
         }
 
-        startupCommandInput.value = data.startup_command || '';
+        const own = data.mode === 'own';
+        const imgField = startupImageSelect.closest('.field');
+        if(imgField) imgField.style.display = own ? 'none' : '';
+        startupCommandInput.readOnly = own;
+        startupCommandInput.placeholder = '';
+        startupCommandInput.value = data.startup_command || data.raw_startup_command || '';
         startupImageSelect.innerHTML = '';
-        Object.entries(data.docker_images || {}).forEach(([label, image]) => {
+        const images = data.docker_images || {};
+        Object.entries(images).forEach(([label, image]) => {
           const opt = document.createElement('option');
           opt.value = image;
           opt.textContent = label;
           startupImageSelect.appendChild(opt);
         });
+        if(data.docker_image && !Object.values(images).includes(data.docker_image)){
+          const opt = document.createElement('option');
+          opt.value = data.docker_image;
+          opt.textContent = data.docker_image;
+          startupImageSelect.appendChild(opt);
+        }
+        if(data.docker_image) startupImageSelect.value = data.docker_image;
 
-        currentVariables = data.variables || [];
+        currentVariables = Array.isArray(data.variables) ? data.variables : [];
         renderVariables();
+        startupReady = true;
+        setStartupBusy(false);
       }catch(err){
-        startupError.textContent = 'Could not reach the backend.';
+        if(req !== startupReq) return;
+        failStartup(err && err.name === 'AbortError' ? 'Backend timed out.' : ((err && err.message) || 'Could not reach the backend.'));
+      }finally{
+        clearTimeout(timer);
       }
     }
 
     startupSaveBtn.addEventListener('click', async () => {
-      if(!pendingControlDoc) return;
+      if(!pendingControlDoc || !startupReady) return;
       startupError.textContent = '';
       const environment = {};
       startupVarsBox.querySelectorAll('[data-env]').forEach((el) => {
@@ -3797,7 +4521,7 @@
 
       try{
         const idToken = await auth.currentUser.getIdToken();
-        const res = await fetch('http://localhost:5000/server_startup_update', {
+        const res = await fetch(`${API_BASE}/server_startup_update`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -3813,6 +4537,7 @@
           startupError.textContent = data.error || 'Could not save startup settings.';
           return;
         }
+        if(data.startup_command) startupCommandInput.value = data.startup_command;
         startupSaveBtn.classList.add('saved');
         startupSaveBtn.textContent = 'Saved';
         setTimeout(() => { startupSaveBtn.classList.remove('saved'); startupSaveBtn.textContent = 'Save'; }, 1200);
@@ -3825,5 +4550,1017 @@
   })();
 </script>
 
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const overlay = $('pluginsOverlay'), qEl = $('plgQuery'), loaderEl = $('plgLoader'), versionEl = $('plgVersion'), sortEl = $('plgSort');
+  const listEl = $('plgList'), statusEl = $('plgStatus'), pageEl = $('plgPage'), prevBtn = $('plgPrev'), nextBtn = $('plgNext');
+  let page = 0, total = 0, limit = 20, reqId = 0, metaLoaded = false, timer = null, loadedDoc = null;
+  const nf = new Intl.NumberFormat('en', { notation: 'compact' });
+
+  try{ const l = localStorage.getItem('plgLoader'); if(l) loaderEl.value = l; }catch(e){}
+
+  async function api(path, body){
+    const user = auth.currentUser;
+    if(!user) throw new Error('Not signed in.');
+    const idToken = await user.getIdToken();
+    const res = await fetch(`${API_BASE}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idToken, docId: pendingControlDoc, ...body })
+    });
+    let data;
+    try{ data = await res.json(); }catch(e){ throw new Error(`Bad backend response (HTTP ${res.status}).`); }
+    if(!res.ok || !data.ok) throw new Error(data.error || `Request failed (HTTP ${res.status}).`);
+    return data;
+  }
+
+  function el(tag, cls, text){
+    const n = document.createElement(tag);
+    if(cls) n.className = cls;
+    if(text !== undefined) n.textContent = text;
+    return n;
+  }
+
+  function setStatus(msg, isErr){
+    statusEl.textContent = msg || '';
+    statusEl.classList.toggle('err', !!isErr);
+  }
+
+  function card(h){
+    const c = el('div', 'plg-card');
+    const img = el('img', 'plg-icon');
+    img.alt = '';
+    img.loading = 'lazy';
+    if(typeof h.icon_url === 'string' && h.icon_url.startsWith('https://cdn.modrinth.com/')) img.src = h.icon_url;
+    const body = el('div', 'plg-body');
+    const title = el('div', 'plg-title', h.title || h.slug || 'Untitled');
+    title.appendChild(el('span', '', h.author ? `by ${h.author}` : ''));
+    body.appendChild(title);
+    body.appendChild(el('div', 'plg-desc', h.description || ''));
+    const cats = (h.categories || []).slice(0, 3).join(' · ');
+    body.appendChild(el('div', 'plg-meta', `${nf.format(h.downloads || 0)} downloads · ${nf.format(h.follows || 0)} follows${cats ? ' · ' + cats : ''}`));
+    const btn = el('button', 'plg-btn', 'Install');
+    btn.type = 'button';
+    btn.addEventListener('click', () => install(h, btn));
+    c.append(img, body, btn);
+    return c;
+  }
+
+  async function install(h, btn){
+    btn.disabled = true;
+    btn.textContent = 'Installing…';
+    setStatus('');
+    try{
+      const data = await api('/plugin_install', { project_id: h.project_id, loader: loaderEl.value, version: versionEl.value });
+      btn.textContent = 'Installed ✓';
+      setStatus(`Installed to ${data.directory}: ${data.installed.join(', ')}`);
+    }catch(err){
+      btn.disabled = false;
+      btn.textContent = 'Retry';
+      setStatus(err.message || 'Install failed.', true);
+    }
+  }
+
+  async function search(){
+    const id = ++reqId;
+    setStatus('Loading…');
+    listEl.replaceChildren();
+    try{
+      const data = await api('/plugin_search', { query: qEl.value.trim(), loader: loaderEl.value, version: versionEl.value, sort: sortEl.value, page });
+      if(id !== reqId) return;
+      total = data.total || 0;
+      limit = data.limit || 20;
+      data.hits.forEach(h => listEl.appendChild(card(h)));
+      setStatus(data.hits.length ? '' : 'No results.');
+      const pages = Math.max(1, Math.ceil(total / limit));
+      pageEl.textContent = `Page ${page + 1} / ${pages}`;
+      prevBtn.disabled = page <= 0;
+      nextBtn.disabled = page + 1 >= pages;
+    }catch(err){
+      if(id !== reqId) return;
+      setStatus(err.message || 'Could not load plugins.', true);
+      pageEl.textContent = '';
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
+    }
+  }
+
+  async function loadMeta(){
+    try{
+      const data = await api('/plugin_meta', {});
+      const keep = versionEl.value;
+      versionEl.innerHTML = '<option value="">Any version</option>';
+      data.versions.forEach(v => versionEl.appendChild(new Option(v, v)));
+      versionEl.value = keep;
+      metaLoaded = true;
+    }catch(err){}
+  }
+
+  function restart(){ page = 0; search(); }
+
+  qEl.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(restart, 350); });
+  loaderEl.addEventListener('change', () => { try{ localStorage.setItem('plgLoader', loaderEl.value); }catch(e){} restart(); });
+  versionEl.addEventListener('change', restart);
+  sortEl.addEventListener('change', restart);
+  prevBtn.addEventListener('click', () => { if(page > 0){ page--; search(); } });
+  nextBtn.addEventListener('click', () => { page++; search(); });
+
+  $('navPlugins').addEventListener('click', () => {
+    if(!pendingControlDoc) return;
+    ['serverControlOverlay','filesOverlay','manageServersOverlay','serverUsersOverlay','startupOverlay'].forEach(o => $(o).classList.remove('show'));
+    serverList.classList.remove('show');
+    hideMcViews();
+    overlay.classList.add('show');
+    if(!metaLoaded) loadMeta();
+    if(loadedDoc !== pendingControlDoc || !listEl.children.length){
+      loadedDoc = pendingControlDoc;
+      page = 0;
+      search();
+    }
+  });
+})();
+</script>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const COLORS = { '0':'#000000','1':'#0000aa','2':'#00aa00','3':'#00aaaa','4':'#aa0000','5':'#aa00aa','6':'#ffaa00','7':'#aaaaaa','8':'#555555','9':'#5555ff','a':'#55ff55','b':'#55ffff','c':'#ff5555','d':'#ff55ff','e':'#ffff55','f':'#ffffff' };
+  const FORMATS = [['l','Bold'],['o','Italic'],['n','Underline'],['m','Strike'],['k','Magic'],['r','Reset']];
+  const statusEl = $('cfgStatus'), motdBox = $('cfgMotd'), motdInput = $('motdInput'), motdPreview = $('motdPreview');
+  const switches = ['cfgWhitelist','cfgCracked','cfgFly','cfgForceGm','cfgReqPack'];
+  let motd = '', icon = null, loadedDoc = null, busy = false;
+
+  function setStatus(msg, isErr){
+    statusEl.textContent = msg || '';
+    statusEl.classList.toggle('err', !!isErr);
+  }
+
+  async function api(path, body){
+    const user = auth.currentUser;
+    if(!user) throw new Error('Not signed in.');
+    const idToken = await user.getIdToken();
+    const res = await fetch(`${API_BASE}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idToken, docId: pendingControlDoc, ...body })
+    });
+    let data;
+    try{ data = await res.json(); }catch(e){ throw new Error(`Bad backend response (HTTP ${res.status}).`); }
+    if(!res.ok || !data.ok) throw new Error(data.error || `Request failed (HTTP ${res.status}).`);
+    return data;
+  }
+
+  function renderMc(text, box){
+    box.replaceChildren();
+    let st = {};
+    const lines = String(text || '').split('\n').slice(0, 2);
+    lines.forEach(line => {
+      const row = document.createElement('div');
+      let buf = '';
+      const flush = () => {
+        if(!buf) return;
+        const sp = document.createElement('span');
+        sp.textContent = buf;
+        if(st.color) sp.style.color = COLORS[st.color];
+        if(st.l) sp.style.fontWeight = '700';
+        if(st.o) sp.style.fontStyle = 'italic';
+        const deco = [st.n ? 'underline' : '', st.m ? 'line-through' : ''].filter(Boolean).join(' ');
+        if(deco) sp.style.textDecoration = deco;
+        if(st.k) sp.classList.add('mc-magic');
+        row.appendChild(sp);
+        buf = '';
+      };
+      for(let i = 0; i < line.length; i++){
+        const ch = line[i], nx = (line[i + 1] || '').toLowerCase();
+        if((ch === '&' || ch === '\u00a7') && /[0-9a-fk-or]/.test(nx)){
+          flush();
+          if(COLORS[nx]) st = { color: nx };
+          else if(nx === 'r') st = {};
+          else st = { ...st, [nx]: true };
+          i++;
+          continue;
+        }
+        buf += ch;
+      }
+      flush();
+      box.appendChild(row);
+    });
+  }
+
+  function setSwitch(id, on){
+    const b = $(id);
+    b.setAttribute('aria-checked', on ? 'true' : 'false');
+    b.nextElementSibling.textContent = on ? 'On' : 'Off';
+  }
+  const getSwitch = id => $(id).getAttribute('aria-checked') === 'true';
+  switches.forEach(id => $(id).addEventListener('click', () => setSwitch(id, !getSwitch(id))));
+
+  function setIcon(b64){
+    icon = null;
+    const img = $('cfgIconImg');
+    if(b64){
+      img.src = 'data:image/png;base64,' + b64;
+      img.hidden = false;
+      $('cfgIconPh').hidden = true;
+      $('cfgIcon').classList.add('has');
+    }else{
+      img.hidden = true;
+      $('cfgIconPh').hidden = false;
+      $('cfgIcon').classList.remove('has');
+    }
+  }
+
+  $('cfgIconFile').addEventListener('change', e => {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if(!file) return;
+    const url = URL.createObjectURL(file);
+    const im = new Image();
+    im.onload = () => {
+      const c = document.createElement('canvas');
+      c.width = 64; c.height = 64;
+      const side = Math.min(im.width, im.height);
+      c.getContext('2d').drawImage(im, (im.width - side) / 2, (im.height - side) / 2, side, side, 0, 0, 64, 64);
+      URL.revokeObjectURL(url);
+      const b64 = c.toDataURL('image/png').split(',')[1];
+      setIcon(b64);
+      icon = b64;
+    };
+    im.onerror = () => { URL.revokeObjectURL(url); setStatus('Could not read that image.', true); };
+    im.src = url;
+  });
+
+  $('cfgCopy').addEventListener('click', async () => {
+    const ip = $('cfgIp').textContent;
+    if(!ip || ip === '—') return;
+    try{ await navigator.clipboard.writeText(ip); $('cfgCopy').textContent = 'Copied'; setTimeout(() => { $('cfgCopy').textContent = 'Copy'; }, 1200); }catch(e){}
+  });
+
+  function packUi(){ $('cfgPackLinkWrap').hidden = $('cfgPackType').value !== 'link'; }
+  $('cfgPackType').addEventListener('change', packUi);
+  $('cfgSlots').addEventListener('input', () => {
+    const n = parseInt($('cfgSlots').value, 10);
+    $('cfgSlotsHint').textContent = n > 0 ? `Up to ${n} member${n === 1 ? '' : 's'} can be online at once.` : 'Total members that can be online at once.';
+  });
+
+  (function buildTz(){
+    let zones = [];
+    try{ zones = Intl.supportedValuesOf('timeZone'); }catch(e){}
+    if(!zones.length) zones = ['UTC','Asia/Calcutta','Asia/Dubai','Asia/Tokyo','Europe/London','Europe/Berlin','America/New_York','America/Chicago','America/Los_Angeles','Australia/Sydney'];
+    if(!zones.includes('UTC')) zones.unshift('UTC');
+    const dl = $('cfgTzList');
+    zones.forEach(z => { const o = document.createElement('option'); o.value = z; dl.appendChild(o); });
+  })();
+
+  (function buildEditor(){
+    const sw = $('motdSwatches'), fm = $('motdFmts');
+    Object.entries(COLORS).forEach(([k, c]) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'motd-swatch'; b.style.background = c; b.title = '&' + k; b.dataset.code = k;
+      sw.appendChild(b);
+    });
+    FORMATS.forEach(([k, label]) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'plg-btn'; b.textContent = `${label} &${k}`; b.dataset.code = k;
+      fm.appendChild(b);
+    });
+    [sw, fm].forEach(box => box.addEventListener('click', e => {
+      const b = e.target.closest('[data-code]');
+      if(!b) return;
+      const s = motdInput.selectionStart, en = motdInput.selectionEnd;
+      motdInput.setRangeText('&' + b.dataset.code, s, en, 'end');
+      motdInput.focus();
+      motdInput.dispatchEvent(new Event('input'));
+    }));
+  })();
+
+  motdInput.addEventListener('input', () => {
+    const lines = motdInput.value.split('\n');
+    if(lines.length > 2) motdInput.value = lines.slice(0, 2).join('\n');
+    renderMc(motdInput.value, motdPreview);
+  });
+  $('cfgEditMotd').addEventListener('click', () => {
+    motdInput.value = motd;
+    renderMc(motd, motdPreview);
+    $('motdOverlay').classList.add('show');
+    motdInput.focus();
+  });
+  const closeMotd = () => $('motdOverlay').classList.remove('show');
+  $('motdClose').addEventListener('click', closeMotd);
+  $('motdCancel').addEventListener('click', closeMotd);
+  $('motdApply').addEventListener('click', () => {
+    motd = motdInput.value;
+    renderMc(motd, motdBox);
+    closeMotd();
+  });
+
+  async function load(){
+    setStatus('Loading…');
+    try{
+      const d = await api('/mc_config_get', {});
+      const p = d.props || {};
+      $('cfgIp').textContent = d.ip || '—';
+      motd = d.motd || '';
+      renderMc(motd, motdBox);
+      setIcon(d.icon);
+      $('cfgSlots').value = p['max-players'];
+      $('cfgSlots').dispatchEvent(new Event('input'));
+      $('cfgGamemode').value = p['gamemode'];
+      $('cfgDifficulty').value = p['difficulty'];
+      setSwitch('cfgWhitelist', p['white-list'] === 'true');
+      setSwitch('cfgCracked', p['online-mode'] === 'false');
+      setSwitch('cfgFly', p['allow-flight'] === 'true');
+      setSwitch('cfgForceGm', p['force-gamemode'] === 'true');
+      $('cfgSpawn').value = p['spawn-protection'];
+      setSwitch('cfgReqPack', p['require-resource-pack'] === 'true');
+      $('cfgPackType').value = p['resource-pack'] ? 'link' : 'none';
+      $('cfgPackLink').value = p['resource-pack'] || '';
+      packUi();
+      const tz = $('cfgTz');
+      tz.value = d.tz || '';
+      tz.disabled = !d.tz_supported;
+      tz.placeholder = d.tz_supported ? 'Asia/Calcutta' : 'Not supported by this server';
+      const env = $('cfgEnv');
+      env.innerHTML = '';
+      Object.entries(d.images || {}).forEach(([label, image]) => env.appendChild(new Option(label, image)));
+      if(d.image && ![...env.options].some(o => o.value === d.image)) env.appendChild(new Option(d.image, d.image));
+      env.value = d.image || '';
+      env.disabled = !env.options.length;
+      loadedDoc = pendingControlDoc;
+      setStatus('');
+    }catch(err){
+      setStatus(err.message || 'Could not load configuration.', true);
+    }
+  }
+
+  $('cfgSave').addEventListener('click', async () => {
+    if(busy) return;
+    busy = true;
+    const btn = $('cfgSave');
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+    setStatus('');
+    try{
+      const body = {
+        motd,
+        slots: $('cfgSlots').value,
+        gamemode: $('cfgGamemode').value,
+        difficulty: $('cfgDifficulty').value,
+        whitelist: getSwitch('cfgWhitelist'),
+        cracked: getSwitch('cfgCracked'),
+        fly: getSwitch('cfgFly'),
+        force_gamemode: getSwitch('cfgForceGm'),
+        spawn_protection: $('cfgSpawn').value,
+        require_resource_pack: getSwitch('cfgReqPack'),
+        resource_pack: $('cfgPackType').value === 'link' ? $('cfgPackLink').value.trim() : '',
+        tz: $('cfgTz').disabled ? '' : $('cfgTz').value.trim(),
+        image: $('cfgEnv').disabled ? '' : $('cfgEnv').value
+      };
+      if(icon) body.icon = icon;
+      const d = await api('/mc_config_save', body);
+      icon = null;
+      setStatus(d.warnings && d.warnings.length ? `Saved. Note: ${d.warnings.join(', ')}.` : 'Saved. Start the server to apply.');
+    }catch(err){
+      setStatus(err.message || 'Save failed.', true);
+    }finally{
+      busy = false;
+      btn.disabled = false;
+      btn.textContent = 'Save changes';
+    }
+  });
+
+  $('navConfig').addEventListener('click', () => {
+    if(!pendingControlDoc) return;
+    ['serverControlOverlay','filesOverlay','manageServersOverlay','serverUsersOverlay','startupOverlay'].forEach(o => $(o).classList.remove('show'));
+    serverList.classList.remove('show');
+    hideMcViews();
+    $('mcConfigOverlay').classList.add('show');
+    load();
+  });
+})();
+</script>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const ACTIONS = { restart: 'Restart', stop: 'Stop', start: 'Start' };
+  const pad = n => String(n).padStart(2, '0');
+  const isNum = v => /^\d+$/.test(String(v));
+  const listEl = $('schList'), statusEl = $('schStatus'), errEl = $('schError');
+  let items = [], editing = null, days = new Set(), busy = false;
+
+  function setStatus(msg, isErr){ statusEl.textContent = msg || ''; statusEl.classList.toggle('err', !!isErr); }
+  function setErr(msg){ errEl.textContent = msg || ''; errEl.classList.toggle('err', !!msg); }
+  function el(tag, cls, text){ const n = document.createElement(tag); if(cls) n.className = cls; if(text !== undefined) n.textContent = text; return n; }
+
+  async function api(path, body){
+    const user = auth.currentUser;
+    if(!user) throw new Error('Not signed in.');
+    const idToken = await user.getIdToken();
+    const res = await fetch(`${API_BASE}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idToken, docId: pendingControlDoc, ...body })
+    });
+    let data;
+    try{ data = await res.json(); }catch(e){ throw new Error(`Bad backend response (HTTP ${res.status}).`); }
+    if(!res.ok || !data.ok) throw new Error(data.error || `Request failed (HTTP ${res.status}).`);
+    return data;
+  }
+
+  function parseCron(c){
+    const mi = c.minute, h = c.hour, dm = c.day_of_month, mo = c.month, dw = c.day_of_week;
+    if(isNum(mi) && /^\*\/\d+$/.test(h) && dm === '*' && mo === '*' && dw === '*') return { mode: 'hours', every: +h.slice(2), minute: +mi };
+    if(isNum(mi) && isNum(h) && dm === '*' && mo === '*'){
+      const time = `${pad(h)}:${pad(mi)}`;
+      if(dw === '*') return { mode: 'daily', time };
+      if(/^[0-6](,[0-6])*$/.test(dw)) return { mode: 'weekly', time, days: dw.split(',').map(Number) };
+    }
+    return { mode: 'custom' };
+  }
+
+  function describe(c){
+    const p = parseCron(c);
+    if(p.mode === 'hours') return `Every ${p.every === 1 ? 'hour' : p.every + ' hours'} at :${pad(p.minute)}`;
+    if(p.mode === 'daily') return `Every day at ${p.time}`;
+    if(p.mode === 'weekly') return `${[...new Set(p.days)].sort().map(d => DOW[d]).join(', ')} at ${p.time}`;
+    return `Cron: ${c.minute} ${c.hour} ${c.day_of_month} ${c.month} ${c.day_of_week}`;
+  }
+
+  const fmtDate = v => { if(!v) return '—'; const d = new Date(v); return isNaN(d) ? '—' : d.toLocaleString(); };
+
+  function card(it){
+    const c = el('div', 'plg-card sch-card');
+    c.style.flexWrap = 'wrap';
+    const body = el('div', 'plg-body');
+    const title = el('div', 'plg-title', it.name || 'Untitled');
+    title.appendChild(el('span', 'sch-badge', ACTIONS[it.action] || 'Restart'));
+    body.appendChild(title);
+    body.appendChild(el('div', 'plg-desc', describe(it.cron || {})));
+    body.appendChild(el('div', 'plg-meta', `Next: ${it.is_active ? fmtDate(it.next_run_at) : 'paused'} · Last: ${fmtDate(it.last_run_at)}${it.warn ? ' · Warns players' : ''}${it.only_when_online ? ' · Only when online' : ''}`));
+    const act = el('div', 'sch-actions');
+    const sw = el('button', 'mc-switch');
+    sw.type = 'button';
+    sw.setAttribute('role', 'switch');
+    sw.setAttribute('aria-checked', it.is_active ? 'true' : 'false');
+    sw.title = it.is_active ? 'Active' : 'Paused';
+    sw.innerHTML = '<span></span>';
+    sw.addEventListener('click', async () => {
+      const next = sw.getAttribute('aria-checked') !== 'true';
+      sw.setAttribute('aria-checked', next ? 'true' : 'false');
+      try{ await api('/schedule_active', { schedule_id: it.id, active: next }); await load(); }
+      catch(err){ sw.setAttribute('aria-checked', next ? 'false' : 'true'); setStatus(err.message, true); }
+    });
+    const run = el('button', 'plg-btn', 'Run now'); run.type = 'button';
+    run.addEventListener('click', async () => {
+      run.disabled = true;
+      try{ await api('/schedule_run', { schedule_id: it.id }); setStatus(`"${it.name}" started.`); }
+      catch(err){ setStatus(err.message, true); }
+      run.disabled = false;
+    });
+    const edit = el('button', 'plg-btn', 'Edit'); edit.type = 'button';
+    edit.addEventListener('click', () => openModal(it));
+    const del = el('button', 'plg-btn danger', 'Delete'); del.type = 'button';
+    del.addEventListener('click', async () => {
+      if(!confirm(`Delete schedule "${it.name}"?`)) return;
+      try{ await api('/schedule_delete', { schedule_id: it.id }); setStatus('Deleted.'); await load(); }
+      catch(err){ setStatus(err.message, true); }
+    });
+    act.append(sw, run, edit, del);
+    c.append(body, act);
+    return c;
+  }
+
+  function render(){
+    listEl.replaceChildren();
+    if(!items.length){
+      listEl.appendChild(el('p', 'server-list-empty', 'No schedules yet. Create one to restart your server automatically.'));
+      return;
+    }
+    items.forEach(it => listEl.appendChild(card(it)));
+  }
+
+  async function load(){
+    try{
+      const d = await api('/schedule_list', {});
+      items = d.schedules || [];
+      render();
+    }catch(err){
+      setStatus(err.message || 'Could not load schedules.', true);
+    }
+  }
+
+  function setSwitch(id, on){ const b = $(id); b.setAttribute('aria-checked', on ? 'true' : 'false'); b.nextElementSibling.textContent = on ? 'On' : 'Off'; }
+  const getSwitch = id => $(id).getAttribute('aria-checked') === 'true';
+  ['schWarn','schOnline','schActive'].forEach(id => $(id).addEventListener('click', () => setSwitch(id, !getSwitch(id))));
+
+  (function buildDays(){
+    DOW.forEach((n, i) => {
+      const b = el('button', 'sch-day', n);
+      b.type = 'button';
+      b.dataset.d = i;
+      b.addEventListener('click', () => { if(days.has(i)) days.delete(i); else days.add(i); b.classList.toggle('on', days.has(i)); });
+      $('schDays').appendChild(b);
+    });
+  })();
+
+  function syncDays(){ $('schDays').querySelectorAll('.sch-day').forEach(b => b.classList.toggle('on', days.has(+b.dataset.d))); }
+
+  function syncMode(){
+    const m = $('schMode').value;
+    $('schHoursWrap').hidden = m !== 'hours';
+    $('schTimeWrap').hidden = !(m === 'daily' || m === 'weekly');
+    $('schDaysWrap').hidden = m !== 'weekly';
+    $('schCustomWrap').hidden = m !== 'custom';
+    $('schWarn').closest('.cfg-row').hidden = $('schAction').value === 'start';
+  }
+  $('schMode').addEventListener('change', syncMode);
+  $('schAction').addEventListener('change', syncMode);
+
+  function openModal(it){
+    editing = it;
+    setErr('');
+    $('schTitle').textContent = it ? 'Edit schedule' : 'New schedule';
+    $('schName').value = it ? it.name : 'Daily restart';
+    $('schAction').value = it ? it.action : 'restart';
+    const p = it ? parseCron(it.cron || {}) : { mode: 'daily', time: '04:00' };
+    $('schMode').value = p.mode;
+    $('schEvery').value = String(p.every || 6);
+    if(![...$('schEvery').options].some(o => o.value === $('schEvery').value)) $('schEvery').appendChild(new Option($('schEvery').value, $('schEvery').value));
+    $('schEvery').value = String(p.every || 6);
+    $('schMinute').value = p.minute || 0;
+    $('schTime').value = p.time || '04:00';
+    days = new Set(p.days || [1]);
+    syncDays();
+    const c = it ? it.cron || {} : {};
+    $('schCMin').value = c.minute ?? '0';
+    $('schCHour').value = c.hour ?? '4';
+    $('schCDom').value = c.day_of_month ?? '*';
+    $('schCMon').value = c.month ?? '*';
+    $('schCDow').value = c.day_of_week ?? '*';
+    setSwitch('schWarn', it ? it.warn : true);
+    setSwitch('schOnline', it ? it.only_when_online : false);
+    setSwitch('schActive', it ? it.is_active : true);
+    syncMode();
+    $('schModal').classList.add('show');
+  }
+  const closeModal = () => $('schModal').classList.remove('show');
+  $('schClose').addEventListener('click', closeModal);
+  $('schCancel').addEventListener('click', closeModal);
+  $('schNew').addEventListener('click', () => openModal(null));
+
+  function buildCron(){
+    const m = $('schMode').value;
+    if(m === 'hours'){
+      const mi = parseInt($('schMinute').value, 10);
+      if(!(mi >= 0 && mi <= 59)) throw new Error('Minute must be 0-59.');
+      return { minute: String(mi), hour: `*/${$('schEvery').value}`, day_of_month: '*', month: '*', day_of_week: '*' };
+    }
+    if(m === 'daily' || m === 'weekly'){
+      const t = $('schTime').value;
+      if(!/^\d{2}:\d{2}$/.test(t)) throw new Error('Pick a time.');
+      const [hh, mm] = t.split(':').map(Number);
+      let dw = '*';
+      if(m === 'weekly'){
+        if(!days.size) throw new Error('Pick at least one day.');
+        dw = [...days].sort().join(',');
+      }
+      return { minute: String(mm), hour: String(hh), day_of_month: '*', month: '*', day_of_week: dw };
+    }
+    const c = { minute: $('schCMin').value.trim(), hour: $('schCHour').value.trim(), day_of_month: $('schCDom').value.trim(), month: $('schCMon').value.trim(), day_of_week: $('schCDow').value.trim() };
+    if(Object.values(c).some(v => !/^[0-9*\/,\-]{1,40}$/.test(v))) throw new Error('Cron fields may only use digits and * / , -');
+    return c;
+  }
+
+  $('schSave').addEventListener('click', async () => {
+    if(busy) return;
+    setErr('');
+    const name = $('schName').value.trim();
+    if(!name){ setErr('Enter a name.'); return; }
+    let cron;
+    try{ cron = buildCron(); }catch(err){ setErr(err.message); return; }
+    busy = true;
+    const btn = $('schSave');
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+    try{
+      await api('/schedule_save', {
+        schedule_id: editing ? editing.id : null,
+        name,
+        cron,
+        action: $('schAction').value,
+        warn: $('schAction').value !== 'start' && getSwitch('schWarn'),
+        only_when_online: getSwitch('schOnline'),
+        is_active: getSwitch('schActive')
+      });
+      closeModal();
+      setStatus('Saved.');
+      await load();
+    }catch(err){
+      setErr(err.message || 'Save failed.');
+    }finally{
+      busy = false;
+      btn.disabled = false;
+      btn.textContent = 'Save';
+    }
+  });
+
+  $('navSchedule').addEventListener('click', () => {
+    if(!pendingControlDoc) return;
+    ['serverControlOverlay','filesOverlay','manageServersOverlay','serverUsersOverlay','startupOverlay'].forEach(o => $(o).classList.remove('show'));
+    serverList.classList.remove('show');
+    hideMcViews();
+    $('scheduleOverlay').classList.add('show');
+    setStatus('Loading…');
+    load().then(() => { if(statusEl.textContent === 'Loading…') setStatus(''); });
+  });
+})();
+</script>
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const HIDE = ['serverControlOverlay','filesOverlay','manageServersOverlay','serverUsersOverlay','startupOverlay'];
+  const PERMS = [['start','Start server'],['stop','Stop server'],['restart','Restart server'],['kill','Kill server'],['console','Console & commands'],['files','Manage files'],['edit_files','Edit files'],['config','Configurations'],['plugins','Plugins'],['schedule','Schedule'],['startup','Startup'],['members','Manage members'],['worlds','Worlds'],['access','Grant access']];
+  const NAVS = [['navTerminal','console'],['navFiles','files'],['navSchedule','schedule'],['navConfig','config'],['navPlugins','plugins'],['navMembers','members'],['navWorlds','worlds'],['navAccess','access']];
+  const PWR = [['pwrStart','start'],['pwrStop','stop'],['pwrRestart','restart']];
+
+  async function api(path, body){
+    const user = auth.currentUser;
+    if(!user) throw new Error('Not signed in.');
+    const idToken = await user.getIdToken();
+    const res = await fetch(`${API_BASE}${path}`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ idToken, docId: pendingControlDoc, ...body }) });
+    let data;
+    try{ data = await res.json(); }catch(e){ throw new Error(`Bad backend response (HTTP ${res.status}).`); }
+    if(!res.ok || !data.ok) throw new Error(data.error || `Request failed (HTTP ${res.status}).`);
+    return data;
+  }
+  function open(id){
+    if(!pendingControlDoc) return;
+    HIDE.forEach(o => $(o).classList.remove('show'));
+    serverList.classList.remove('show');
+    hideMcViews();
+    $(id).classList.add('show');
+  }
+
+  window.applyMcPerms = async function(){
+    const doc = pendingControlDoc;
+    try{
+      const d = await api('/server_perms', {});
+      if(doc !== pendingControlDoc) return;
+      PWR.forEach(([id]) => { const x = $(id); if(x) x.style.display = ''; });
+      if(!d.perms) return;
+      NAVS.forEach(([id, p]) => { if(!d.perms[p]) $(id).style.display = 'none'; });
+      PWR.forEach(([id, p]) => { const b = $(id); if(b) b.style.display = d.perms[p] ? '' : 'none'; });
+    }catch(e){}
+  };
+
+  const mm = { tab:'whitelist', data:null, doc:null, busy:false };
+  const TITLES = { whitelist:'Whitelisted players', ops:'Operators', banned:'Banned players', bannedIps:'Banned IPs', known:'Players who have joined' };
+  const ADD = { whitelist:'whitelist_add', ops:'op_add', banned:'ban', bannedIps:'banip' };
+  const REM = { whitelist:'whitelist_remove', ops:'op_remove', banned:'unban', bannedIps:'unbanip' };
+  const status = (m, err) => { $('mmStatus').textContent = m || ''; $('mmStatus').classList.toggle('err', !!err); };
+  const headImg = n => `<img class="mm-head" loading="lazy" alt="" src="https://mc-heads.net/avatar/${encodeURIComponent(n)}/64">`;
+  const IPICO = '<span class="mm-ipico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 12h17M12 3.5c2.3 2.4 3.5 5.2 3.5 8.5s-1.2 6.1-3.5 8.5c-2.3-2.4-3.5-5.2-3.5-8.5S9.7 5.9 12 3.5z" stroke="currentColor" stroke-width="1.8"/></svg></span>';
+
+  function card(n, sub, btn, key, danger){
+    const el = document.createElement('div');
+    el.className = 'mm-card';
+    el.innerHTML = `${key === 'ip' ? IPICO : headImg(n)}<div class="mm-name">${esc(n)}${sub ? `<small>${esc(sub)}</small>` : ''}</div>${btn ? `<button type="button" class="plg-btn${danger ? ' danger' : ''}">${btn}</button>` : ''}`;
+    return el;
+  }
+  const has = (lst, f, v) => lst.some(p => String(p[f]).toLowerCase() === v.toLowerCase());
+
+  function render(){
+    const d = mm.data, t = mm.tab, list = $('mmList'), pick = $('mmPick'), bar = $('mmBar'), inp = $('mmInput');
+    document.querySelectorAll('#mmTabs .mm-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t));
+    list.replaceChildren(); pick.replaceChildren();
+    bar.style.display = t === 'known' ? 'none' : 'flex';
+    inp.placeholder = t === 'bannedIps' ? 'IP address to ban…' : (t === 'whitelist' || t === 'ops') ? 'Search players or type a name…' : 'Player name to ban…';
+    $('mmAdd').textContent = t === 'banned' || t === 'bannedIps' ? 'Ban' : 'Add';
+    $('mmListTitle').textContent = d ? TITLES[t] : '';
+    if(!d) return;
+    const q = inp.value.trim().toLowerCase();
+    const rows = d[t];
+    if(t === 'whitelist' || t === 'ops'){
+      if(q){
+        d.known.filter(p => p.name.toLowerCase().includes(q) && !has(rows, 'name', p.name)).slice(0, 12).forEach(p => {
+          const c = card(p.name, '', 'Add', 'p');
+          c.querySelector('button').addEventListener('click', () => act(ADD[t], { name:p.name }));
+          pick.appendChild(c);
+        });
+      }
+    }else if(t === 'banned' && q){
+      d.known.filter(p => p.name.toLowerCase().includes(q) && !has(rows, 'name', p.name)).slice(0, 12).forEach(p => {
+        const c = card(p.name, '', 'Ban', 'p', true);
+        c.querySelector('button').addEventListener('click', () => act('ban', { name:p.name }));
+        pick.appendChild(c);
+      });
+    }
+    rows.forEach(p => {
+      if(t === 'bannedIps'){
+        const c = card(p.ip, p.reason, 'Unban', 'ip', true);
+        c.querySelector('button').addEventListener('click', () => act('unbanip', { ip:p.ip }));
+        list.appendChild(c);
+      }else if(t === 'known'){
+        list.appendChild(card(p.name, '', '', 'p'));
+      }else{
+        const sub = t === 'banned' ? p.reason : t === 'ops' && p.level ? `Level ${p.level}` : '';
+        const c = card(p.name, sub, t === 'banned' ? 'Unban' : 'Remove', 'p', true);
+        c.querySelector('button').addEventListener('click', () => act(REM[t], { name:p.name }));
+        list.appendChild(c);
+      }
+    });
+  }
+
+  async function load(){
+    try{
+      mm.data = await api('/mc_members_get', {});
+      mm.doc = pendingControlDoc;
+      status('');
+    }catch(e){ status(e.message, true); }
+    render();
+  }
+
+  async function act(action, extra){
+    if(mm.busy) return;
+    mm.busy = true;
+    status('Working…');
+    try{
+      const r = await api('/mc_members_action', { action, ...extra });
+      $('mmInput').value = '';
+      await new Promise(res => setTimeout(res, r.live ? 900 : 100));
+      await load();
+    }catch(e){ status(e.message, true); }
+    mm.busy = false;
+  }
+
+  document.querySelectorAll('#mmTabs .mm-tab').forEach(b => b.addEventListener('click', () => { mm.tab = b.dataset.tab; $('mmInput').value = ''; render(); }));
+  $('mmInput').addEventListener('input', render);
+  $('mmInput').addEventListener('keydown', e => { if(e.key === 'Enter') $('mmAdd').click(); });
+  $('mmAdd').addEventListener('click', () => {
+    const v = $('mmInput').value.trim();
+    if(!v || !ADD[mm.tab]) return;
+    act(ADD[mm.tab], mm.tab === 'bannedIps' ? { ip:v } : { name:v });
+  });
+  $('navMembers').addEventListener('click', () => {
+    open('membersOverlay');
+    if(mm.doc !== pendingControlDoc){ mm.data = null; mm.tab = 'whitelist'; $('mmInput').value = ''; }
+    render();
+    load();
+  });
+
+  const ac = { perms:{}, users:[] };
+  const aStatus = (m, err) => { $('accStatus').textContent = m || ''; $('accStatus').classList.toggle('err', !!err); };
+  function renderPerms(){
+    const box = $('accPerms');
+    box.replaceChildren();
+    PERMS.forEach(([k, label]) => {
+      const row = document.createElement('div');
+      row.className = 'mm-card';
+      row.innerHTML = `<div class="mm-name">${label}</div><button type="button" class="mm-sw${ac.perms[k] ? ' on' : ''}" aria-label="${label}"></button>`;
+      row.querySelector('.mm-sw').addEventListener('click', e => { ac.perms[k] = !ac.perms[k]; e.currentTarget.classList.toggle('on', ac.perms[k]); });
+      box.appendChild(row);
+    });
+  }
+  function resetForm(){
+    $('accEmail').value = ''; $('accPass').value = ''; $('accEmail').readOnly = false;
+    $('accFormTitle').textContent = 'Grant access';
+    ac.perms = { start:true, stop:true, restart:true, console:true, files:true };
+    renderPerms();
+  }
+  function renderUsers(){
+    const box = $('accList');
+    box.replaceChildren();
+    ac.users.forEach(u => {
+      const on = PERMS.filter(([k]) => !u.perms || u.perms[k]).length;
+      const c = card(u.email, `${on} of ${PERMS.length} permissions`, 'Remove', 'ip', true);
+      c.classList.add('acc-user');
+      c.querySelector('.mm-ipico').innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.8"/><path d="M4.5 20c1.4-3.6 4.4-5.5 7.5-5.5s6.1 1.9 7.5 5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+      c.addEventListener('click', () => {
+        $('accEmail').value = u.email; $('accEmail').readOnly = true; $('accPass').value = '';
+        $('accFormTitle').textContent = 'Edit access';
+        ac.perms = {}; PERMS.forEach(([k]) => { ac.perms[k] = !u.perms || !!u.perms[k]; });
+        renderPerms();
+      });
+      c.querySelector('button').addEventListener('click', async e => {
+        e.stopPropagation();
+        if(!confirm(`Remove access for ${u.email}?`)) return;
+        try{ await api('/remove_server_access', { email:u.email }); await loadUsers(); }catch(err){ aStatus(err.message, true); }
+      });
+      box.appendChild(c);
+    });
+  }
+  async function loadUsers(){
+    try{
+      const d = await api('/server_access_list', {});
+      ac.users = (d.users || []).filter(u => u.fullAccess);
+      aStatus('');
+    }catch(e){ aStatus(e.message, true); }
+    renderUsers();
+  }
+  $('accSave').addEventListener('click', async () => {
+    const email = $('accEmail').value.trim();
+    if(!email){ aStatus('Enter an email.', true); return; }
+    aStatus('Saving…');
+    try{
+      await api('/assign_server_access', { email, password:$('accPass').value, fullAccess:true, perms:ac.perms });
+      resetForm();
+      await loadUsers();
+      aStatus('Saved.');
+    }catch(e){ aStatus(e.message, true); }
+  });
+  $('accReset').addEventListener('click', resetForm);
+  $('navAccess').addEventListener('click', () => {
+    open('accessOverlay');
+    resetForm();
+    renderUsers();
+    loadUsers();
+  });
+})();
+</script>
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  async function api(path, body){
+    const user = auth.currentUser;
+    if(!user) throw new Error('Not signed in.');
+    const idToken = await user.getIdToken();
+    const res = await fetch(`${API_BASE}${path}`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ idToken, docId: pendingControlDoc, ...body }) });
+    let data;
+    try{ data = await res.json(); }catch(e){ throw new Error(`Bad backend response (HTTP ${res.status}).`); }
+    if(!res.ok || !data.ok) throw new Error(data.error || `Request failed (HTTP ${res.status}).`);
+    return data;
+  }
+
+  const NAMES = { overworld:'Overworld', nether:'Nether', end:'The End' };
+  let cur = null, info = null, busy = false, infoDoc = null;
+  const wst = (m, err) => { $('wdStatus').textContent = m || ''; $('wdStatus').classList.toggle('err', !!err); };
+  const lock = on => { busy = on; document.querySelectorAll('.wd-opt').forEach(b => b.disabled = on); };
+
+  function tags(){
+    document.querySelectorAll('.wd-box').forEach(b => {
+      const miss = info && !info.worlds[b.dataset.dim];
+      let t = b.querySelector('.wd-tag');
+      if(miss && !t){ t = document.createElement('em'); t.className = 'wd-tag'; t.style.fontStyle = 'normal'; t.textContent = 'Not generated'; b.appendChild(t); }
+      else if(!miss && t) t.remove();
+    });
+  }
+  async function loadInfo(){
+    try{ info = await api('/mc_worlds_info', {}); infoDoc = pendingControlDoc; tags(); }catch(e){}
+  }
+  function showGrid(){ $('worldsGrid').style.display = ''; $('worldDetail').style.display = 'none'; $('wdGen').style.display = 'none'; cur = null; }
+  function showWorld(dim){
+    cur = dim;
+    $('worldsGrid').style.display = 'none';
+    $('worldDetail').style.display = 'block';
+    $('wdTitle').textContent = NAMES[dim];
+    $('wdGen').style.display = 'none';
+    wst('');
+  }
+
+  document.querySelectorAll('.wd-box').forEach(b => b.addEventListener('click', () => showWorld(b.dataset.dim)));
+  $('wdBack').addEventListener('click', showGrid);
+  $('navWorlds').addEventListener('click', () => {
+    showGrid();
+    if(infoDoc !== pendingControlDoc) info = null;
+    tags();
+    loadInfo();
+  });
+
+  async function download(){
+    lock(true); wst('Preparing archive…');
+    try{
+      const user = auth.currentUser, idToken = await user.getIdToken();
+      const res = await fetch(`${API_BASE}/mc_world_download`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ idToken, docId: pendingControlDoc, dim: cur }) });
+      if(!res.ok){
+        let m = `Request failed (HTTP ${res.status}).`;
+        try{ m = (await res.json()).error || m; }catch(e){}
+        throw new Error(m);
+      }
+      wst('Downloading…');
+      const url = URL.createObjectURL(await res.blob());
+      const a = document.createElement('a');
+      a.href = url; a.download = `${cur}.tar.gz`;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      wst('Downloaded.');
+    }catch(e){ wst(e.message, true); }
+    lock(false);
+  }
+
+  async function upload(file){
+    const ext = /\.zip$/i.test(file.name) ? 'zip' : /\.(tar\.gz|tgz)$/i.test(file.name) ? 'tar.gz' : '';
+    if(!ext){ wst('Choose a .zip or .tar.gz archive.', true); return; }
+    if(!confirm(`Replace the ${NAMES[cur]} with ${file.name}? The current one will be deleted.`)) return;
+    lock(true); wst('Uploading…');
+    try{
+      const user = auth.currentUser, idToken = await user.getIdToken();
+      const form = new FormData();
+      form.append('idToken', idToken);
+      form.append('docId', pendingControlDoc);
+      form.append('path', '/');
+      form.append('file', new File([file], ext === 'zip' ? '_xt_upload.zip' : '_xt_upload.tar.gz'));
+      const res = await fetch(`${API_BASE}/upload_file`, { method:'POST', body: form });
+      let data = {};
+      try{ data = await res.json(); }catch(e){}
+      if(!res.ok || !data.ok) throw new Error(data.error || `Upload failed (HTTP ${res.status}).`);
+      wst('Installing world…');
+      await api('/mc_world_upload', { dim: cur, ext });
+      wst('World replaced.');
+      loadInfo();
+    }catch(e){ wst(e.message, true); }
+    lock(false);
+  }
+
+  function files(){
+    const p = info && info.worlds[cur];
+    if(!p){ wst('This world has not been generated yet.', true); return; }
+    window.openFilesAt('/' + p);
+  }
+
+  function gen(){
+    $('wdGen').style.display = 'block';
+    const ow = cur === 'overworld';
+    $('wdSeed').style.display = ow ? '' : 'none';
+    $('wdSeed').value = '';
+    $('wdGenHint').textContent = ow ? 'Deletes the Overworld, Nether and End. A new world is created on next start.' : `Deletes the ${NAMES[cur]}. It is created again on next start.`;
+  }
+  $('wdGenCancel').addEventListener('click', () => { $('wdGen').style.display = 'none'; });
+  $('wdGenGo').addEventListener('click', async () => {
+    if(busy) return;
+    if(!confirm(`Delete and regenerate ${cur === 'overworld' ? 'all worlds' : NAMES[cur]}? This cannot be undone.`)) return;
+    lock(true); wst('Working…');
+    try{
+      await api('/mc_world_generate', { dim: cur, seed: $('wdSeed').value });
+      $('wdGen').style.display = 'none';
+      wst('Done. Start the server to generate it.');
+      loadInfo();
+    }catch(e){ wst(e.message, true); }
+    lock(false);
+  });
+
+  document.querySelectorAll('.wd-opt').forEach(b => b.addEventListener('click', () => {
+    if(busy || !cur) return;
+    const o = b.dataset.opt;
+    if(o === 'download') download();
+    else if(o === 'upload') $('wdFile').click();
+    else if(o === 'files') files();
+    else gen();
+  }));
+  $('wdFile').addEventListener('change', () => { const f = $('wdFile').files[0]; $('wdFile').value = ''; if(f) upload(f); });
+
+  const vi = { soft:null, list:[], cache:{} };
+  const vst = (m, err) => { $('viStatus').textContent = m || ''; $('viStatus').classList.toggle('err', !!err); };
+  const LABEL = { vanilla:'Vanilla', paper:'Paper', folia:'Folia', purpur:'Purpur', fabric:'Fabric' };
+
+  function renderVers(){
+    const q = $('viSearch').value.trim().toLowerCase(), box = $('viVers');
+    box.replaceChildren();
+    vi.list.filter(v => v.toLowerCase().includes(q)).forEach(v => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'vi-ver'; b.textContent = v;
+      b.addEventListener('click', () => install(v));
+      box.appendChild(b);
+    });
+  }
+  async function pick(soft){
+    vi.soft = soft;
+    $('viSoft').style.display = 'none';
+    $('viPick').style.display = 'block';
+    $('viTitle').textContent = LABEL[soft];
+    $('viSearch').value = '';
+    vi.list = vi.cache[soft] || [];
+    renderVers();
+    if(vi.list.length) return;
+    vst('Loading versions…');
+    try{
+      const d = await api('/mc_versions', { software: soft });
+      vi.cache[soft] = vi.list = d.versions || [];
+      vst('');
+      renderVers();
+    }catch(e){ vst(e.message, true); }
+  }
+  async function install(v){
+    if(busy) return;
+    if(!confirm(`Install ${LABEL[vi.soft]} ${v}? This replaces the current server jar.`)) return;
+    busy = true;
+    document.querySelectorAll('.vi-ver').forEach(b => b.disabled = true);
+    vst(`Installing ${LABEL[vi.soft]} ${v}…`);
+    try{
+      await api('/mc_install', { software: vi.soft, version: v });
+      vst(`${LABEL[vi.soft]} ${v} installed. Start the server to use it.`);
+    }catch(e){ vst(e.message, true); }
+    busy = false;
+    document.querySelectorAll('.vi-ver').forEach(b => b.disabled = false);
+  }
+  document.querySelectorAll('.vi-box').forEach(b => b.addEventListener('click', () => pick(b.dataset.soft)));
+  $('viBack').addEventListener('click', () => { $('viPick').style.display = 'none'; $('viSoft').style.display = ''; vst(''); });
+  $('viSearch').addEventListener('input', renderVers);
+})();
+</script>
 </body>
 </html>
