@@ -869,10 +869,6 @@
   .ac-box input{ width:100%; background:#0f1114; color:var(--text); border:1px solid var(--panel-border); border-radius:10px; padding:10px 12px; font-family:var(--mono); font-size:13px; box-sizing:border-box; }
   .ac-key{ font-family:var(--mono); font-size:15px; color:var(--text); background:#0f1114; border:1px solid var(--panel-border); border-radius:10px; padding:12px 14px; overflow-wrap:anywhere; }
   .ac-row{ display:flex; gap:10px; flex-wrap:wrap; }
-  .ac-act{ display:flex; gap:12px; align-items:center; background:#0a0b0d; border:1px solid var(--panel-border); border-radius:12px; padding:10px 14px; margin-bottom:8px; }
-  .ac-act b{ font-size:14px; color:var(--text); font-weight:500; }
-  .ac-act small{ display:block; font-family:var(--mono); font-size:11.5px; color:var(--text-faint); overflow-wrap:anywhere; }
-  .ac-act time{ margin-left:auto; font-family:var(--mono); font-size:11.5px; color:var(--text-muted); white-space:nowrap; }
   .su-chips{ display:flex; flex-wrap:wrap; gap:8px; }
   .su-chip{ display:inline-flex; align-items:center; gap:8px; background:#0a0b0d; border:1px solid var(--panel-border); border-radius:999px; padding:6px 10px 6px 14px; font-family:var(--mono); font-size:12.5px; color:var(--text); }
   .su-chip button{ background:none; border:0; color:var(--text-muted); cursor:pointer; font-size:16px; line-height:1; padding:0; }
@@ -937,6 +933,8 @@
     padding: 6px 2px 0;
   }
   .server-section-title span{ opacity: 0.6; margin-left: 8px; }
+  .srv-dots{background:rgba(0,0,0,.45);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:10px}
+  #srvMenu button.cur{color:var(--accent)}
   .server-list-empty{
     font-family: var(--mono);
     font-size: 13px;
@@ -1274,16 +1272,36 @@
 
   .fm-editor-highlight, .fm-editor-textarea{
     position:absolute;
-    inset:0;
+    inset:0 0 0 54px;
     margin:0;
     padding: 18px;
     font-family: var(--mono);
     font-size:13px;
     line-height:1.6;
     tab-size:2;
-    white-space:pre-wrap;
-    word-break:break-word;
+    white-space:pre;
+    word-break:normal;
     overflow:auto;
+  }
+
+  .fm-editor-gutter{
+    position:absolute;
+    top:0; left:0; bottom:0;
+    width:54px;
+    margin:0;
+    padding:18px 10px 60px 0;
+    box-sizing:border-box;
+    font-family: var(--mono);
+    font-size:13px;
+    line-height:1.6;
+    text-align:right;
+    color: var(--text-faint);
+    background:#0a0b0d;
+    border-right:1px solid var(--panel-border);
+    overflow:hidden;
+    user-select:none;
+    pointer-events:none;
+    white-space:pre;
   }
 
   .fm-editor-highlight{
@@ -1627,9 +1645,100 @@
     border-color: rgba(255,255,255,0.25);
   }
 
+
+  #bootLoader{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:var(--bg);opacity:1;visibility:visible;transition:opacity .15s ease}
+  #bootLoader.hide{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .15s ease,visibility 0s linear .15s}
+  .boot-ring{width:54px;height:54px;border:4px solid rgba(232,163,61,.18);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+  .boot-text{font-family:var(--mono);font-size:14px;color:var(--text-muted);letter-spacing:.04em}
+  .adv-card{background:#0a0b0d;border:1px solid var(--panel-border);border-radius:10px;padding:16px;margin-bottom:20px}
+  .adv-h{font-family:var(--mono);font-weight:600;font-size:16px;margin:0 0 10px;color:var(--text)}
+  .adv-search{display:flex;gap:8px}
+  .adv-search input,.adv-pip input{flex:1;min-width:0;background:#0d0f12;border:1px solid var(--panel-border);border-radius:10px;padding:11px 12px;font-family:var(--mono);font-size:13px;color:var(--text);outline:none;transition:border-color .15s,box-shadow .15s}
+  .adv-search input:focus,.adv-pip input:focus{border-color:var(--accent-dim);box-shadow:0 0 0 3px var(--accent-soft)}
+  .adv-search input::placeholder,.adv-pip input::placeholder{color:var(--text-faint)}
+  .adv-ibtn{flex-shrink:0;display:flex;align-items:center;justify-content:center;gap:8px;background:transparent;border:1px solid var(--panel-border);border-radius:10px;padding:0 14px;color:var(--text);font-family:var(--mono);font-size:13px;cursor:pointer;transition:border-color .15s,color .15s}
+  .adv-ibtn:hover:not(:disabled){border-color:var(--accent-dim);color:var(--accent)}
+  .adv-ibtn:disabled{opacity:.5;cursor:default}
+  .adv-ibtn svg{width:16px;height:16px;flex-shrink:0}
+  .adv-ibtn.ok{color:var(--success);border-color:rgba(95,191,138,.4)}
+  .adv-ibtn.no{color:var(--error);border-color:rgba(224,87,76,.4)}
+  .adv-pip .adv-ibtn,.adv-acts .adv-ibtn{padding:10px 16px}
+  #advResults{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+  #advResults:empty{display:none}
+  .adv-row{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:transparent;border:1px solid transparent;border-radius:8px;padding:9px 10px;color:var(--text);font-family:var(--mono);font-size:13px;cursor:pointer}
+  .adv-row:hover{background:var(--accent-soft);border-color:var(--panel-border)}
+  .adv-lines{flex:0 0 76px;text-align:right;color:var(--text-faint);font-size:12px}
+  .adv-rname{font-weight:600}
+  .adv-rdir{color:var(--text-faint);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .adv-empty{padding:10px;color:var(--text-faint);font-family:var(--mono);font-size:12.5px}
+  .adv-found{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:stretch;border:1px solid var(--panel-border);border-radius:12px;padding:14px;background:#0d0f12}
+  .adv-logo{width:56px;height:56px;align-self:center;display:flex;align-items:center;justify-content:center;border-radius:12px;background:var(--accent-soft);border:1px solid var(--accent-dim);color:var(--accent)}
+  .adv-logo.bad{background:var(--error-soft);border-color:var(--error);color:var(--error)}
+  .adv-logo svg{width:28px;height:28px}
+  .adv-fbody{display:flex;flex-direction:column;justify-content:space-between;gap:14px;min-width:0}
+  .adv-fname{font-family:var(--mono);font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .adv-fname.bad{color:var(--error)}
+  .adv-acts{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+  .adv-file{display:flex;align-items:center;gap:12px;padding:10px 12px;margin-top:8px;border:1px solid var(--panel-border);border-radius:12px;background:#0d0f12}
+  .adv-file:first-child{margin-top:0}
+  .adv-file .adv-fic{width:34px;height:34px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:9px;background:rgba(255,255,255,.05);color:var(--accent)}
+  .adv-file .adv-fic svg{width:18px;height:18px}
+  .adv-file .adv-fpath{flex:1;min-width:0;font-family:var(--mono);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .adv-pip{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .adv-cmd{font-family:var(--mono);font-size:13px;color:var(--accent);white-space:nowrap}
+  .adv-pip input{flex:1 1 200px}
+
+  .sidebar-tooltip{display:none !important}
+  #sbTip{position:fixed;z-index:10000;transform:translateY(-50%) translateX(-6px);background:rgba(10,11,13,.94);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:6px 12px;font-family:var(--mono);font-size:12px;color:var(--text);white-space:nowrap;opacity:0;pointer-events:none;box-shadow:0 10px 25px -8px rgba(0,0,0,.6);transition:opacity .15s ease,transform .15s ease}
+  #sbTip.show{opacity:1;transform:translateY(-50%)}
+  .db-list{display:flex;flex-direction:column;gap:10px}
+  .db-box{cursor:default}
+  .db-meta{flex-shrink:0;font-family:var(--mono);font-size:12px;color:var(--text-faint);white-space:nowrap}
+  .db-empty{padding:22px 4px;font-family:var(--mono);font-size:13.5px;color:var(--text-muted)}
+  .ak-ta{width:100%;min-height:96px;resize:vertical;background:#0f1114;color:var(--text);border:1px solid var(--panel-border);border-radius:10px;padding:10px 12px;font-family:var(--mono);font-size:13px;line-height:1.6;box-sizing:border-box;outline:none}
+  .ak-ta:focus{border-color:var(--accent-dim);box-shadow:0 0 0 3px var(--accent-soft)}
+  .ak-lab{font-size:12.5px;color:var(--text-muted)}
+  .ak-lab small{color:var(--text-faint);margin-left:6px}
+  .ak-new{display:none;flex-direction:column;gap:10px}
+  .ak-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:12px}
+  .ak-box{display:flex;align-items:center;gap:20px;min-height:128px;padding:22px 24px;background:#0d0e11;border:1px solid rgba(255,255,255,.10);border-radius:16px;transition:transform .15s ease,border-color .2s ease,background .2s ease}
+  .ak-box:hover{transform:translateY(-1px);border-color:rgba(232,163,61,.35);background:#101216}
+  .ak-ic{width:56px;height:56px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:14px;background:var(--accent-soft);border:1px solid var(--accent-dim);color:var(--accent)}
+  .ak-ic svg{width:28px;height:28px}
+  .ak-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+  .ak-hint{font-family:var(--mono);font-size:19px;font-weight:600;color:var(--text)}
+  .ak-meta{font-family:var(--mono);font-size:12px;color:var(--text-faint)}
+  .ak-ips{display:flex;flex-wrap:wrap;gap:6px}
+  .ak-ip{font-family:var(--mono);font-size:11.5px;padding:3px 9px;border-radius:999px;background:var(--accent-soft);border:1px solid var(--accent-dim);color:var(--accent)}
+  .ak-ip.any{background:transparent;border-color:var(--panel-border);color:var(--text-muted)}
+  .ak-del{flex-shrink:0;width:46px;height:46px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid rgba(224,87,76,.35);border-radius:12px;color:var(--error);cursor:pointer;transition:background .2s ease,transform .15s ease}
+  .ak-del:hover{background:var(--error-soft);transform:scale(1.06)}
+  .ak-del svg{width:20px;height:20px}
+  .ac-act{--c:#6ea8fe;position:relative;overflow:hidden;display:flex;align-items:center;gap:18px;min-height:104px;padding:22px 24px;margin-bottom:12px;border-radius:16px;border:1px solid color-mix(in srgb,var(--c) 28%,var(--panel-border));border-left:4px solid var(--c);background:linear-gradient(90deg,color-mix(in srgb,var(--c) 11%,#0a0b0d),#0a0b0d 65%);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+  .ac-act:hover{transform:translateY(-3px) scale(1.012);border-color:var(--c);box-shadow:0 14px 30px -12px color-mix(in srgb,var(--c) 60%,transparent)}
+  .ac-act::after{content:'';position:absolute;top:-40%;right:-8%;width:46%;height:180%;background:radial-gradient(closest-side,color-mix(in srgb,var(--c) 22%,transparent),transparent);pointer-events:none}
+  .ak-split{display:grid;grid-template-columns:minmax(300px,400px) minmax(0,1fr);gap:22px;align-items:start}
+  .ak-split .ak-grid{grid-template-columns:1fr}
+  @media(max-width:860px){.ak-split{grid-template-columns:1fr}}
+  .ac-av{position:relative;flex-shrink:0;width:60px;height:60px;border-radius:50%;padding:3px;background:conic-gradient(from 140deg,var(--c),#b48cf2,#4fd1c5,var(--c));box-shadow:0 0 18px -2px color-mix(in srgb,var(--c) 70%,transparent)}
+  .ac-av i{display:flex;align-items:center;justify-content:center;width:100%;height:100%;border-radius:50%;border:2px solid #0a0b0d;background:#15171b center/cover no-repeat;font-style:normal;font-weight:700;font-size:22px;color:var(--c)}
+  .ac-who{display:inline-block;margin-bottom:6px;padding:2px 10px;border-radius:999px;font-family:var(--mono);font-size:12px;font-weight:600;color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent);border:1px solid color-mix(in srgb,var(--c) 38%,transparent)}
+  .ac-act > *{position:relative;z-index:1}
+  .ac-act b{display:block;font-size:16px;font-weight:600;color:var(--c)}
+  .ac-act small{display:block;margin-top:4px;font-family:var(--mono);font-size:13px;color:var(--text-muted);overflow-wrap:anywhere}
+  .ac-act time{margin-left:auto;font-family:var(--mono);font-size:12.5px;color:var(--text);white-space:nowrap}
+  .ac-act.k-ok{--c:#5fbf8a}
+  .ac-act.k-warn{--c:#e8a33d}
+  .ac-act.k-bad{--c:#e0574c}
+  .ac-act.k-cmd{--c:#b48cf2}
+  .ac-act.k-file{--c:#4fd1c5}
 </style>
 </head>
 <body>
+
+<div id="sbTip"></div>
+
+<div id="bootLoader"><div class="boot-ring"></div><div class="boot-text" id="bootText">Initializing Panel</div></div>
 
 <video id="loggedInVideoBg" autoplay loop muted playsinline>
   <source src="https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/Make_k_vedio_of_live_servers.mp4" type="video/mp4">
@@ -1794,12 +1903,38 @@
       <span class="sidebar-tooltip">Files</span>
     </button>
 
+    <button type="button" class="sidebar-btn ctx-terminal" id="navDatabase" data-label="Database" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="12" cy="6" rx="7.5" ry="2.8" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M4.5 6v6c0 1.55 3.36 2.8 7.5 2.8s7.5-1.25 7.5-2.8V6" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M4.5 12v6c0 1.55 3.36 2.8 7.5 2.8s7.5-1.25 7.5-2.8v-6" stroke="currentColor" stroke-width="1.8"/>
+      </svg>
+      <span class="sidebar-tooltip">Database</span>
+    </button>
+
+    <button type="button" class="sidebar-btn ctx-terminal" id="navBackup" data-label="Backup" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3.5" y="4.5" width="17" height="4" rx="1" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M5 8.5V18a1.5 1.5 0 0 0 1.5 1.5h11A1.5 1.5 0 0 0 19 18V8.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M10 12.5h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <span class="sidebar-tooltip">Backup</span>
+    </button>
+
     <button type="button" class="sidebar-btn ctx-terminal" id="navStartup" data-label="Startup" style="display:none;">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/>
         <path d="M12 7.5v5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <span class="sidebar-tooltip">Startup</span>
+    </button>
+
+    <button type="button" class="sidebar-btn ctx-terminal" id="navAdvanced" data-label="Advanced files startup" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7 3.5h7l4 4V19a1.5 1.5 0 0 1-1.5 1.5h-9.5A1.5 1.5 0 0 1 5.5 19V5A1.5 1.5 0 0 1 7 3.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M9.5 12.5L8 14l1.5 1.5M14.5 12.5L16 14l-1.5 1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="sidebar-tooltip">Advanced files startup</span>
     </button>
 
     <button type="button" class="sidebar-btn ctx-terminal" id="navPlugins" data-label="Plugins" style="display:none;">
@@ -1947,6 +2082,14 @@
           <option value="https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/Aurora.png">Aurora</option>
           <option value="https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/Naruto.png">Naruto</option>
           <option value="https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/DBSOG.png">Dragon Ball Super</option>
+          <option value="https://github.com/xtremetechprograms/IMAGES/blob/main/okmc.png?raw=true">Minecraft Lights</option>
+          <option value="https://github.com/xtremetechprograms/IMAGES/blob/main/bamboo.png?raw=true">Minecraft Bamboos</option>
+          <option value="https://github.com/xtremetechprograms/IMAGES/blob/main/mcnethercastle.png?raw=true">Minecraft Nether Castle</option>
+          <option value="https://github.com/xtremetechprograms/IMAGES/blob/main/mcend.png?raw=true">Minecraft End</option>
+          <option value="https://github.com/xtremetechprograms/IMAGES/blob/main/server.png?raw=true">Cloud Hosting 1</option>
+          <option value="https://github.com/xtremetechprograms/IMAGES/blob/main/c2.png?raw=true">Cloud Hosting 2</option>
+          <option value="https://github.com/xtremetechprograms/IMAGES/blob/main/dcbot.png?raw=true">Discord Bot 1</option>
+          <option value="https://github.com/xtremetechprograms/IMAGES/blob/main/dcb.png?raw=true">Discord Bot 2</option>
         </select>
       </div>
 
@@ -1958,6 +2101,16 @@
       <div class="field">
         <label for="serverUuid">Server UUID</label>
         <input type="text" id="serverUuid" placeholder="e.g. 3f29c1a2-..." required>
+      </div>
+
+      <div class="field">
+        <label for="serverOwnerEmail">Owner Email</label>
+        <input type="email" id="serverOwnerEmail" placeholder="owner@example.com" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label for="serverOwnerPass">Owner Password</label>
+        <input type="password" id="serverOwnerPass" placeholder="Min 6 characters" autocomplete="new-password">
       </div>
 
       <button type="submit" class="submit" id="createServerBtn">
@@ -2060,9 +2213,24 @@
 <!-- Manage Servers section: click a server to manage its users -->
 <div class="manage-view" id="manageServersOverlay">
   <h1 class="heading" style="text-align:left; justify-content:flex-start;">Manage Servers</h1>
-  <p class="subtext" style="text-align:left; margin-bottom:20px;">Click a server to see and manage its users.</p>
+  <p class="subtext" style="text-align:left; margin-bottom:16px;">Click a server to see and manage its users.</p>
+
+  <div class="adv-search" style="margin-bottom:16px;">
+    <input type="text" id="manageSearch" placeholder="Search servers…" autocomplete="off" spellcheck="false">
+    <button type="button" class="adv-ibtn" id="manageSearchBtn" title="Search">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </div>
 
   <div id="manageServersBoxes" style="display:flex; flex-direction:column; gap:14px;"></div>
+</div>
+
+<div class="modal-overlay" id="srvInfoOverlay">
+  <div class="modal-box" style="max-width:440px;">
+    <button type="button" class="modal-close" id="srvInfoClose">✕</button>
+    <h1 class="heading" style="text-align:left; justify-content:flex-start;" id="srvInfoTitle">Info</h1>
+    <div id="srvInfoBody" style="display:flex; flex-direction:column; gap:8px; margin-top:16px;"></div>
+  </div>
 </div>
 
 <!-- Server Users section: shown in place of the box list when a server is clicked -->
@@ -2074,7 +2242,7 @@
 
   <div id="serverUsersList" style="display:flex; flex-direction:column; gap:10px; margin-bottom:28px;"></div>
 
-  <h1 class="heading" style="text-align:left; justify-content:flex-start; font-size:16px;">Add User</h1>
+  <h1 class="heading" id="addUserHeading" style="text-align:left; justify-content:flex-start; font-size:16px;">Add User</h1>
   <p class="subtext" style="text-align:left; margin-bottom:16px;">Creates a real login for them (or updates their password if the email already has one) and limits what they'll be able to use.</p>
 
   <div id="addUserError" class="error-msg"></div>
@@ -2333,17 +2501,28 @@
 </div>
 
 <div class="manage-view" id="apiOverlay">
-  <h1 class="heading" style="text-align:left; justify-content:flex-start;">API</h1>
-  <p class="subtext" style="text-align:left; margin-bottom:16px;">Use your key in the <code>X-API-Key</code> header with a <code>docId</code> to run the same actions you can run here.</p>
-  <div class="plg-status" id="apStatus"></div>
-  <div class="ac-box" style="max-width:560px;">
-    <h3>Your API key</h3>
-    <div class="ac-key" id="apKey">No key yet</div>
-    <div class="ac-row">
-      <button type="button" class="plg-btn" id="apGen">Generate key</button>
-      <button type="button" class="plg-btn" id="apCopy" style="display:none;">Copy</button>
-      <button type="button" class="plg-btn" id="apRevoke" style="display:none;">Revoke</button>
+  <div class="ak-split">
+  <div>
+    <h1 class="heading" style="text-align:left; justify-content:flex-start;">API</h1>
+    <p class="subtext" style="text-align:left; margin-bottom:16px;">Use a key in the <code>X-API-Key</code> header with a <code>docId</code> to run the same actions you can run here.</p>
+    <div class="plg-status" id="apStatus"></div>
+    <div class="ac-box">
+      <h3>Create API key</h3>
+      <label class="ak-lab" for="apIps">Allowed IPs<small>one per row, empty allows any IP</small></label>
+      <textarea class="ak-ta" id="apIps" rows="4" spellcheck="false" autocomplete="off" placeholder="203.0.113.5&#10;198.51.100.0/24"></textarea>
+      <div class="ac-row">
+        <button type="button" class="plg-btn" id="apGen">Generate key</button>
+      </div>
+      <div class="ak-new" id="apNew">
+        <div class="ac-key" id="apKey"></div>
+        <div class="ac-row"><button type="button" class="plg-btn" id="apCopy">Copy</button><button type="button" class="plg-btn" id="apJson">Download JSON</button></div>
+      </div>
     </div>
+  </div>
+  <div class="ak-right">
+    <h1 class="heading" style="text-align:left; justify-content:flex-start;">Saved keys</h1>
+    <div class="ak-grid" id="apList"></div>
+  </div>
   </div>
 </div>
 
@@ -2461,6 +2640,50 @@
   </button>
 </div>
 
+<div class="manage-view" id="dbOverlay">
+  <h1 class="heading" style="text-align:left; justify-content:flex-start;">Database</h1>
+  <p class="subtext" style="text-align:left; margin-bottom:16px;">Database files (.db) on this server.</p>
+  <div id="dbStatus" class="plg-status"></div>
+  <div id="dbList" class="db-list"></div>
+</div>
+
+<div class="manage-view" id="backupOverlay">
+  <h1 class="heading" style="text-align:left; justify-content:flex-start;">Backup</h1>
+  <p class="subtext" style="text-align:left; margin-bottom:16px;">Backups for this server.</p>
+</div>
+
+<div class="manage-view" id="advOverlay">
+  <h1 class="heading" style="text-align:left; justify-content:flex-start;">Advanced files startup</h1>
+  <p class="subtext" style="text-align:left; margin-bottom:16px;">Search runnable files (.py, .js, .ts, .sh or executable) and add one to this server's startup files.</p>
+  <div id="advStatus" class="plg-status"></div>
+
+  <div class="adv-card">
+    <div class="adv-search">
+      <input type="text" id="advInput" placeholder="example.py" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <button type="button" class="adv-ibtn" id="advSearchBtn" title="Search">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div id="advResults"></div>
+  </div>
+
+  <h2 class="adv-h">Startup files</h2>
+  <div class="adv-card"><div id="advFiles"></div></div>
+
+  <h2 class="adv-h">Python libraries</h2>
+  <div class="adv-card">
+    <div class="adv-pip">
+      <span class="adv-cmd">python -m pip install</span>
+      <input type="text" id="pipInput" placeholder="requests flask" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <button type="button" class="adv-ibtn ok" id="pipBtn">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Install</span>
+      </button>
+    </div>
+    <div id="pipStatus" class="plg-status" style="margin:10px 0 0;"></div>
+  </div>
+</div>
+
 <!-- Files section: browse, upload, and edit a server's files -->
 <div class="manage-view" id="filesOverlay">
   <div class="fm-topbar">
@@ -2510,6 +2733,7 @@
       <button type="button" class="fm-editor-close" id="fmEditorClose">&times;</button>
     </div>
     <div class="fm-editor-code-wrap">
+      <pre class="fm-editor-gutter" id="fmEditorGutter">1</pre>
       <pre class="fm-editor-highlight" id="fmEditorHighlight"></pre>
       <textarea class="fm-editor-textarea" id="fmEditorTextarea" spellcheck="false"></textarea>
     </div>
@@ -2562,6 +2786,13 @@
   const adminView = document.getElementById('adminView');
   const adminSidebar = document.getElementById('adminSidebar');
   const serverList = document.getElementById('serverList');
+  const bootEl = document.getElementById('bootLoader');
+  const bootText = document.getElementById('bootText');
+  const showBoot = () => bootEl.classList.remove('hide');
+  const hideBoot = () => bootEl.classList.add('hide');
+  setTimeout(() => { if(!bootEl.classList.contains('hide')) bootText.textContent = 'Still connecting…'; }, 12000);
+  const roleGet = uid => { try{ return localStorage.getItem('xtRole_' + uid); }catch(e){ return null; } };
+  const roleSet = (uid, r) => { try{ localStorage.setItem('xtRole_' + uid, r); }catch(e){} };
 
   const LOGIN_BG = "https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/LOGIN.png";
   const ADMIN_BG = "https://raw.githubusercontent.com/xtremetechprograms/IMAGES/main/XtremeTechWebsiteBackground.png";
@@ -2657,39 +2888,60 @@
     adminBrand.classList.remove('show');
     adminSidebar.classList.remove('show');
     serverList.classList.remove('show');
-    let isAdmin = false;
-    try{
-      const idToken = await user.getIdToken();
-      const res = await fetch(BACKEND_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idToken })
-      });
-      const data = await res.json();
-      if(data.ok && data.is_admin){
-        isAdmin = true;
-        showAdminPanel();
+
+    const cached = roleGet(user.uid);
+    const verify = (async () => {
+      try{
+        const idToken = await user.getIdToken();
+        const res = await fetch(BACKEND_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken })
+        });
+        const data = await res.json();
+        return data.ok ? (data.is_admin ? 'admin' : 'user') : null;
+      }catch(err){
+        return null;
       }
-    }catch(err){
-      // backend offline or unreachable -- fall through and treat as
-      // non-admin below, no error shown to the user
+    })();
+
+    if(cached === 'admin'){
+      showAdminPanel();
+      hideBoot();
+      const v = await verify;
+      if(v) roleSet(user.uid, v);
+      if(v === 'user' && auth.currentUser === user) await attachOwnerServerListener(user.email);
+      return;
     }
 
-    if(!isAdmin){
-      // Not the admin -- check whether this email has been assigned
-      // a server via Manage Servers. If so, they'll see just that one.
-      attachOwnerServerListener(user.email);
+    if(cached === 'user'){
+      const owner = attachOwnerServerListener(user.email);
+      verify.then(v => { if(v) roleSet(user.uid, v); });
+      await owner;
+      hideBoot();
+      return;
     }
+
+    const v = await verify;
+    if(v) roleSet(user.uid, v);
+    if(v === 'admin') showAdminPanel();
+    else await attachOwnerServerListener(user.email);
+    hideBoot();
   }
 
   auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
 
   // Runs on page load, and again whenever auth state changes (login/logout).
+  let authResolved = false;
+  setTimeout(() => { if(!authResolved) hideBoot(); }, 8000);
   auth.onAuthStateChanged((user) => {
+    authResolved = true;
     if(user){
+      showBoot();
       checkAdminAndRoute(user);
     }else{
       showLoginForm();
+      hideBoot();
     }
   });
 
@@ -2868,6 +3120,7 @@
       await db.collection('servers').doc(pendingDeleteId).delete();
       closeConfirmDelete();
       closeRemoveServerModal();
+      if(manageServersOverlay.classList.contains('show')) openManageServersModal();
       // The persistent list (serverList) updates on its own via the
       // onSnapshot listener already running -- no manual refresh needed.
     }catch(err){
@@ -3248,8 +3501,11 @@
     document.getElementById('serverControlOverlay').classList.remove('show');
     document.getElementById('filesOverlay').classList.remove('show');
     document.getElementById('startupOverlay').classList.remove('show');
+    document.getElementById('advOverlay').classList.remove('show');
+    document.getElementById('backupOverlay').classList.remove('show');
+    document.getElementById('dbOverlay').classList.remove('show');
     hideMcViews();
-    ['navTerminal','navFiles','navSchedule','navUsers','navStartup','navConfig','navPlugins','navMembers','navAccess','navWorlds']
+    ['navTerminal','navFiles','navSchedule','navUsers','navDatabase','navBackup','navStartup','navAdvanced','navConfig','navPlugins','navMembers','navAccess','navWorlds']
       .forEach(id => { document.getElementById(id).style.display = 'none'; });
     stopTerminalPolling();
     disconnectConsoleSocket();
@@ -3267,56 +3523,181 @@
 
   function showControlNav(){
     const mc = pendingControlCategory === 'minecraft';
+    const cloud = pendingControlCategory === 'cloud_storage';
     const sched = document.getElementById('navSchedule');
     if(mc) document.getElementById('navPlugins').before(sched);
-    else document.getElementById('navStartup').after(sched);
+    else document.getElementById('navAdvanced').after(sched);
     const on = (id, v) => { document.getElementById(id).style.display = v ? 'flex' : 'none'; };
     on('navTerminal', true);
     on('navFiles', true);
-    on('navSchedule', true);
+    on('navSchedule', !cloud);
     on('navConfig', mc);
     on('navPlugins', mc);
     on('navMembers', mc);
     on('navAccess', true);
     window.mcCtx = mc;
     on('navWorlds', mc);
-    on('navStartup', !mc);
+    on('navDatabase', true);
+    on('navBackup', true);
+    on('navStartup', !mc && !cloud);
+    on('navAdvanced', !mc && !cloud);
     on('navUsers', !mc);
     if(window.applyMcPerms) window.applyMcPerms();
   }
 
+  let manageData = [];
+  const manageSearch = document.getElementById('manageSearch');
+  const srvMenu = document.createElement('div');
+  srvMenu.className = 'fm-dropdown';
+  srvMenu.id = 'srvMenu';
+  srvMenu.style.cssText = 'position:fixed;z-index:70;min-width:180px;max-height:60vh;overflow-y:auto;top:0;right:0;';
+  document.body.appendChild(srvMenu);
+  let menuCtx = null;
+
+  function closeSrvMenu(){ srvMenu.classList.remove('show'); menuCtx = null; }
+  function placeSrvMenu(){
+    if(!menuCtx) return;
+    const r = menuCtx.btn.getBoundingClientRect();
+    srvMenu.style.left = 'auto';
+    srvMenu.style.right = Math.max(8, window.innerWidth - r.right) + 'px';
+    srvMenu.style.top = (r.bottom + 4) + 'px';
+    const h = srvMenu.offsetHeight;
+    if(r.bottom + 4 + h > window.innerHeight - 8) srvMenu.style.top = Math.max(8, r.top - h - 4) + 'px';
+  }
+  function paintSrvMenu(view){
+    srvMenu.replaceChildren();
+    const add = (label, act, cls) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.textContent = label; b.dataset.act = act;
+      if(cls) b.className = cls;
+      srvMenu.appendChild(b);
+      return b;
+    };
+    if(view === 'theme'){
+      add('← Back', 'back');
+      [...document.getElementById('serverBackground').options].filter(o => o.value).forEach(o => {
+        const b = add(o.textContent, 'pick', menuCtx.s.backgroundUrl === o.value ? 'cur' : '');
+        b.dataset.url = o.value;
+      });
+    }else{
+      add('Info', 'info');
+      add('Show current users', 'users');
+      add('Add member', 'add');
+      add('Remove Member', 'remove');
+      add('Rename', 'rename');
+      add('Delete Server', 'delete', 'danger');
+      add('Change theme', 'theme');
+    }
+  }
+
+  function showServerInfo(id, s){
+    document.getElementById('srvInfoTitle').textContent = s.name || 'Unnamed server';
+    const created = s.createdAt && s.createdAt.toDate ? s.createdAt.toDate().toLocaleString() : '—';
+    const rows = [['Category', (SERVER_KINDS[s.category] || {}).label || s.category || '—'], ['Expires', s.expiry || '—'], ['Cost', s.cost || '—'], ['UUID', s.uuid || '—'], ['Created', created], ['ID', id]];
+    const body = document.getElementById('srvInfoBody');
+    body.replaceChildren();
+    rows.forEach(([k, v]) => {
+      const row = document.createElement('div'); row.className = 'info-box';
+      const a = document.createElement('span'); a.textContent = k;
+      const b = document.createElement('span'); b.textContent = v; b.style.wordBreak = 'break-all'; b.style.textAlign = 'right';
+      row.append(a, b); body.appendChild(row);
+    });
+    document.getElementById('srvInfoOverlay').classList.add('show');
+  }
+  document.getElementById('srvInfoClose').addEventListener('click', () => document.getElementById('srvInfoOverlay').classList.remove('show'));
+  document.getElementById('srvInfoOverlay').addEventListener('click', (e) => { if(e.target.id === 'srvInfoOverlay') e.currentTarget.classList.remove('show'); });
+
+  async function updateServerDoc(id, patch){
+    try{
+      await db.collection('servers').doc(id).update(patch);
+      const row = manageData.find(x => x.id === id);
+      if(row) Object.assign(row.s, patch);
+      renderManageList();
+    }catch(err){
+      alert('Could not update this server: ' + err.message);
+    }
+  }
+
+  srvMenu.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    const b = e.target.closest('button');
+    if(!b || !menuCtx) return;
+    const { id, s } = menuCtx;
+    const act = b.dataset.act;
+    if(act === 'theme'){ paintSrvMenu('theme'); placeSrvMenu(); return; }
+    if(act === 'back'){ paintSrvMenu('main'); placeSrvMenu(); return; }
+    closeSrvMenu();
+    if(act === 'pick'){ updateServerDoc(id, { backgroundUrl: b.dataset.url }); return; }
+    if(act === 'info') showServerInfo(id, s);
+    else if(act === 'users') openServerUsersPanel(id, s);
+    else if(act === 'add') openServerUsersPanel(id, s).then(() => { document.getElementById('addUserHeading').scrollIntoView({ behavior: 'smooth' }); addUserEmail.focus({ preventScroll: true }); });
+    else if(act === 'remove') openServerUsersPanel(id, s).then(() => { serverUsersOverlay.scrollTop = 0; });
+    else if(act === 'rename'){
+      const name = prompt('Rename server to:', s.name || '');
+      if(name && name.trim() && name.trim() !== s.name) updateServerDoc(id, { name: name.trim() });
+    }else if(act === 'delete'){
+      pendingDeleteId = id;
+      confirmDeleteName.textContent = s.name || 'Unnamed server';
+      confirmDeleteOverlay.classList.add('show');
+    }
+  });
+  document.addEventListener('click', closeSrvMenu);
+  window.addEventListener('resize', closeSrvMenu);
+  manageServersOverlay.addEventListener('scroll', closeSrvMenu);
+
+  function renderManageList(){
+    closeSrvMenu();
+    const q = manageSearch.value.trim().toLowerCase();
+    const list = manageData.filter(x => (x.s.name || '').toLowerCase().includes(q));
+    manageServersBoxes.innerHTML = '';
+    if(!list.length){
+      manageServersBoxes.innerHTML = `<p class="server-list-empty">${manageData.length ? 'No servers match your search.' : 'No servers yet.'}</p>`;
+      return;
+    }
+    list.forEach(({ id, s }) => {
+      const box = document.createElement('div');
+      box.className = 'server-item';
+      applyBg(box, s.backgroundUrl);
+      box.innerHTML = `
+        <div class="server-item-inner">
+          <div class="server-item-name">${escapeHtml(s.name || 'Unnamed server')}</div>
+          <div class="server-item-meta">
+            <div><span>Expires</span>${escapeHtml(s.expiry || '—')}</div>
+            <div>Manage users →</div>
+          </div>
+          <button type="button" class="fm-file-dots srv-dots" title="Options"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="5" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="19" r="1.6" fill="currentColor"/></svg></button>
+        </div>
+      `;
+      const dots = box.querySelector('.srv-dots');
+      dots.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if(menuCtx && menuCtx.id === id && srvMenu.classList.contains('show')){ closeSrvMenu(); return; }
+        const row = manageData.find(x => x.id === id);
+        menuCtx = { id, s: row ? row.s : s, btn: dots };
+        paintSrvMenu('main');
+        srvMenu.classList.add('show');
+        placeSrvMenu();
+      });
+      box.addEventListener('click', () => openServerUsersPanel(id, (manageData.find(x => x.id === id) || { s }).s));
+      manageServersBoxes.appendChild(box);
+    });
+  }
+
+  manageSearch.addEventListener('input', renderManageList);
+  manageSearch.addEventListener('keydown', (e) => { if(e.key === 'Enter'){ e.preventDefault(); renderManageList(); } });
+  document.getElementById('manageSearchBtn').addEventListener('click', renderManageList);
+
   async function openManageServersModal(){
     hideAllScreens();
     manageServersOverlay.classList.add('show');
+    manageSearch.value = '';
     manageServersBoxes.innerHTML = '<p class="server-list-empty">Loading…</p>';
 
     try{
       const snapshot = await db.collection('servers').orderBy('createdAt', 'desc').get();
-      if(snapshot.empty){
-        manageServersBoxes.innerHTML = '<p class="server-list-empty">No servers yet.</p>';
-        return;
-      }
-
-      manageServersBoxes.innerHTML = '';
-      snapshot.forEach((doc) => {
-        const s = doc.data();
-        const box = document.createElement('div');
-        box.className = 'server-item';
-        if(s.backgroundUrl){
-          box.style.backgroundImage = `url('${s.backgroundUrl}')`;
-        }
-        box.innerHTML = `
-          <div class="server-item-inner">
-            <div class="server-item-name">${s.name || 'Unnamed server'}</div>
-            <div class="server-item-meta">
-              <div><span>Expires</span>${s.expiry || '—'}</div>
-              <div>Manage users →</div>
-            </div>
-          </div>
-        `;
-        box.addEventListener('click', () => openServerUsersPanel(doc.id, s));
-        manageServersBoxes.appendChild(box);
-      });
+      manageData = [];
+      snapshot.forEach((doc) => manageData.push({ id: doc.id, s: doc.data() }));
+      renderManageList();
     }catch(err){
       manageServersBoxes.innerHTML = '<p class="server-list-empty">Could not load servers.</p>';
     }
@@ -3565,6 +3946,13 @@
   // Renders the persistent stacked list from whatever Firestore sends.
   // This runs every time the "servers" collection changes -- including
   // the instant after we add a new one below.
+  const CENTER_BGS = ['okmc.png','bamboo.png','mcnethercastle.png','mcend.png','server.png','c2.png','dcbot.png','dcb.png'];
+  function applyBg(el, url){
+    if(!url) return;
+    el.style.backgroundImage = `url('${url}')`;
+    el.style.backgroundPosition = CENTER_BGS.some(f => url.includes('/' + f)) ? 'center center' : '';
+  }
+
   function renderServerList(snapshot){
     if(snapshot.empty){
       serverList.innerHTML = '<p class="server-list-empty">No servers yet.</p>';
@@ -3591,9 +3979,7 @@
       const category = sectionBodies[s.category] ? s.category : 'discord';
       const item = document.createElement('div');
       item.className = 'server-item';
-      if(s.backgroundUrl){
-        item.style.backgroundImage = `url('${s.backgroundUrl}')`;
-      }
+      applyBg(item, s.backgroundUrl);
       item.innerHTML = `
         <div class="server-item-inner">
           <div>
@@ -3797,13 +4183,15 @@
     const bgUrl = document.getElementById('serverBackground').value;
     const cost = document.getElementById('serverCost').value.trim();
     const uuid = document.getElementById('serverUuid').value.trim();
+    const ownerEmail = document.getElementById('serverOwnerEmail').value.trim().toLowerCase();
+    const ownerPass = document.getElementById('serverOwnerPass').value;
 
     // A real date the backend can do math on (days until expiry),
     // not just the human-readable string shown on the card.
     const expiryDate = new Date(yearNum, monthIndex, dayNum);
 
     try{
-      await db.collection('servers').add({
+      const ref = await db.collection('servers').add({
         name,
         expiry: `${day} ${month} ${yearNum}`,
         expiryTimestamp: firebase.firestore.Timestamp.fromDate(expiryDate),
@@ -3815,8 +4203,19 @@
         category: pendingCategory,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
+      let note = '';
+      try{
+        const idToken = await auth.currentUser.getIdToken();
+        const post = (p, b) => fetch(`${API_BASE}${p}`, { method:'POST', headers:{ 'Content-Type':'application/json' }, body:JSON.stringify({ idToken, docId:ref.id, ...b }) }).then(r => r.json());
+        await post('/server_init', {});
+        if(ownerEmail){
+          const r = await post('/assign_server_access', { email:ownerEmail, password:ownerPass, fullAccess:true });
+          if(!r.ok) note = 'Server created, but the owner was not assigned: ' + (r.error || 'error');
+        }
+      }catch(e2){ note = 'Server created, but setup failed: ' + e2.message; }
       closeAddServerModal();
       addServerForm.reset();
+      if(note) alert(note);
     }catch(err){
       alert('Could not save this server to Firestore: ' + err.message);
     }
@@ -4047,6 +4446,7 @@
     const fmEditorName = document.getElementById('fmEditorName');
     const fmEditorTextarea = document.getElementById('fmEditorTextarea');
     const fmEditorHighlight = document.getElementById('fmEditorHighlight');
+    const fmEditorGutter = document.getElementById('fmEditorGutter');
     const fmLangBtn = document.getElementById('fmLangBtn');
     const fmLangLabel = document.getElementById('fmLangLabel');
     const fmLangMenu = document.getElementById('fmLangMenu');
@@ -4200,6 +4600,7 @@
         menu.innerHTML = `
           <button type="button" data-act="rename">Rename</button>
           <button type="button" data-act="download">Download</button>
+          ${item.is_file && pendingControlCategory === 'cloud_storage' ? '<button type="button" data-act="link">Copy link</button>' : ''}
           <button type="button" class="danger" data-act="delete">Delete</button>
         `;
 
@@ -4218,6 +4619,7 @@
           if(act === 'rename') renameItem(item);
           if(act === 'delete') deleteItem(item);
           if(act === 'download') downloadItem(item);
+          if(act === 'link') copyLink(item);
         });
 
         dotsWrap.appendChild(dots);
@@ -4276,6 +4678,7 @@
             : `Uploading ${f.name}…`;
           setUploadProgress(0);
           await uploadOneFile(f, idToken);
+          await render();
         }
       }finally{
         fmUploadBtn.querySelector('span').textContent = originalLabel;
@@ -4314,6 +4717,13 @@
       URL.revokeObjectURL(url);
     }
 
+    async function copyLink(item){
+      const data = await fmApi('file_link', { path: joinPath(currentPath, item.name) });
+      if(!data.ok || !data.url){ alert(data.error || 'Could not get a link for this file.'); return; }
+      try{ await navigator.clipboard.writeText(data.url); alert('Link copied. It expires in about 15 minutes.'); }
+      catch(e){ prompt('Copy this link (expires in about 15 minutes):', data.url); }
+    }
+
     async function deleteSelected(){
       if(selected.size === 0) return;
       if(!confirm(`Delete ${selected.size} selected item(s)?`)) return;
@@ -4340,12 +4750,22 @@
     }
     buildLangMenu();
 
+    let gutterCount = 0;
     function syncHighlight(){
       fmEditorHighlight.innerHTML = highlightCode(fmEditorTextarea.value);
+      const n = fmEditorTextarea.value.split('\n').length;
+      if(n !== gutterCount){
+        gutterCount = n;
+        let s = '1';
+        for(let i = 2; i <= n; i++) s += '\n' + i;
+        fmEditorGutter.textContent = s;
+      }
+      fmEditorGutter.scrollTop = fmEditorTextarea.scrollTop;
     }
     fmEditorTextarea.addEventListener('input', syncHighlight);
     fmEditorTextarea.addEventListener('scroll', () => {
       fmEditorHighlight.scrollTop = fmEditorTextarea.scrollTop;
+      fmEditorGutter.scrollTop = fmEditorTextarea.scrollTop;
       fmEditorHighlight.scrollLeft = fmEditorTextarea.scrollLeft;
     });
 
@@ -5422,7 +5842,7 @@
   const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const HIDE = ['serverControlOverlay','filesOverlay','manageServersOverlay','serverUsersOverlay','startupOverlay'];
   const PERMS = [['start','Start server'],['stop','Stop server'],['restart','Restart server'],['kill','Kill server'],['console','Console & commands'],['files','Manage files'],['edit_files','Edit files'],['config','Configurations'],['plugins','Plugins'],['schedule','Schedule'],['startup','Startup'],['members','Manage members'],['worlds','Worlds'],['access','Add member']];
-  const NAVS = [['navTerminal','console'],['navFiles','files'],['navSchedule','schedule'],['navConfig','config'],['navPlugins','plugins'],['navMembers','members'],['navWorlds','worlds'],['navAccess','access']];
+  const NAVS = [['navTerminal','console'],['navFiles','files'],['navDatabase','files'],['navSchedule','schedule'],['navConfig','config'],['navPlugins','plugins'],['navMembers','members'],['navWorlds','worlds'],['navAccess','access']];
   const PWR = [['pwrStart','start'],['pwrStop','stop'],['pwrRestart','restart']];
 
   async function api(path, body){
@@ -5868,7 +6288,7 @@
       return d;
     }catch(e){ say('acStatus', e.message, true); }
   }
-  auth.onAuthStateChanged(u => { if(u) setTimeout(loadProfile, 800); });
+  auth.onAuthStateChanged(u => { if(u) setTimeout(loadProfile, 0); });
 
   const openSettings = () => {
     body.classList.add('acct-mode');
@@ -5959,36 +6379,84 @@
     }catch(e){ say('acStatus', authMsg(e), true); }
   });
 
-  let shownKey = '';
-  function paintKey(d){
-    const has = d && d.hasKey;
-    $('apKey').textContent = shownKey || (has ? d.keyHint : 'No key yet');
-    $('apGen').textContent = has || shownKey ? 'Regenerate key' : 'Generate key';
-    $('apCopy').style.display = shownKey ? '' : 'none';
-    $('apRevoke').style.display = has || shownKey ? '' : 'none';
+  let shownKey = '', shownRec = null;
+  function saveKeyJson(){
+    if(!shownRec) return;
+    const blob = new Blob([JSON.stringify(shownRec, null, 2)], { type:'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'xtremetech-api-key-' + shownRec.key.slice(-4) + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
   }
-  async function loadKey(){
-    try{ paintKey(await apiU('/account_get', {})); }catch(e){ say('apStatus', e.message, true); }
+  const el = (tag, cls, text) => { const x = document.createElement(tag); if(cls) x.className = cls; if(text != null) x.textContent = text; return x; };
+  const KEY_SVG = '<svg viewBox="0 0 24 24" fill="none"><circle cx="8" cy="15" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M11 12l8.5-8.5M16 7l2.5 2.5M13.5 9.5L16 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const TRASH_SVG = '<svg viewBox="0 0 24 24" fill="none"><path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 12.5h9l1-12.5M10 11v5M14 11v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function keyBox(k){
+    const box = el('div', 'ak-box');
+    const ic = el('div', 'ak-ic'); ic.innerHTML = KEY_SVG;
+    const main = el('div', 'ak-main');
+    const ips = el('div', 'ak-ips');
+    if(k.ips && k.ips.length) k.ips.forEach(ip => ips.appendChild(el('span', 'ak-ip', ip)));
+    else ips.appendChild(el('span', 'ak-ip any', 'Any IP'));
+    main.append(el('div', 'ak-hint', k.hint), el('div', 'ak-meta', k.created ? 'Created ' + new Date(k.created).toLocaleString() : ''), ips);
+    const del = el('button', 'ak-del'); del.type = 'button'; del.title = 'Delete'; del.innerHTML = TRASH_SVG;
+    del.addEventListener('click', async () => {
+      if(!confirm('Delete this key? It stops working immediately.')) return;
+      del.disabled = true;
+      try{ await apiU('/api_key_revoke', { id: k.id }); say('apStatus', 'Key deleted.'); loadKeys(); }
+      catch(e){ say('apStatus', e.message, true); del.disabled = false; }
+    });
+    box.append(ic, main, del);
+    return box;
   }
-  $('navApi').addEventListener('click', () => { shownKey = ''; openGlobal('apiOverlay'); say('apStatus', ''); loadKey(); });
-  $('apGen').addEventListener('click', async () => {
-    if($('apGen').textContent.startsWith('Regen') && !confirm('Regenerate? The current key stops working immediately.')) return;
+  async function loadKeys(){
     try{
-      const d = await apiU('/api_key_generate', {});
-      shownKey = d.key;
-      paintKey({ hasKey:true, keyHint:d.hint });
-      say('apStatus', 'Copy it now. It will not be shown again.');
+      const d = await apiU('/api_keys_list', {});
+      const list = $('apList');
+      list.replaceChildren();
+      if(!d.keys.length) list.appendChild(el('div', 'db-empty', 'No API keys yet.'));
+      d.keys.forEach(k => list.appendChild(keyBox(k)));
     }catch(e){ say('apStatus', e.message, true); }
+  }
+  $('navApi').addEventListener('click', () => { shownKey = ''; shownRec = null; $('apNew').style.display = 'none'; openGlobal('apiOverlay'); say('apStatus', ''); loadKeys(); });
+  $('apGen').addEventListener('click', async () => {
+    const ips = $('apIps').value.split(/[\s,;]+/).filter(Boolean);
+    $('apGen').disabled = true;
+    try{
+      const d = await apiU('/api_key_generate', { ips });
+      shownKey = d.key;
+      shownRec = { key: d.key, header: 'X-API-Key', api_base: API_BASE, allowed_ips: d.ips || [], created: new Date().toISOString() };
+      saveKeyJson();
+      $('apKey').textContent = d.key;
+      $('apNew').style.display = 'flex';
+      $('apIps').value = '';
+      say('apStatus', 'Copy it now. It will not be shown again.');
+      loadKeys();
+    }catch(e){ say('apStatus', e.message, true); }
+    $('apGen').disabled = false;
   });
+  $('apJson').addEventListener('click', saveKeyJson);
   $('apCopy').addEventListener('click', async () => {
     try{ await navigator.clipboard.writeText(shownKey); say('apStatus', 'Copied.'); }catch(e){ say('apStatus', 'Copy failed. Select the key manually.', true); }
   });
-  $('apRevoke').addEventListener('click', async () => {
-    if(!confirm('Revoke this key?')) return;
-    try{ await apiU('/api_key_revoke', {}); shownKey = ''; paintKey({ hasKey:false }); say('apStatus', 'Key revoked.'); }
-    catch(e){ say('apStatus', e.message, true); }
-  });
 
+  const KIND = {
+    'Signed in':'auth', 'Changed email':'auth',
+    'Console command':'cmd',
+    'Edited file':'warn', 'Renamed file':'warn', 'Changed startup':'warn', 'Regenerated world':'warn', 'Members':'warn', 'Ran schedule':'warn', 'Saved configuration':'warn',
+    'Uploaded file':'file', 'Created folder':'file', 'Uploaded world':'file', 'Downloaded world':'file',
+    'Deleted files':'bad', 'Deleted schedule':'bad', 'Removed access':'bad', 'Revoked API key':'bad',
+    'Installed plugin':'ok', 'Installed version':'ok', 'Installed libraries':'ok', 'Added startup file':'ok', 'Granted access':'ok', 'Generated API key':'ok', 'Saved schedule':'ok'
+  };
+  function kindOf(x){
+    if(x.action === 'Power'){
+      const d = String(x.detail || '').toLowerCase();
+      return d === 'start' ? 'ok' : d === 'restart' ? 'warn' : 'bad';
+    }
+    return KIND[x.action] || 'auth';
+  }
   async function loadActivity(){
     say('atStatus', 'Loading…');
     try{
@@ -5997,22 +6465,310 @@
       box.replaceChildren();
       d.items.forEach(x => {
         const row = document.createElement('div');
-        row.className = 'ac-act';
+        row.className = 'ac-act k-' + kindOf(x);
+        const av = document.createElement('div'); av.className = 'ac-av';
+        const avi = document.createElement('i');
+        if(P.photo) avi.style.backgroundImage = 'url("' + P.photo + '")';
+        else avi.textContent = (P.name || '?').charAt(0).toUpperCase();
+        av.appendChild(avi);
         const info = document.createElement('div');
+        const who = document.createElement('span'); who.className = 'ac-who'; who.textContent = P.name || P.email;
         const t = document.createElement('b'); t.textContent = x.action;
         const s = document.createElement('small');
         s.textContent = [x.detail, x.server, x.via === 'api' ? 'via API' : ''].filter(Boolean).join(' · ');
-        info.append(t, s);
+        info.append(who, t, s);
         const tm = document.createElement('time');
         tm.textContent = x.ts ? new Date(x.ts).toLocaleString() : '';
-        row.append(info, tm);
+        row.append(av, info, tm);
         box.appendChild(row);
       });
       say('atStatus', d.items.length ? '' : 'No activity yet.');
     }catch(e){ say('atStatus', e.message, true); }
   }
-  $('navActivity').addEventListener('click', () => { openGlobal('activityOverlay'); loadActivity(); });
+  $("navActivity").addEventListener("click", async () => { openGlobal("activityOverlay"); if(!P.name) await loadProfile(); loadActivity(); });
   $('atRefresh').addEventListener('click', loadActivity);
+})();
+</script>
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const ICON = {
+    tick: '<svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    cross: '<svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    file: '<svg viewBox="0 0 24 24" fill="none"><path d="M7 3.5h7l4 4V19a1.5 1.5 0 0 1-1.5 1.5h-9.5A1.5 1.5 0 0 1 5.5 19V5A1.5 1.5 0 0 1 7 3.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 3.5V8h4" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+    back: '<svg viewBox="0 0 24 24" fill="none"><path d="M14 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    reload: '<svg viewBox="0 0 24 24" fill="none"><path d="M20 12a8 8 0 1 1-2.5-5.8M20 4v4.5h-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+  };
+  const PIP_RE = /^[A-Za-z0-9][A-Za-z0-9._\-\[\],~=<>!]{0,100}$/;
+  const MAX_COUNT = 1048576;
+  const ov = $('advOverlay'), input = $('advInput'), box = $('advResults'), statusEl = $('advStatus');
+  const lines = new Map(), pend = new Set();
+  let index = [], loading = null, loadDoc = null, chosen = null, doc = null;
+
+  async function api(path, body){
+    const user = auth.currentUser;
+    if(!user) throw new Error('Not signed in.');
+    const idToken = await user.getIdToken();
+    const res = await fetch(`${API_BASE}${path}`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ idToken, docId: pendingControlDoc, ...body }) });
+    let data;
+    try{ data = await res.json(); }catch(e){ throw new Error(`Bad backend response (HTTP ${res.status}).`); }
+    if(!res.ok || !data.ok) throw new Error(data.error || `Request failed (HTTP ${res.status}).`);
+    return data;
+  }
+
+  const setStatus = (m, err) => { statusEl.textContent = m || ''; statusEl.classList.toggle('err', !!err); };
+  const msgBox = t => { box.innerHTML = `<div class="adv-empty">${esc(t)}</div>`; };
+
+  function loadIndex(fresh){
+    if(loading && !fresh && loadDoc === pendingControlDoc) return loading;
+    loadDoc = pendingControlDoc;
+    const p = api('/startup_file_index', { fresh: !!fresh })
+      .then(d => { if(loadDoc === pendingControlDoc) index = Array.isArray(d.files) ? d.files : []; })
+      .finally(() => { if(loading === p) loading = null; });
+    loading = p;
+    return p;
+  }
+
+  const lineText = f => lines.has(f.path) ? lines.get(f.path) : (f.size > MAX_COUNT ? '—' : '…');
+
+  async function countLines(f){
+    if(lines.has(f.path) || pend.has(f.path) || f.size > MAX_COUNT) return;
+    pend.add(f.path);
+    try{
+      const d = await api('/file_contents', { path: '/' + f.path });
+      const c = String(d.content || '');
+      lines.set(f.path, c ? c.split('\n').length - (c.endsWith('\n') ? 1 : 0) : 0);
+    }catch(e){
+      lines.set(f.path, '—');
+    }
+    pend.delete(f.path);
+    const el = box.querySelector(`[data-l="${CSS.escape(f.path)}"]`);
+    if(el) el.textContent = lines.get(f.path);
+  }
+
+  function rows(list){
+    box.innerHTML = list.map(f => {
+      const i = f.path.lastIndexOf('/');
+      return `<button type="button" class="adv-row" data-p="${esc(f.path)}"><span class="adv-lines" data-l="${esc(f.path)}">${esc(lineText(f))}</span><span class="adv-rname">${esc(f.name)}</span><span class="adv-rdir">${i > 0 ? esc(f.path.slice(0, i)) : ''}</span></button>`;
+    }).join('');
+    list.forEach(countLines);
+  }
+
+  function live(){
+    chosen = null;
+    const q = input.value.trim().toLowerCase();
+    if(!q){ box.innerHTML = ''; return; }
+    if(loading){ msgBox('Loading…'); loading.then(live, () => {}); return; }
+    const rank = f => f.name.toLowerCase().startsWith(q) ? 0 : 1;
+    const m = index.filter(f => f.path.toLowerCase().includes(q)).sort((a, b) => rank(a) - rank(b) || a.path.length - b.path.length).slice(0, 8);
+    if(!m.length){ msgBox('No matching files'); return; }
+    rows(m);
+  }
+
+  function foundBox(f){
+    chosen = f;
+    box.innerHTML = `<div class="adv-found"><div class="adv-logo">${ICON.file}</div><div class="adv-fbody"><div class="adv-fname" title="${esc(f.path)}">${esc(f.path)}</div><div class="adv-acts"><button type="button" class="adv-ibtn ok" id="advConfirm">${ICON.tick}<span>Confirm</span></button><button type="button" class="adv-ibtn no" id="advCancel">${ICON.cross}<span>Cancel</span></button></div></div></div>`;
+  }
+
+  function missBox(){
+    chosen = null;
+    box.innerHTML = `<div class="adv-found"><div class="adv-logo bad">${ICON.cross}</div><div class="adv-fbody"><div class="adv-fname bad">No file found</div><div class="adv-acts"><button type="button" class="adv-ibtn" id="advBack">${ICON.back}<span>Back</span></button><button type="button" class="adv-ibtn" id="advReload">${ICON.reload}<span>Reload</span></button></div></div></div>`;
+  }
+
+  async function search(){
+    const q = input.value.trim().replace(/^\.?\/+/, '');
+    if(!q) return;
+    setStatus('');
+    if(loading){
+      msgBox('Loading…');
+      try{ await loading; }catch(e){ setStatus(e.message, true); return; }
+    }
+    const hit = index.filter(f => f.path === q || f.name === q);
+    if(hit.length === 1) foundBox(hit[0]);
+    else if(hit.length > 1) rows(hit);
+    else missBox();
+  }
+
+  async function reload(){
+    msgBox('Loading…');
+    try{ await loadIndex(true); }catch(e){ setStatus(e.message, true); }
+    search();
+  }
+
+  const filesBox = $('advFiles');
+  let filesReq = 0;
+  async function loadFiles(){
+    const req = ++filesReq;
+    try{
+      const d = await api('/startup_files_list', {});
+      if(req !== filesReq) return;
+      const list = Array.isArray(d.files) ? d.files : [];
+      filesBox.replaceChildren();
+      if(!list.length){ filesBox.innerHTML = '<div class="adv-empty">No startup files added yet.</div>'; return; }
+      list.forEach(name => {
+        const row = document.createElement('div'); row.className = 'adv-file';
+        const ic = document.createElement('div'); ic.className = 'adv-fic'; ic.innerHTML = ICON.file;
+        const p = document.createElement('div'); p.className = 'adv-fpath'; p.textContent = name; p.title = name;
+        const rm = document.createElement('button'); rm.type = 'button'; rm.className = 'adv-ibtn no'; rm.style.padding = '8px 12px'; rm.innerHTML = ICON.cross + '<span>Remove</span>';
+        rm.addEventListener('click', async () => {
+          rm.disabled = true;
+          try{
+            const r = await api('/startup_file_remove', { file: name });
+            setStatus(r.note || `${name} removed.`);
+            row.remove();
+            if(!filesBox.children.length) loadFiles();
+          }catch(e){ setStatus(e.message, true); rm.disabled = false; }
+        });
+        row.append(ic, p, rm);
+        filesBox.appendChild(row);
+      });
+    }catch(e){ if(req === filesReq) filesBox.innerHTML = `<div class="adv-empty">${esc(e.message)}</div>`; }
+  }
+
+  async function confirmAdd(){
+    if(!chosen) return;
+    const f = chosen, b = $('advConfirm');
+    b.disabled = true;
+    try{
+      const d = await api('/startup_file_add', { file: f.path });
+      setStatus(d.note || `${f.path} added to startup files.`);
+      input.value = '';
+      box.innerHTML = '';
+      chosen = null;
+      loadFiles();
+    }catch(e){
+      setStatus(e.message, true);
+      b.disabled = false;
+    }
+  }
+
+  async function pipInstall(){
+    const out = $('pipStatus'), btn = $('pipBtn'), field = $('pipInput');
+    const set = (m, err) => { out.textContent = m; out.classList.toggle('err', !!err); };
+    const pk = field.value.trim().split(/\s+/).filter(Boolean);
+    if(!pk.length){ set('Enter at least one library.', true); return; }
+    if(pk.length > 20 || pk.some(t => !PIP_RE.test(t))){ set('Invalid library name.', true); return; }
+    btn.disabled = true;
+    set('Starting install…');
+    try{
+      await api('/pip_install', { packages: pk.join(' ') });
+      set('Install started. Output is in the Terminal.');
+      field.value = '';
+    }catch(e){
+      set(e.message, true);
+    }
+    btn.disabled = false;
+  }
+
+  box.addEventListener('click', e => {
+    const t = e.target.closest('button');
+    if(!t) return;
+    if(t.classList.contains('adv-row')){
+      const f = index.find(x => x.path === t.dataset.p);
+      if(f){ input.value = f.path; foundBox(f); }
+    }else if(t.id === 'advConfirm') confirmAdd();
+    else if(t.id === 'advCancel' || t.id === 'advBack') live();
+    else if(t.id === 'advReload') reload();
+  });
+
+  input.addEventListener('input', live);
+  input.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); search(); } });
+  $('advSearchBtn').addEventListener('click', search);
+  $('pipBtn').addEventListener('click', pipInstall);
+  $('pipInput').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); pipInstall(); } });
+
+  $('navAdvanced').addEventListener('click', () => {
+    if(!pendingControlDoc) return;
+    hideAllScreens();
+    ov.classList.add('show');
+    showControlNav();
+    if(doc !== pendingControlDoc){
+      doc = pendingControlDoc;
+      index = [];
+      lines.clear();
+      pend.clear();
+    }
+    chosen = null;
+    input.value = '';
+    box.innerHTML = '';
+    setStatus('');
+    filesBox.innerHTML = '<div class="adv-empty">Loading…</div>';
+    loadFiles();
+    loadIndex(false).catch(e => setStatus(e.message, true));
+  });
+
+  const fmtSize = n => { n = +n || 0; const u = ['B', 'KB', 'MB', 'GB']; let i = 0; while(n >= 1024 && i < 3){ n /= 1024; i++; } return (i ? n.toFixed(1) : n) + ' ' + u[i]; };
+  const dbStatus = (m, err) => { $('dbStatus').textContent = m || ''; $('dbStatus').classList.toggle('err', !!err); };
+  const DB_SVG = '<svg viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="6" rx="7.5" ry="2.8" stroke="currentColor" stroke-width="1.8"/><path d="M4.5 6v6c0 1.55 3.36 2.8 7.5 2.8s7.5-1.25 7.5-2.8V6M4.5 12v6c0 1.55 3.36 2.8 7.5 2.8s7.5-1.25 7.5-2.8v-6" stroke="currentColor" stroke-width="1.8"/></svg>';
+  let dbReq = 0;
+  async function loadDb(){
+    const req = ++dbReq, list = $('dbList');
+    list.replaceChildren();
+    dbStatus('Loading…');
+    try{
+      const d = await api('/db_files', {});
+      if(req !== dbReq) return;
+      dbStatus('');
+      if(!d.files.length){
+        const e = document.createElement('div');
+        e.className = 'db-empty';
+        e.textContent = 'There is no databases on this server yet';
+        list.appendChild(e);
+        return;
+      }
+      d.files.forEach(f => {
+        const box = document.createElement('div'); box.className = 'fm-file-box db-box';
+        const ic = document.createElement('div'); ic.className = 'fm-file-icon'; ic.innerHTML = DB_SVG;
+        const nm = document.createElement('div'); nm.className = 'fm-file-name'; nm.textContent = f.path; nm.title = f.path;
+        const meta = document.createElement('div'); meta.className = 'db-meta';
+        const t = f.modified ? new Date(f.modified) : null;
+        meta.textContent = fmtSize(f.size) + (t && !isNaN(t) ? ' · ' + t.toLocaleDateString() : '');
+        box.append(ic, nm, meta);
+        list.appendChild(box);
+      });
+    }catch(e){ if(req === dbReq) dbStatus(e.message, true); }
+  }
+
+  $('navDatabase').addEventListener('click', () => {
+    if(!pendingControlDoc) return;
+    hideAllScreens();
+    $('dbOverlay').classList.add('show');
+    showControlNav();
+    loadDb();
+  });
+
+  const tip = $('sbTip'), sidebar = $('adminSidebar');
+  sidebar.addEventListener('mouseover', e => {
+    const b = e.target.closest('.sidebar-btn[data-label]');
+    if(!b) return;
+    const r = b.getBoundingClientRect();
+    tip.textContent = b.dataset.label;
+    tip.style.left = (r.right + 19) + 'px';
+    tip.style.top = (r.top + r.height / 2) + 'px';
+    tip.classList.add('show');
+  });
+  sidebar.addEventListener('mouseout', e => {
+    const b = e.target.closest('.sidebar-btn');
+    if(b && !b.contains(e.relatedTarget)) tip.classList.remove('show');
+  });
+  sidebar.addEventListener('click', () => tip.classList.remove('show'));
+  sidebar.addEventListener('scroll', () => tip.classList.remove('show'));
+
+  $('navBackup').addEventListener('click', () => {
+    if(!pendingControlDoc) return;
+    hideAllScreens();
+    $('backupOverlay').classList.add('show');
+    showControlNav();
+  });
+
+  $('adminSidebar').addEventListener('click', e => {
+    const b = e.target.closest('.sidebar-btn');
+    if(!b || b.id === 'navAdvanced' || b.id === 'navBackup' || b.id === 'navDatabase') return;
+    ov.classList.remove('show');
+    $('backupOverlay').classList.remove('show');
+    $('dbOverlay').classList.remove('show');
+  }, true);
 })();
 </script>
 </body>
