@@ -2215,6 +2215,13 @@
   <h1 class="heading" style="text-align:left; justify-content:flex-start;">Manage Servers</h1>
   <p class="subtext" style="text-align:left; margin-bottom:16px;">Click a server to see and manage its users.</p>
 
+  <h2 class="adv-h">Backend link</h2>
+  <div class="adv-search" style="margin-bottom:8px;">
+    <input type="text" id="backendUrlInput" placeholder="https://your-backend-link" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <button type="button" class="adv-ibtn ok" id="backendUrlBtn"><span>Save</span></button>
+  </div>
+  <div class="plg-status" id="backendUrlStatus" style="margin:0 0 18px;"></div>
+
   <div class="adv-search" style="margin-bottom:16px;">
     <input type="text" id="manageSearch" placeholder="Search servers…" autocomplete="off" spellcheck="false">
     <button type="button" class="adv-ibtn" id="manageSearchBtn" title="Search">
@@ -2682,6 +2689,21 @@
     </div>
     <div id="pipStatus" class="plg-status" style="margin:10px 0 0;"></div>
   </div>
+
+  <div id="shellWrap" style="display:none;">
+    <h2 class="adv-h">Command prompt</h2>
+    <div class="adv-card">
+      <div class="adv-pip">
+        <span class="adv-cmd">$</span>
+        <input type="text" id="shellInput" placeholder="ls -la" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="1000">
+        <button type="button" class="adv-ibtn ok" id="shellBtn">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Run</span>
+        </button>
+      </div>
+      <div id="shellStatus" class="plg-status" style="margin:10px 0 0;"></div>
+    </div>
+  </div>
 </div>
 
 <!-- Files section: browse, upload, and edit a server's files -->
@@ -2799,9 +2821,21 @@
 
   // Where notify_login.py is running. Change this if you host it
   // somewhere other than your own machine on port 5000.
-  const API_BASE = window.API_BASE || "http://localhost:5000";
-  const WS_BASE = API_BASE.replace(/^http/, "ws");
-  const BACKEND_URL = `${API_BASE}/notify`;
+  let API_BASE = window.API_BASE || (() => { try{ return localStorage.getItem('xtApiBase') || ''; }catch(e){ return ''; } })() || "http://localhost:5000";
+  let WS_BASE = API_BASE.replace(/^http/, "ws");
+  let BACKEND_URL = `${API_BASE}/notify`;
+  function setApiBase(u){
+    API_BASE = String(u).trim().replace(/\/+$/, '');
+    WS_BASE = API_BASE.replace(/^http/, "ws");
+    BACKEND_URL = `${API_BASE}/notify`;
+    try{ localStorage.setItem('xtApiBase', API_BASE); }catch(e){}
+  }
+  if(!window.API_BASE){
+    db.collection('config').doc('backend').get().then(s => {
+      const u = s.exists ? String(s.data().url || '') : '';
+      if(/^https?:\/\//.test(u)) setApiBase(u);
+    }).catch(() => {});
+  }
 
   function setBackground(url){
     document.body.style.backgroundImage = `url('${url}')`;
@@ -3683,6 +3717,22 @@
     });
   }
 
+  const backendInput = document.getElementById('backendUrlInput');
+  const backendStatus = document.getElementById('backendUrlStatus');
+  document.getElementById('backendUrlBtn').addEventListener('click', async () => {
+    const u = backendInput.value.trim().replace(/\/+$/, '');
+    const say = (m, err) => { backendStatus.textContent = m; backendStatus.classList.toggle('err', !!err); };
+    if(!/^https:\/\/[^\s/]+(\/\S*)?$/.test(u)){ say('Enter a full https:// link.', true); return; }
+    say('Saving…');
+    try{
+      await db.collection('config').doc('backend').set({ url: u, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+      setApiBase(u);
+      say('Saved. The website now uses this link.');
+    }catch(err){
+      say(err.message, true);
+    }
+  });
+
   manageSearch.addEventListener('input', renderManageList);
   manageSearch.addEventListener('keydown', (e) => { if(e.key === 'Enter'){ e.preventDefault(); renderManageList(); } });
   document.getElementById('manageSearchBtn').addEventListener('click', renderManageList);
@@ -3691,6 +3741,8 @@
     hideAllScreens();
     manageServersOverlay.classList.add('show');
     manageSearch.value = '';
+    backendInput.value = API_BASE;
+    backendStatus.textContent = '';
     manageServersBoxes.innerHTML = '<p class="server-list-empty">Loading…</p>';
 
     try{
@@ -6661,6 +6713,36 @@
     btn.disabled = false;
   }
 
+  async function shellRun(){
+    const out = $('shellStatus'), btn = $('shellBtn'), field = $('shellInput');
+    const set = (m, err) => { out.textContent = m; out.classList.toggle('err', !!err); };
+    const cmd = field.value.trim();
+    if(!cmd){ set('Enter a command.', true); return; }
+    btn.disabled = true;
+    set('Running…');
+    try{
+      await api('/server_shell', { command: cmd });
+      set('Command sent. Output is in the Terminal.');
+      field.value = '';
+    }catch(e){
+      set(e.message, true);
+    }
+    btn.disabled = false;
+  }
+
+  async function probeAdmin(){
+    const wrap = $('shellWrap');
+    wrap.style.display = 'none';
+    const d0 = doc;
+    try{
+      const d = await api('/server_perms', {});
+      if(d0 === doc && d.admin) wrap.style.display = '';
+    }catch(e){}
+  }
+
+  $('shellBtn').addEventListener('click', shellRun);
+  $('shellInput').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); shellRun(); } });
+
   box.addEventListener('click', e => {
     const t = e.target.closest('button');
     if(!t) return;
@@ -6694,6 +6776,8 @@
     box.innerHTML = '';
     setStatus('');
     filesBox.innerHTML = '<div class="adv-empty">Loading…</div>';
+    $('shellStatus').textContent = '';
+    probeAdmin();
     loadFiles();
     loadIndex(false).catch(e => setStatus(e.message, true));
   });
