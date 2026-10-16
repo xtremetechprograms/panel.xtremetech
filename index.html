@@ -2835,7 +2835,44 @@
       const u = s.exists ? String(s.data().url || '') : '';
       if(/^https?:\/\//.test(u)) setApiBase(u);
     }).catch(() => {});
+    db.collection('config').doc('backend').onSnapshot(s => {
+      const u = s.exists ? String(s.data().url || '') : '';
+      if(/^https?:\/\//.test(u) && u.replace(/\/+$/, '') !== API_BASE) setApiBase(u);
+    }, () => {});
   }
+  (function(){
+    const nativeFetch = window.fetch.bind(window);
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    async function freshBase(){
+      try{
+        const s = await db.collection('config').doc('backend').get({ source:'server' });
+        const u = s.exists ? String(s.data().url || '').trim().replace(/\/+$/, '') : '';
+        if(/^https?:\/\//.test(u)) return u;
+      }catch(e){}
+      return '';
+    }
+    window.fetch = async function(input, init){
+      const url = typeof input === 'string' ? input : (input && input.url) || '';
+      const base = API_BASE;
+      if(window.API_BASE || !url.startsWith(base + '/')) return nativeFetch(input, init);
+      const path = url.slice(base.length);
+      let last;
+      for(let i = 0; i < 4; i++){
+        const cur = i === 0 ? url : API_BASE + path;
+        try{
+          return await nativeFetch(cur, init);
+        }catch(e){
+          if(e && e.name === 'AbortError') throw e;
+          last = e;
+          if(i === 3) break;
+          await sleep(i === 0 ? 800 : 2500);
+          const u = await freshBase();
+          if(u && u !== API_BASE) setApiBase(u);
+        }
+      }
+      throw last;
+    };
+  })();
 
   function setBackground(url){
     document.body.style.backgroundImage = `url('${url}')`;
