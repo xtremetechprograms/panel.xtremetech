@@ -1014,6 +1014,9 @@
   }
 
   .fm-btn svg{ width:15px; height:15px; flex-shrink:0; }
+  .fm-btn .fm-spin{ display:none; width:28px; height:28px; object-fit:contain; flex-shrink:0; }
+  .fm-btn.loading .fm-spin{ display:block; }
+  .fm-btn.loading > svg{ display:none; }
 
   .fm-btn:hover{
     transform: translateY(-1px);
@@ -1123,6 +1126,7 @@
   }
 
   .fm-file-icon svg{ width:18px; height:18px; }
+  .fm-file-icon img{ width:20px; height:20px; object-fit:contain; }
 
   .fm-file-name{
     flex:1;
@@ -2729,6 +2733,11 @@
       <button type="button" class="fm-btn" id="fmNewFileBtn">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3.5h8l4 4V19.5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 19.5v-14A1.5 1.5 0 0 1 5.5 3.5H6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 11v5M9.5 13.5h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
         <span>New File</span>
+      </button>
+      <button type="button" class="fm-btn" id="fmDownloadAllBtn">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4v12M12 16l-4-4M12 16l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <img class="fm-spin" src="https://media4.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3cmZveGs0ZTBzaTh5NzV2YnV3N21vOTI4ajV4bzRqZGw0dmd6b29hMyZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/9ItQ65rxiTpkceJ66B/giphy.webp" alt="" decoding="async">
+        <span>Download All</span>
       </button>
       <input type="file" id="fmFileInput" multiple style="display:none;">
     </div>
@@ -4659,7 +4668,7 @@
 
         const icon = document.createElement('div');
         icon.className = 'fm-file-icon';
-        icon.innerHTML = item.is_file ? fileIconSvg() : folderIconSvg();
+        icon.innerHTML = item.is_file ? (/\.py$/i.test(item.name) ? '<img src="https://cdn.discordapp.com/emojis/1536991920356724786.webp?size=24" alt="" decoding="async">' : fileIconSvg()) : folderIconSvg();
         box.appendChild(icon);
 
         const nameEl = document.createElement('div');
@@ -4806,6 +4815,43 @@
       URL.revokeObjectURL(url);
     }
 
+    async function downloadAll(){
+      const btn = document.getElementById('fmDownloadAllBtn');
+      const label = btn.querySelector('span');
+      const old = label.textContent;
+      btn.disabled = true;
+      btn.classList.add('loading');
+      label.textContent = 'Preparing…';
+      try{
+        const idToken = await auth.currentUser.getIdToken();
+        const res = await fetch(`${API_BASE}/download_all`, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ idToken, docId: pendingControlDoc }) });
+        if(!res.ok){
+          let m = `Request failed (HTTP ${res.status}).`;
+          try{ m = (await res.json()).error || m; }catch(e){}
+          throw new Error(m);
+        }
+        const reader = res.body.getReader();
+        const parts = [];
+        let got = 0;
+        for(;;){
+          const { done, value } = await reader.read();
+          if(done) break;
+          parts.push(value);
+          got += value.length;
+          label.textContent = `Downloading ${formatSize(got)}`;
+        }
+        const m = /filename="([^"]+)"/.exec(res.headers.get('Content-Disposition') || '');
+        const url = URL.createObjectURL(new Blob(parts, { type:'application/zip' }));
+        const a = document.createElement('a');
+        a.href = url; a.download = m ? m[1] : 'server-files.zip';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
+      }catch(e){ alert(e.message || 'Could not download the files.'); }
+      label.textContent = old;
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }
+
     async function copyLink(item){
       const data = await fmApi('file_link', { path: joinPath(currentPath, item.name) });
       if(!data.ok || !data.url){ alert(data.error || 'Could not get a link for this file.'); return; }
@@ -4906,6 +4952,7 @@
     // -- Wiring --
     document.getElementById('fmCreateDirBtn').addEventListener('click', createDirectory);
     document.getElementById('fmNewFileBtn').addEventListener('click', createNewFile);
+    document.getElementById('fmDownloadAllBtn').addEventListener('click', downloadAll);
     document.getElementById('fmUploadBtn').addEventListener('click', () => fmFileInput.click());
     fmFileInput.addEventListener('change', () => { uploadFiles(fmFileInput.files); fmFileInput.value = ''; });
 
