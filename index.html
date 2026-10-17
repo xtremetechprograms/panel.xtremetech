@@ -1739,6 +1739,8 @@
   .cu-drop{ position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; min-height:170px; border:2px dashed var(--panel-border); border-radius:14px; background:#0f1114 center/cover no-repeat; color:var(--text-muted); font-size:13.5px; text-align:center; cursor:pointer; overflow:hidden; padding:14px; transition:border-color .2s ease; }
   .cu-drop:hover, .cu-drop.drag, .cu-drop:focus-visible{ border-color:#fff; outline:none; }
   .cu-drop.has{ border-style:solid; }
+  .cu-drop.locked{ opacity:.45; cursor:not-allowed; border-style:dashed; }
+  .cu-drop.locked:hover{ border-color:var(--panel-border); }
   .cu-drop.has .cu-hint{ background:rgba(0,0,0,.62); padding:6px 12px; border-radius:8px; color:#fff; }
   .cu-drop small{ display:block; margin-top:3px; font-family:var(--mono); font-size:11.5px; color:var(--text-faint); }
   .cu-drop.has small{ color:#d6d9de; }
@@ -7106,6 +7108,7 @@
   const TYPES = ['image/jpeg','image/png','image/webp','image/gif'];
   const SHOWN = ['serverControlOverlay','filesOverlay','manageServersOverlay','serverUsersOverlay','startupOverlay'];
   let pending = '';
+  let unlocked = false;
 
   const say = (m, err) => { const e = $('cuStatus'); e.textContent = m || ''; e.classList.toggle('err', !!err); };
   const fmt = n => n >= 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB';
@@ -7128,6 +7131,7 @@
     XT_BG.size = bg.size || 0;
     XT_BG.quotaMb = bg.quotaMb || 500;
     XT_BG.loaded = true;
+    if(XT_BG.has) unlocked = !XT_BG.useDefault;
     xtBgSave();
     xtApplyBg(pending);
     paint();
@@ -7135,9 +7139,10 @@
   window.xtBgSync = sync;
 
   function paint(){
-    $('cuDefault').checked = XT_BG.useDefault || !XT_BG.has;
-    $('cuApply').disabled = !pending;
+    $('cuDefault').checked = !unlocked;
+    $('cuApply').disabled = !pending || !unlocked;
     $('cuUndo').disabled = !pending;
+    $('cuDrop').classList.toggle('locked', !unlocked);
     const src = pending || (XT_BG.has && XT_BG.url ? API_BASE + XT_BG.url : '');
     const drop = $('cuDrop');
     drop.style.backgroundImage = src ? `url('${src}')` : '';
@@ -7150,7 +7155,7 @@
       const url = URL.createObjectURL(file);
       const img = new Image();
       img.onload = () => {
-        const k = Math.min(1, 1920 / Math.max(img.naturalWidth, img.naturalHeight));
+        const k = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight));
         const w = Math.max(1, Math.round(img.naturalWidth * k)), h = Math.max(1, Math.round(img.naturalHeight * k));
         const c = document.createElement('canvas');
         c.width = w; c.height = h;
@@ -7158,7 +7163,7 @@
         URL.revokeObjectURL(url);
         let q = 0.86, mime = 'image/webp', out = c.toDataURL(mime, q);
         if(!out.startsWith('data:image/webp')){ mime = 'image/jpeg'; out = c.toDataURL(mime, q); }
-        while(out.length * 0.75 > 7.5 * 1048576 && q > 0.4){ q -= 0.1; out = c.toDataURL(mime, q); }
+        while(out.length * 0.75 > 1.2 * 1048576 && q > 0.3){ q -= 0.08; out = c.toDataURL(mime, q); }
         res(out);
       };
       img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('bad image')); };
@@ -7168,6 +7173,7 @@
 
   async function pick(file){
     if(!file) return;
+    if(!unlocked) return say('Turn off the default background first to add a custom one.', true);
     if(!TYPES.includes(file.type)) return say('Use a JPG, PNG, WEBP or GIF image.', true);
     if(file.size > 30 * 1048576) return say('That image is too large.', true);
     say('Preparing image…');
@@ -7187,12 +7193,13 @@
   $('cuFile').addEventListener('change', e => { pick(e.target.files[0]); e.target.value = ''; });
 
   $('cuApply').addEventListener('click', async () => {
-    if(!pending) return;
+    if(!pending || !unlocked) return;
     $('cuApply').disabled = true; $('cuUndo').disabled = true;
     say('Uploading…');
     try{
       const d = await api('/bg_set', { image: pending });
       pending = '';
+      unlocked = true;
       sync(d.bg);
       say('Background applied.');
     }catch(e){
@@ -7210,9 +7217,12 @@
 
   $('cuDefault').addEventListener('change', async () => {
     const want = $('cuDefault').checked;
-    if(!want && !XT_BG.has){ say('Apply a custom background first.', true); paint(); return; }
+    if(!want && !XT_BG.has){ unlocked = true; paint(); say('Default off. Add a custom background.'); return; }
+    if(want && !XT_BG.has){ unlocked = false; pending = ''; xtApplyBg(); paint(); say('Default background on. Custom uploads are blocked.'); return; }
+    if(want){ pending = ''; }
     try{
       const d = await api('/bg_mode', { useDefault: want });
+      unlocked = !want;
       sync(d.bg);
       say(want ? 'Default background loaded.' : 'Custom background loaded.');
     }catch(e){
