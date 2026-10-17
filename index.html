@@ -852,9 +852,9 @@
   .vi-ver:hover:not(:disabled){ border-color:#fff; }
   .vi-ver:disabled{ opacity:.5; cursor:default; }
 
-  #navGear, #navApi, #navActivity{ display:none !important; }
-  body.acct-mode #navGear, body.acct-mode #navApi, body.acct-mode #navActivity{ display:flex !important; }
-  body.acct-mode .sidebar-btn:not(#navHome):not(#navGear):not(#navApi):not(#navActivity):not(#navAccount):not(#navLogout){ display:none !important; }
+  #navGear, #navCustomize, #navApi, #navActivity{ display:none !important; }
+  body.acct-mode #navGear, body.acct-mode #navCustomize, body.acct-mode #navApi, body.acct-mode #navActivity{ display:flex !important; }
+  body.acct-mode .sidebar-btn:not(#navHome):not(#navGear):not(#navCustomize):not(#navApi):not(#navActivity):not(#navAccount):not(#navLogout){ display:none !important; }
   .sidebar-btn img{ display:none; width:26px; height:26px; border-radius:50%; object-fit:cover; }
   .sidebar-btn.has-dp img{ display:block; }
   .sidebar-btn.has-dp svg{ display:none; }
@@ -1736,6 +1736,91 @@
   .ac-act.k-bad{--c:#e0574c}
   .ac-act.k-cmd{--c:#b48cf2}
   .ac-act.k-file{--c:#4fd1c5}
+  .cu-drop{ position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; min-height:170px; border:2px dashed var(--panel-border); border-radius:14px; background:#0f1114 center/cover no-repeat; color:var(--text-muted); font-size:13.5px; text-align:center; cursor:pointer; overflow:hidden; padding:14px; transition:border-color .2s ease; }
+  .cu-drop:hover, .cu-drop.drag, .cu-drop:focus-visible{ border-color:#fff; outline:none; }
+  .cu-drop.has{ border-style:solid; }
+  .cu-drop.has .cu-hint{ background:rgba(0,0,0,.62); padding:6px 12px; border-radius:8px; color:#fff; }
+  .cu-drop small{ display:block; margin-top:3px; font-family:var(--mono); font-size:11.5px; color:var(--text-faint); }
+  .cu-drop.has small{ color:#d6d9de; }
+  .cu-switch{ position:relative; display:flex; align-items:center; gap:12px; cursor:pointer; color:var(--text); font-size:14px; }
+  .ac-box .cu-switch input{ position:absolute; opacity:0; width:0; height:0; padding:0; border:0; pointer-events:none; }
+  .cu-switch i{ position:relative; flex-shrink:0; width:42px; height:24px; border-radius:999px; background:#2a2d33; border:1px solid var(--panel-border); transition:background .2s ease; }
+  .cu-switch i::after{ content:''; position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:50%; background:#fff; transition:transform .2s ease; }
+  .cu-switch input:checked + i{ background:var(--success); }
+  .cu-switch input:checked + i::after{ transform:translateX(18px); }
+  .cu-note{ font-family:var(--mono); font-size:12px; color:var(--text-faint); line-height:1.5; }
+
+  @media (max-width: 700px){
+    body{ padding:12px; }
+    .content{ padding:24px 18px 22px; }
+    .modal-overlay{ padding:12px; }
+    .modal-box{ padding:20px 16px; max-height:90vh; border-radius:16px; }
+    .fm-editor-overlay{ padding:8px; }
+    .fm-editor-box{ height:90vh; }
+
+    .admin-sidebar{ top:auto; bottom:0; left:0; right:0; width:100%; height:calc(62px + env(safe-area-inset-bottom, 0px)); flex-direction:row; justify-content:flex-start; padding:7px 10px calc(7px + env(safe-area-inset-bottom, 0px)); border-right:none; border-top:1px solid rgba(255,255,255,0.12); border-radius:18px 18px 0 0; overflow-x:auto; overflow-y:hidden; }
+    .sidebar-group{ flex-direction:row; align-items:center; gap:8px; flex-shrink:0; }
+    .sidebar-spacer{ display:none; }
+    .sidebar-divider{ width:1px; height:26px; margin:0 2px; flex-shrink:0; }
+    .sidebar-btn{ width:44px; height:44px; flex-shrink:0; border-radius:13px; }
+    .sidebar-btn:hover{ left:0; }
+    .sidebar-btn svg{ width:22px; height:22px; }
+
+    .admin-brand{ top:8px; left:8px; right:8px; gap:8px; }
+    .brand-card{ padding:7px 16px; gap:10px; }
+    .admin-brand .logo-x{ font-size:26px; }
+    .admin-brand .welcome-text{ font-size:13px; }
+    .pill-btn{ padding:6px 12px; font-size:13px; gap:7px; }
+    .pill-btn svg, .pill-btn img{ width:20px; height:20px; }
+
+    .server-list, .manage-view{ top:100px; left:8px; right:8px; bottom:calc(68px + env(safe-area-inset-bottom, 0px)); }
+    .server-list{ gap:10px; }
+    .server-item{ border-radius:14px; }
+    .server-item-inner{ padding:14px; min-height:84px; gap:10px; }
+    .server-item-name{ font-size:14px; }
+    .server-item-meta{ gap:10px; flex-wrap:wrap; font-size:11.5px; }
+    .manage-view .heading{ font-size:17px; }
+
+    .ctl-split{ display:grid !important; grid-template-columns:1fr 1fr; gap:8px !important; height:auto !important; padding-right:0 !important; margin-top:8px !important; }
+    .ctl-term{ grid-column:1 / -1; order:2; flex:none !important; min-width:0; }
+    .ctl-side{ display:contents !important; }
+    .ctl-pwr{ grid-column:1 / -1; order:1; gap:8px !important; }
+    .ctl-pwr button{ height:42px !important; border-radius:21px !important; }
+    .ctl-side .info-box{ order:3; padding:6px 9px; font-size:10.5px; gap:6px; min-width:0; }
+    .ctl-side .info-box:nth-child(2){ grid-column:1 / -1; }
+    .ctl-side .info-box span:last-child{ text-align:right; overflow-wrap:anywhere; min-width:0; }
+    #terminalOutput{ flex:none !important; height:190px; padding:10px !important; font-size:11.5px !important; }
+    #terminalInput{ padding:8px 10px !important; font-size:12px !important; }
+    .ctl-graphs{ gap:6px !important; margin-top:8px !important; }
+    .graph-box{ padding:6px; min-width:0; }
+    .graph-box span{ font-size:10px; }
+    .graph-box-row{ gap:3px; min-width:0; }
+    .graph-box-row canvas{ flex:1 1 0; width:auto; min-width:0; height:64px; }
+    .graph-scale{ width:24px; font-size:8px; }
+
+    .ac-grid, .cfg-grid, .cfg-section .cfg-grid, .cfg-section.boxed .cfg-grid, .wd-grid, .ak-grid, .mm-grid, .acc-perms, .ak-split, .adv-found{ grid-template-columns:1fr !important; }
+    .wd-opts, .vi-grid{ grid-template-columns:repeat(2,1fr) !important; }
+    .vi-vers, .sch-custom{ grid-template-columns:repeat(3,1fr); }
+    .cfg-head{ gap:12px; }
+    .cfg-head-main{ min-width:0; }
+    .cfg-box, .ac-box{ padding:14px; }
+    .ac-top{ gap:12px; margin-bottom:14px; }
+    .ac-dp{ width:64px; height:64px; }
+    .ac-act{ padding:14px; min-height:0; gap:12px; flex-wrap:wrap; margin-bottom:10px; }
+    .ac-av{ width:46px; height:46px; }
+    .mm-tab{ padding:7px 12px; }
+    .plg-card{ padding:10px; gap:10px; }
+    .plg-icon{ width:40px; height:40px; }
+
+    .fm-topbar{ gap:10px; margin-bottom:12px; }
+    .fm-actions{ flex-wrap:wrap; gap:8px; }
+    .fm-btn{ padding:7px 11px; }
+    .fm-header-row{ padding:8px 12px; gap:10px; }
+    .fm-header-row span:nth-child(4), .fm-file-date{ display:none !important; }
+    .fm-file-size{ width:56px; }
+    .fm-file-box{ padding:10px 12px; min-height:52px; gap:10px; border-radius:13px; }
+    .cu-drop{ min-height:130px; }
+  }
 </style>
 </head>
 <body>
@@ -1855,6 +1940,11 @@
     <button type="button" class="sidebar-btn" id="navGear" data-label="Settings">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" ><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span class="sidebar-tooltip">Settings</span>
+    </button>
+
+    <button type="button" class="sidebar-btn" id="navCustomize" data-label="Customize">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-.9 2-1.8 0-.6-.3-1.1-.6-1.5-.3-.4-.4-.8-.4-1.2 0-1 .8-1.5 1.8-1.5H17a4 4 0 0 0 4-4c0-4.4-4-8-9-8z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7.5" cy="11.5" r="1.1" fill="currentColor"/><circle cx="10.5" cy="7.5" r="1.1" fill="currentColor"/><circle cx="15" cy="7.5" r="1.1" fill="currentColor"/></svg>
+      <span class="sidebar-tooltip">Customize</span>
     </button>
 
     <button type="button" class="sidebar-btn admin-only" id="navAddServer" data-label="Add Server">
@@ -2151,14 +2241,14 @@
 <!-- Confirm-remove-user step, shown on top of Manage Servers -->
 <div class="manage-view" id="serverControlOverlay">
   <h1 class="heading" style="text-align:left; justify-content:flex-start;" id="serverControlName"></h1>
-  <div style="display:flex; gap:14px; margin-top:14px; padding-right:24px; align-items:stretch; height:400px;">
-    <div style="flex:0 0 62%; display:flex; flex-direction:column; gap:8px;">
+  <div class="ctl-split" style="display:flex; gap:14px; margin-top:14px; padding-right:24px; align-items:stretch; height:400px;">
+    <div class="ctl-term" style="flex:0 0 62%; display:flex; flex-direction:column; gap:8px;">
       <div style="background:#0a0b0d; border:1px solid var(--panel-border); border-radius:10px; padding:14px; font-family:var(--mono); font-size:12.5px; color:#ffffff; flex:1; min-height:0; overflow-y:auto; white-space:pre-wrap;" id="terminalOutput"></div>
       <input type="text" id="terminalInput" placeholder="Type a command…" style="background:#0a0b0d; border:1px solid var(--panel-border); border-radius:10px; padding:10px 12px; font-family:var(--mono); font-size:12.5px; color:var(--text); outline:none;">
     </div>
 
-    <div style="flex:1; display:flex; flex-direction:column; gap:10px;">
-      <div style="display:flex; gap:10px;">
+    <div class="ctl-side" style="flex:1; display:flex; flex-direction:column; gap:10px;">
+      <div class="ctl-pwr" style="display:flex; gap:10px;">
         <button type="button" id="pwrStart" style="flex:1; height:50px; border-radius:25px; border:2px solid rgba(255,255,255,0.3); background:var(--success); color:#0a1a12; display:flex; align-items:center; justify-content:center; cursor:pointer;">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
         </button>
@@ -2180,7 +2270,7 @@
     </div>
   </div>
 
-  <div style="display:flex; gap:8px; margin-top:10px;">
+  <div class="ctl-graphs" style="display:flex; gap:8px; margin-top:10px;">
     <div class="graph-box"><span>CPU Load</span>
       <div class="graph-box-row">
         <div class="graph-scale"><span id="scaleCpuUp">0</span><span id="scaleCpuMid">0</span><span>0%</span></div>
@@ -2305,7 +2395,7 @@
   <p class="subtext" style="margin-top:14px; font-size:12px;">
     CPU and RAM limits are applied for real on the panel. A private folder named after their email is
     created in Files, and they'll only ever see that folder. Storage/network are shown as caps in the
-    dashboard, but Pterodactyl has no native network-throttle to enforce.
+    dashboard, but XtremeTech has no native network-throttle to enforce.
   </p>
 
   <button type="button" class="submit" id="addUserSaveBtn" style="margin-top:20px;">
@@ -2507,6 +2597,27 @@
       <input type="password" id="emPass" placeholder="Password" autocomplete="current-password">
       <input type="email" id="emNew" placeholder="New email" autocomplete="off">
       <button type="button" class="plg-btn" id="emSave">Update email</button>
+    </div>
+  </div>
+</div>
+
+<div class="manage-view" id="customizeOverlay">
+  <h1 class="heading" style="text-align:left; justify-content:flex-start;">Customize</h1>
+  <div class="plg-status" id="cuStatus"></div>
+  <div class="ac-grid">
+    <div class="ac-box"><h3>Add Custom Background</h3>
+      <div class="cu-drop" id="cuDrop" tabindex="0" role="button" aria-label="Upload background image">
+        <div class="cu-hint">Drag &amp; drop an image here<small>or tap to upload · JPG, PNG, WEBP, GIF</small></div>
+      </div>
+      <input type="file" id="cuFile" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
+      <div class="ac-row">
+        <button type="button" class="plg-btn" id="cuApply" disabled>Apply</button>
+        <button type="button" class="plg-btn" id="cuUndo" disabled>Undo</button>
+      </div>
+    </div>
+    <div class="ac-box"><h3>Default background</h3>
+      <label class="cu-switch"><input type="checkbox" id="cuDefault" checked><i></i><span>Use default background</span></label>
+      <div class="cu-note" id="cuInfo"></div>
     </div>
   </div>
 </div>
@@ -2887,6 +2998,36 @@
     document.body.style.backgroundImage = `url('${url}')`;
   }
 
+  const XT_BG = { has:false, useDefault:true, url:'', size:0, quotaMb:500, loaded:false };
+
+  function xtBgSave(){
+    try{
+      const u = auth.currentUser;
+      if(u) localStorage.setItem('xtBg', JSON.stringify({ uid:u.uid, has:XT_BG.has, useDefault:XT_BG.useDefault, url:XT_BG.url }));
+    }catch(e){}
+  }
+
+  function xtBgCache(){
+    if(XT_BG.loaded) return;
+    try{
+      const c = JSON.parse(localStorage.getItem('xtBg') || 'null');
+      const u = auth.currentUser;
+      if(c && u && c.uid === u.uid){ XT_BG.has = !!c.has; XT_BG.useDefault = c.useDefault !== false; XT_BG.url = c.url || ''; }
+    }catch(e){}
+  }
+
+  function xtApplyBg(preview){
+    const b = document.body;
+    const admin = b.classList.contains('role-admin');
+    if(!admin && !b.classList.contains('role-user')) return;
+    xtBgCache();
+    const saved = XT_BG.has && !XT_BG.useDefault && XT_BG.url ? API_BASE + XT_BG.url : '';
+    const src = preview || saved;
+    if(src){ hideVideoBackground(); setBackground(src); }
+    else if(admin){ hideVideoBackground(); setBackground(ADMIN_BG); }
+    else{ showVideoBackground(); }
+  }
+
   const loggedInVideoBg = document.getElementById('loggedInVideoBg');
 
   const videoMuteToggle = document.getElementById('videoMuteToggle');
@@ -2927,6 +3068,7 @@
     stopServerListener();
     hideVideoBackground();
     setBackground(LOGIN_BG);
+    XT_BG.has = false; XT_BG.useDefault = true; XT_BG.url = ''; XT_BG.loaded = false;
   }
 
   function showLoggedIn(){
@@ -2940,6 +3082,7 @@
     document.body.classList.remove('admin-mode', 'role-admin');
     document.body.classList.add('role-user'); // CSS hides the admin-only sidebar buttons for this role
     showVideoBackground();
+    xtApplyBg();
   }
 
   function showAdminPanel(){
@@ -2954,6 +3097,7 @@
     document.body.classList.add('admin-mode', 'role-admin');
     hideVideoBackground();
     setBackground(ADMIN_BG);
+    xtApplyBg();
     attachAdminServerListener();
   }
 
@@ -3236,26 +3380,42 @@
   let pendingControlDoc = null;
   let pendingControlCategory = 'discord';
 
+  const PWR_LINE = {
+    start: '\u001b[92m[▶] Starting server…\u001b[0m',
+    restart: '\u001b[93m[↻] Restarting server…\u001b[0m',
+    stop: '\u001b[93m[■] Stopping server…\u001b[0m'
+  };
+
+  function termLine(text){
+    const out = document.getElementById('terminalOutput');
+    if(!out) return;
+    const atBottom = out.scrollHeight - out.scrollTop - out.clientHeight < 40;
+    out.appendChild(colorizeConsoleLine(text));
+    while(out.childNodes.length > 2000) out.removeChild(out.firstChild);
+    if(atBottom) out.scrollTop = out.scrollHeight;
+  }
+
   async function sendPower(signal, btn){
     if(!pendingControlDoc) return;
     btn.style.transform = 'scale(0.9)';
     btn.style.opacity = '0.6';
     setTimeout(() => { btn.style.transform = ''; btn.style.opacity = ''; }, 200);
 
-    const idToken = await auth.currentUser.getIdToken();
+    termLine(PWR_LINE[signal] || '');
     try{
+      const idToken = await auth.currentUser.getIdToken();
       const res = await fetch(`${API_BASE}/server_power`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idToken, docId: pendingControlDoc, signal })
       });
-      const data = await res.json();
-      if(!data.ok){
-        alert('Power action failed: ' + (data.error || 'unknown error'));
+      let data = null;
+      try{ data = await res.json(); }catch(e){}
+      if(data && data.ok === false){
+        const e = String(data.error || '');
+        termLine('\u001b[91m[✖] Power action failed' + (e ? (/^\d+$/.test(e) ? ' (HTTP ' + e + ')' : ': ' + e) : '') + '\u001b[0m');
       }
-    }catch(err){
-      alert('Could not reach backend for power action.');
-    }
+    }catch(err){}
   }
   document.getElementById('pwrStart').addEventListener('click', (e) => sendPower('start', e.currentTarget));
   document.getElementById('pwrRestart').addEventListener('click', (e) => sendPower('restart', e.currentTarget));
@@ -3538,7 +3698,7 @@
 
         if(payload.event === 'console output'){
           const atBottom = out.scrollHeight - out.scrollTop - out.clientHeight < 40;
-          out.appendChild(colorizeConsoleLine(payload.args && payload.args[0] ? payload.args[0] : ''));
+          out.appendChild(colorizeConsoleLine((payload.args && payload.args[0] ? String(payload.args[0]) : '').replace(/pterodactyl/gi, 'XtremeTech')));
           while(out.childNodes.length > 2000) out.removeChild(out.firstChild);
           if(atBottom) out.scrollTop = out.scrollHeight;
         }
@@ -3598,7 +3758,7 @@
     document.getElementById('scheduleOverlay').classList.remove('show');
     document.getElementById('membersOverlay').classList.remove('show');
     document.getElementById('accessOverlay').classList.remove('show');
-    ['accountOverlay','apiOverlay','activityOverlay'].forEach(o => document.getElementById(o).classList.remove('show'));
+    ['accountOverlay','customizeOverlay','apiOverlay','activityOverlay'].forEach(o => document.getElementById(o).classList.remove('show'));
   }
 
   function showControlNav(){
@@ -6381,7 +6541,7 @@
   const $ = id => document.getElementById(id);
   const body = document.body;
   const OVERLAYS = ['serverControlOverlay','filesOverlay','manageServersOverlay','serverUsersOverlay','startupOverlay'];
-  const MINE = ['accountOverlay','apiOverlay','activityOverlay'];
+  const MINE = ['accountOverlay','customizeOverlay','apiOverlay','activityOverlay'];
 
   async function apiU(path, payload){
     const user = auth.currentUser;
@@ -6420,6 +6580,7 @@
     try{
       const d = await apiU('/account_get', {});
       P.name = d.username; P.email = d.email; P.photo = d.photo || '';
+      if(d.bg && window.xtBgSync){ window.xtBgSync(d.bg); }
       paintProfile();
       return d;
     }catch(e){ say('acStatus', e.message, true); }
@@ -6936,6 +7097,145 @@
     ov.classList.remove('show');
     $('backupOverlay').classList.remove('show');
     $('dbOverlay').classList.remove('show');
+  }, true);
+})();
+</script>
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const TYPES = ['image/jpeg','image/png','image/webp','image/gif'];
+  const SHOWN = ['serverControlOverlay','filesOverlay','manageServersOverlay','serverUsersOverlay','startupOverlay'];
+  let pending = '';
+
+  const say = (m, err) => { const e = $('cuStatus'); e.textContent = m || ''; e.classList.toggle('err', !!err); };
+  const fmt = n => n >= 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB';
+
+  async function api(path, payload){
+    const user = auth.currentUser;
+    if(!user) throw new Error('Not signed in.');
+    const idToken = await user.getIdToken();
+    const res = await fetch(`${API_BASE}${path}`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ idToken, ...payload }) });
+    let data;
+    try{ data = await res.json(); }catch(e){ throw new Error(`Bad backend response (HTTP ${res.status}).`); }
+    if(!res.ok || !data.ok) throw new Error(data.error || `Request failed (HTTP ${res.status}).`);
+    return data;
+  }
+
+  function sync(bg){
+    XT_BG.has = !!bg.has;
+    XT_BG.useDefault = bg.useDefault !== false;
+    XT_BG.url = bg.url || '';
+    XT_BG.size = bg.size || 0;
+    XT_BG.quotaMb = bg.quotaMb || 500;
+    XT_BG.loaded = true;
+    xtBgSave();
+    xtApplyBg(pending);
+    paint();
+  }
+  window.xtBgSync = sync;
+
+  function paint(){
+    $('cuDefault').checked = XT_BG.useDefault || !XT_BG.has;
+    $('cuApply').disabled = !pending;
+    $('cuUndo').disabled = !pending;
+    const src = pending || (XT_BG.has && XT_BG.url ? API_BASE + XT_BG.url : '');
+    const drop = $('cuDrop');
+    drop.style.backgroundImage = src ? `url('${src}')` : '';
+    drop.classList.toggle('has', !!src);
+    $('cuInfo').textContent = XT_BG.has ? `Saved background: ${fmt(XT_BG.size)} of ${XT_BG.quotaMb} MB. Applying a new one deletes the old.` : 'No custom background saved yet.';
+  }
+
+  function shrink(file){
+    return new Promise((res, rej) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        const k = Math.min(1, 1920 / Math.max(img.naturalWidth, img.naturalHeight));
+        const w = Math.max(1, Math.round(img.naturalWidth * k)), h = Math.max(1, Math.round(img.naturalHeight * k));
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        let q = 0.86, mime = 'image/webp', out = c.toDataURL(mime, q);
+        if(!out.startsWith('data:image/webp')){ mime = 'image/jpeg'; out = c.toDataURL(mime, q); }
+        while(out.length * 0.75 > 7.5 * 1048576 && q > 0.4){ q -= 0.1; out = c.toDataURL(mime, q); }
+        res(out);
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('bad image')); };
+      img.src = url;
+    });
+  }
+
+  async function pick(file){
+    if(!file) return;
+    if(!TYPES.includes(file.type)) return say('Use a JPG, PNG, WEBP or GIF image.', true);
+    if(file.size > 30 * 1048576) return say('That image is too large.', true);
+    say('Preparing image…');
+    try{ pending = await shrink(file); }
+    catch(e){ pending = ''; return say('Could not read that image.', true); }
+    xtApplyBg(pending);
+    paint();
+    say('Preview loaded. Press Apply to keep it or Undo to discard.');
+  }
+
+  const drop = $('cuDrop');
+  drop.addEventListener('click', () => $('cuFile').click());
+  drop.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); $('cuFile').click(); } });
+  ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('drag'); }));
+  ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('drag'); }));
+  drop.addEventListener('drop', e => pick(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]));
+  $('cuFile').addEventListener('change', e => { pick(e.target.files[0]); e.target.value = ''; });
+
+  $('cuApply').addEventListener('click', async () => {
+    if(!pending) return;
+    $('cuApply').disabled = true; $('cuUndo').disabled = true;
+    say('Uploading…');
+    try{
+      const d = await api('/bg_set', { image: pending });
+      pending = '';
+      sync(d.bg);
+      say('Background applied.');
+    }catch(e){
+      say(e.message, true);
+      paint();
+    }
+  });
+
+  $('cuUndo').addEventListener('click', () => {
+    pending = '';
+    xtApplyBg();
+    paint();
+    say('Reverted.');
+  });
+
+  $('cuDefault').addEventListener('change', async () => {
+    const want = $('cuDefault').checked;
+    if(!want && !XT_BG.has){ say('Apply a custom background first.', true); paint(); return; }
+    try{
+      const d = await api('/bg_mode', { useDefault: want });
+      sync(d.bg);
+      say(want ? 'Default background loaded.' : 'Custom background loaded.');
+    }catch(e){
+      say(e.message, true);
+      paint();
+    }
+  });
+
+  $('navCustomize').addEventListener('click', async () => {
+    SHOWN.forEach(o => $(o).classList.remove('show'));
+    serverList.classList.remove('show');
+    hideMcViews();
+    $('customizeOverlay').classList.add('show');
+    pending = '';
+    say('');
+    xtApplyBg();
+    paint();
+    try{ sync((await api('/account_get', {})).bg); }catch(e){}
+  });
+
+  $('adminSidebar').addEventListener('click', e => {
+    const b = e.target.closest('.sidebar-btn');
+    if(b && b.id !== 'navCustomize' && pending){ pending = ''; xtApplyBg(); paint(); }
   }, true);
 })();
 </script>
